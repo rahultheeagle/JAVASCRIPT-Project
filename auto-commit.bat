@@ -1,0 +1,9 @@
+@echo off
+echo Adding all files to Git...
+git add .
+echo Committing changes...
+git commit -m "CodeQuest: %1"
+echo Pushing to GitHub...
+git push -u origin main
+echo Done! Changes pushed to GitHub.
+pause
