@@ -24,6 +24,7 @@ class CodeEditor {
         this.saveStatus = document.getElementById('save-status');
         this.saveBtn = document.getElementById('save-code');
         this.loadBtn = document.getElementById('load-code');
+        this.formatBtn = document.getElementById('format-code');
         
         this.currentTab = 'html';
         this.isResizing = false;
@@ -295,6 +296,154 @@ class CodeEditor {
         }
     }
     
+    // Format current active code
+    formatCurrentCode() {
+        this.formatBtn.classList.add('formatting');
+        this.formatBtn.textContent = '✨ Formatting...';
+        
+        setTimeout(() => {
+            try {
+                switch(this.currentTab) {
+                    case 'html':
+                        this.formatHTML();
+                        break;
+                    case 'css':
+                        this.formatCSS();
+                        break;
+                    case 'js':
+                        this.formatJavaScript();
+                        break;
+                }
+                
+                this.addConsoleMessage('info', `${this.currentTab.toUpperCase()} code formatted`);
+                
+            } catch (error) {
+                this.addConsoleMessage('error', 'Formatting failed: ' + error.message);
+            }
+            
+            this.formatBtn.classList.remove('formatting');
+            this.formatBtn.textContent = '✨ Format';
+        }, 300);
+    }
+    
+    // Format HTML code
+    formatHTML() {
+        const html = this.htmlEditor.value;
+        const formatted = this.formatHTMLString(html);
+        this.htmlEditor.value = formatted;
+        this.updateHighlighting('html', formatted, this.htmlHighlight);
+        this.triggerAutoSave();
+    }
+    
+    // Format CSS code
+    formatCSS() {
+        const css = this.cssEditor.value;
+        const formatted = this.formatCSSString(css);
+        this.cssEditor.value = formatted;
+        this.updateHighlighting('css', formatted, this.cssHighlight);
+        this.triggerAutoSave();
+    }
+    
+    // Format JavaScript code
+    formatJavaScript() {
+        const js = this.jsEditor.value;
+        const formatted = this.formatJSString(js);
+        this.jsEditor.value = formatted;
+        this.updateHighlighting('javascript', formatted, this.jsHighlight);
+        this.triggerAutoSave();
+    }
+    
+    // Simple HTML formatter
+    formatHTMLString(html) {
+        let formatted = html.replace(/></g, '>\n<');
+        let indent = 0;
+        const lines = formatted.split('\n');
+        
+        return lines.map(line => {
+            const trimmed = line.trim();
+            if (!trimmed) return '';
+            
+            if (trimmed.startsWith('</')) {
+                indent = Math.max(0, indent - 1);
+            }
+            
+            const result = '  '.repeat(indent) + trimmed;
+            
+            if (trimmed.startsWith('<') && !trimmed.startsWith('</') && !trimmed.endsWith('/>') && !this.isSelfClosingTag(trimmed)) {
+                indent++;
+            }
+            
+            return result;
+        }).join('\n');
+    }
+    
+    // Simple CSS formatter
+    formatCSSString(css) {
+        return css
+            .replace(/\{/g, ' {\n  ')
+            .replace(/\}/g, '\n}\n')
+            .replace(/;/g, ';\n  ')
+            .replace(/,/g, ',\n')
+            .replace(/\n\s*\n/g, '\n')
+            .replace(/^\s+/gm, (match, offset, string) => {
+                const line = string.substring(0, offset).split('\n').pop();
+                if (line.includes('{') && !line.includes('}')) {
+                    return '  ';
+                }
+                return '';
+            })
+            .trim();
+    }
+    
+    // Simple JavaScript formatter
+    formatJSString(js) {
+        let formatted = js;
+        let indent = 0;
+        
+        // Basic formatting rules
+        formatted = formatted
+            .replace(/\{/g, ' {\n')
+            .replace(/\}/g, '\n}\n')
+            .replace(/;/g, ';\n')
+            .replace(/,/g, ', ')
+            .replace(/\n\s*\n/g, '\n');
+        
+        const lines = formatted.split('\n');
+        
+        return lines.map(line => {
+            const trimmed = line.trim();
+            if (!trimmed) return '';
+            
+            if (trimmed.includes('}')) {
+                indent = Math.max(0, indent - 1);
+            }
+            
+            const result = '  '.repeat(indent) + trimmed;
+            
+            if (trimmed.includes('{')) {
+                indent++;
+            }
+            
+            return result;
+        }).join('\n');
+    }
+    
+    // Check if HTML tag is self-closing
+    isSelfClosingTag(tag) {
+        const selfClosing = ['img', 'br', 'hr', 'input', 'meta', 'link', 'area', 'base', 'col', 'embed', 'source', 'track', 'wbr'];
+        const tagName = tag.match(/<(\w+)/)?.[1]?.toLowerCase();
+        return selfClosing.includes(tagName) || tag.endsWith('/>');
+    }
+    
+    // Trigger auto-save after formatting
+    triggerAutoSave() {
+        this.setSaveStatus('unsaved', '✏ Unsaved');
+        clearTimeout(this.autoSaveTimeout);
+        this.autoSaveTimeout = setTimeout(() => {
+            this.autoSave();
+        }, 1000);
+    }
+    
     // Bind all event listeners
     bindEvents() {
         // Tab switching
@@ -358,12 +507,19 @@ class CodeEditor {
             this.loadFromStorage();
         });
         
-        // Keyboard shortcuts for save/load
+        this.formatBtn.addEventListener('click', () => {
+            this.formatCurrentCode();
+        });
+        
+        // Keyboard shortcuts for save/load/format
         document.addEventListener('keydown', (e) => {
             if (e.ctrlKey || e.metaKey) {
                 if (e.key === 's') {
                     e.preventDefault();
                     this.saveToStorage();
+                } else if (e.key === 'f' && e.shiftKey) {
+                    e.preventDefault();
+                    this.formatCurrentCode();
                 }
             }
         });

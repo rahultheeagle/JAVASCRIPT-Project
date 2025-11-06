@@ -76,7 +76,7 @@ body {
     gap: 10px;
 }
 
-.save-btn, .load-btn {
+.save-btn, .load-btn, .format-btn {
     background: #2196F3;
     color: white;
     border: none;
@@ -85,6 +85,19 @@ body {
     cursor: pointer;
     font-size: 0.9rem;
     transition: background 0.3s;
+}
+
+.format-btn {
+    background: #FF9800;
+}
+
+.format-btn:hover {
+    background: #F57C00;
+}
+
+.format-btn.formatting {
+    background: #4CAF50;
+    animation: pulse 0.5s ease;
 }
 
 .save-btn:hover {
