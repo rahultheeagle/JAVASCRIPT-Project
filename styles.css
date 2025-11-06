@@ -240,6 +240,11 @@ header h1 {
     color: white;
 }
 
+.snippets-btn:hover {
+    background: linear-gradient(135deg, #9C27B0, #BA68C8);
+    color: white;
+}
+
 .btn-icon {
     font-size: 2.5rem;
 }

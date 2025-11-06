@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Snippets - CodeQuest</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="snippets-styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Code Snippets Library</h1>
+            <a href="index.html" class="back-btn">← Back to Dashboard</a>
+        </header>
+
+        <main>
+            <div class="snippets-container">
+                <div class="snippets-sidebar">
+                    <h3>Categories</h3>
+                    <div class="category-list">
+                        <button class="category-btn active" data-category="html">HTML</button>
+                        <button class="category-btn" data-category="css">CSS</button>
+                        <button class="category-btn" data-category="javascript">JavaScript</button>
+                    </div>
+                </div>
+
+                <div class="snippets-content">
+                    <div class="snippets-header">
+                        <h2 id="category-title">HTML Snippets</h2>
+                        <input type="text" id="search-input" placeholder="Search snippets...">
+                    </div>
+
+                    <div class="snippets-grid" id="snippets-grid">
+                        <!-- Snippets populated by JS -->
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="snippets-system.js"></script>
+</body>
+</html>
