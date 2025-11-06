@@ -678,6 +678,122 @@ class XPSystem {
     }
 }
 
+// Learning Path System
+class LearningPath {
+    constructor() {
+        this.pathNodes = document.querySelectorAll('.path-node');
+        this.pathLine = document.querySelector('.path-line');
+        this.initializeEvents();
+    }
+
+    // Initialize event listeners
+    initializeEvents() {
+        this.pathNodes.forEach(node => {
+            node.addEventListener('click', () => {
+                const lessonId = parseInt(node.dataset.lesson);
+                if (node.classList.contains('unlocked')) {
+                    this.selectLesson(lessonId);
+                } else {
+                    this.showLockedMessage(lessonId);
+                }
+            });
+        });
+    }
+
+    // Update path visualization based on progress
+    updatePath(completedLessons) {
+        let unlockedCount = 0;
+        
+        this.pathNodes.forEach((node, index) => {
+            const lessonId = index + 1;
+            const isCompleted = completedLessons.includes(lessonId);
+            const isUnlocked = this.isLessonUnlocked(lessonId, completedLessons);
+            
+            // Reset classes
+            node.classList.remove('completed', 'unlocked', 'locked');
+            
+            if (isCompleted) {
+                node.classList.add('completed');
+                unlockedCount++;
+            } else if (isUnlocked) {
+                node.classList.add('unlocked');
+                unlockedCount++;
+            } else {
+                node.classList.add('locked');
+            }
+        });
+        
+        // Update progress line
+        const progressPercentage = (unlockedCount / this.pathNodes.length) * 100;
+        this.updateProgressLine(progressPercentage);
+    }
+
+    // Check if lesson is unlocked
+    isLessonUnlocked(lessonId, completedLessons) {
+        // First lesson is always unlocked
+        if (lessonId === 1) return true;
+        
+        // Sequential unlock: previous lesson must be completed
+        return completedLessons.includes(lessonId - 1);
+    }
+
+    // Update progress line visual
+    updateProgressLine(percentage) {
+        if (window.innerWidth <= 768) {
+            // Mobile: vertical line
+            this.pathLine.style.background = `linear-gradient(180deg, #4CAF50 ${percentage}%, #ddd ${percentage}%)`;
+        } else {
+            // Desktop: horizontal line
+            this.pathLine.style.background = `linear-gradient(90deg, #4CAF50 ${percentage}%, #ddd ${percentage}%)`;
+        }
+    }
+
+    // Select lesson (scroll to lesson card)
+    selectLesson(lessonId) {
+        const lessonCard = document.querySelector(`[data-lesson="${lessonId}"]`);
+        if (lessonCard && lessonCard.classList.contains('lesson-card')) {
+            lessonCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            lessonCard.style.animation = 'pulse 1s ease';
+            setTimeout(() => {
+                lessonCard.style.animation = '';
+            }, 1000);
+        }
+    }
+
+    // Show locked lesson message
+    showLockedMessage(lessonId) {
+        const notification = document.createElement('div');
+        notification.innerHTML = `
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <span style="font-size: 1.5rem;">🔒</span>
+                <div>
+                    <strong>Lesson ${lessonId} Locked</strong><br>
+                    <small>Complete the previous lesson to unlock</small>
+                </div>
+            </div>
+        `;
+        notification.style.cssText = `
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #ff6b6b;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            z-index: 1002;
+            animation: slideIn 0.3s ease;
+            box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
+        `;
+        
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            notification.remove();
+        }, 3000);
+    }
+}
+
 // Initialize all systems when DOM loads
 document.addEventListener('DOMContentLoaded', () => {
     const profileSystem = new ProfileSystem();
@@ -685,11 +801,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const achievementSystem = new AchievementSystem();
     const streakCounter = new StreakCounter();
     const xpSystem = new XPSystem();
+    const learningPath = new LearningPath();
     
     // Connect progress tracker with all systems
     const originalToggle = progressTracker.toggleLessonCompletion;
     progressTracker.toggleLessonCompletion = function(lessonId) {
         const wasCompleted = this.progressData.completedLessons.includes(lessonId);
+        
+        // Check if lesson is unlocked before allowing toggle
+        if (!wasCompleted && !learningPath.isLessonUnlocked(lessonId, this.progressData.completedLessons)) {
+            learningPath.showLockedMessage(lessonId);
+            return;
+        }
+        
         originalToggle.call(this, lessonId);
         
         if (!wasCompleted && this.progressData.completedLessons.includes(lessonId)) {
@@ -699,8 +823,28 @@ document.addEventListener('DOMContentLoaded', () => {
         
         achievementSystem.checkAchievements(this.progressData.completedLessons.length);
         streakCounter.recordActivity();
+        learningPath.updatePath(this.progressData.completedLessons);
     };
+    
+    // Initial path update
+    learningPath.updatePath(progressTracker.progressData.completedLessons);
+    
+    // Update path on window resize
+    window.addEventListener('resize', () => {
+        learningPath.updatePath(progressTracker.progressData.completedLessons);
+    });
 });
+
+// Add pulse animation CSS
+const pulseStyle = document.createElement('style');
+pulseStyle.textContent = `
+    @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+        100% { transform: scale(1); }
+    }
+`;
+document.head.appendChild(pulseStyle);
 
 // Add level up animation CSS
 const levelUpStyle = document.createElement('style');

@@ -295,6 +295,155 @@ header h1 {
     opacity: 0.9;
 }
 
+.learning-path {
+    margin: 40px 0;
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.learning-path h4 {
+    color: #333;
+    font-size: 1.5rem;
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+.path-container {
+    position: relative;
+    padding: 20px 0;
+}
+
+.path-line {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #4CAF50 0%, #ddd 0%);
+    border-radius: 2px;
+    z-index: 1;
+    transition: background 0.5s ease;
+}
+
+.path-nodes {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.path-node {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    opacity: 0.4;
+    transform: scale(0.9);
+}
+
+.path-node.unlocked {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.path-node.completed {
+    opacity: 1;
+    transform: scale(1.05);
+}
+
+.path-node:hover.unlocked {
+    transform: scale(1.1);
+}
+
+.node-circle {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: #ddd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: #666;
+    border: 3px solid #ddd;
+    transition: all 0.3s ease;
+    margin-bottom: 8px;
+}
+
+.path-node.unlocked .node-circle {
+    background: #667eea;
+    color: white;
+    border-color: #667eea;
+    box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
+}
+
+.path-node.completed .node-circle {
+    background: #4CAF50;
+    color: white;
+    border-color: #4CAF50;
+    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4);
+}
+
+.path-node.completed .node-circle::after {
+    content: '✓';
+    position: absolute;
+    font-size: 0.8rem;
+}
+
+.node-label {
+    font-size: 0.8rem;
+    text-align: center;
+    color: #666;
+    max-width: 80px;
+    line-height: 1.2;
+}
+
+.path-node.unlocked .node-label {
+    color: #333;
+    font-weight: 500;
+}
+
+.path-node.completed .node-label {
+    color: #4CAF50;
+    font-weight: bold;
+}
+
+.path-node.locked {
+    cursor: not-allowed;
+}
+
+.path-node.locked .node-circle {
+    background: #f0f0f0;
+    color: #ccc;
+    border-color: #e0e0e0;
+}
+
+.path-node.locked .node-label {
+    color: #ccc;
+}
+
+@media (max-width: 768px) {
+    .path-nodes {
+        flex-direction: column;
+        gap: 20px;
+    }
+    
+    .path-line {
+        width: 4px;
+        height: 100%;
+        left: 50%;
+        top: 0;
+        transform: translateX(-50%);
+        background: linear-gradient(180deg, #4CAF50 0%, #ddd 0%);
+    }
+}
+
 .progress-bar-container {
     margin-bottom: 40px;
 }
