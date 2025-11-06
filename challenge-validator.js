@@ -200,6 +200,32 @@ class ChallengeValidator {
         const isValid = passedCount === totalTests;
         const percentage = Math.round((passedCount / totalTests) * 100);
         
+        // Record progress for gamification systems if challenge is completed
+        if (isValid && typeof window !== 'undefined') {
+            // Record for daily challenges
+            if (window.dailyChallengeSystem) {
+                window.dailyChallengeSystem.recordProgress('challenge');
+            }
+            
+            // Record for missions based on category
+            if (window.missionSystem) {
+                if (category === 'html-basics') {
+                    window.missionSystem.recordProgress('html-challenge');
+                } else if (category === 'css-styling') {
+                    window.missionSystem.recordProgress('css-challenge');
+                } else if (category === 'js-fundamentals') {
+                    window.missionSystem.recordProgress('js-challenge');
+                }
+            }
+            
+            // Award XP with power-up multiplier
+            if (window.xpSystem && window.powerUpSystem) {
+                const baseXP = this.getChallengeXP(category, challengeId);
+                const multiplier = window.powerUpSystem.getActiveMultiplier('xp');
+                window.xpSystem.awardXP(baseXP * multiplier, `Challenge: ${rules.title}`);
+            }
+        }
+        
         return {
             isValid: isValid,
             passedCount: passedCount,
@@ -292,6 +318,18 @@ class ChallengeValidator {
         return issues;
     }
     
+    // Get XP reward for challenge completion
+    getChallengeXP(category, challengeId) {
+        const baseXP = {
+            'html-basics': 30,
+            'css-styling': 40,
+            'js-fundamentals': 50,
+            'mini-projects': 100
+        };
+        
+        return baseXP[category] || 25;
+    }
+    
     // Run comprehensive validation
     runFullValidation(category, challengeId, html, css, js) {
         const challengeValidation = this.validateChallenge(category, challengeId, html, css, js);
@@ -308,6 +346,17 @@ class ChallengeValidator {
             },
             hasIssues: htmlIssues.length > 0 || cssIssues.length > 0 || jsIssues.length > 0
         };
+    }
+    
+    // Record failed attempt for solution reveal system
+    recordFailedAttempt(category, challengeId) {
+        if (typeof window !== 'undefined' && window.localStorage) {
+            const key = `failed_attempts_${category}_${challengeId}`;
+            const attempts = parseInt(localStorage.getItem(key) || '0') + 1;
+            localStorage.setItem(key, attempts.toString());
+            return attempts;
+        }
+        return 0;
     }
 }
 

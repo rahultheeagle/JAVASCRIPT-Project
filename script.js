@@ -546,7 +546,12 @@ class XPSystem {
     // Award XP for different activities
     awardXP(amount, reason) {
         const oldLevel = this.xpData.currentLevel;
-        this.xpData.totalXP += amount;
+        
+        // Apply power-up multiplier if available
+        const multiplier = window.powerUpSystem ? window.powerUpSystem.getActiveMultiplier('xp') : 1;
+        const finalAmount = Math.floor(amount * multiplier);
+        
+        this.xpData.totalXP += finalAmount;
         
         // Calculate new level
         this.xpData.currentLevel = this.calculateLevel(this.xpData.totalXP);
@@ -555,7 +560,7 @@ class XPSystem {
         this.updateXPDisplay();
         
         // Show XP notification
-        this.showXPNotification(amount, reason);
+        this.showXPNotification(finalAmount, reason, multiplier > 1 ? `${multiplier}x bonus!` : null);
         
         // Check for level up
         if (this.xpData.currentLevel > oldLevel) {
@@ -612,13 +617,13 @@ class XPSystem {
     }
 
     // Show XP notification
-    showXPNotification(amount, reason) {
+    showXPNotification(amount, reason, bonus = null) {
         const notification = document.createElement('div');
         notification.innerHTML = `
             <div style="display: flex; align-items: center; gap: 10px;">
                 <span style="font-size: 1.5rem;">⭐</span>
                 <div>
-                    <strong>+${amount} XP</strong><br>
+                    <strong>+${amount} XP</strong>${bonus ? ` <span style="color: #FFD700;">(${bonus})</span>` : ''}<br>
                     <small>${reason}</small>
                 </div>
             </div>
@@ -796,12 +801,31 @@ class LearningPath {
 
 // Initialize all systems when DOM loads
 document.addEventListener('DOMContentLoaded', () => {
+    // Initialize core systems
     const profileSystem = new ProfileSystem();
     const progressTracker = new ProgressTracker();
-    const achievementSystem = new AchievementSystem();
+    const achievementSystem = new EnhancedAchievementSystem();
     const streakCounter = new StreakCounter();
     const xpSystem = new XPSystem();
     const learningPath = new LearningPath();
+    
+    // Initialize gamification systems
+    const dailyChallengeSystem = new DailyChallengeSystem();
+    const missionSystem = new MissionSystem();
+    const powerUpSystem = new PowerUpSystem();
+    const leaderboardSystem = new LeaderboardSystem();
+    
+    // Make systems globally accessible
+    window.profileSystem = profileSystem;
+    window.progressTracker = progressTracker;
+    window.achievementSystem = achievementSystem;
+    window.streakCounter = streakCounter;
+    window.xpSystem = xpSystem;
+    window.learningPath = learningPath;
+    window.dailyChallengeSystem = dailyChallengeSystem;
+    window.missionSystem = missionSystem;
+    window.powerUpSystem = powerUpSystem;
+    window.leaderboardSystem = leaderboardSystem;
     
     // Connect progress tracker with all systems
     const originalToggle = progressTracker.toggleLessonCompletion;
@@ -817,8 +841,14 @@ document.addEventListener('DOMContentLoaded', () => {
         originalToggle.call(this, lessonId);
         
         if (!wasCompleted && this.progressData.completedLessons.includes(lessonId)) {
-            // Lesson completed - award XP
-            xpSystem.awardXP(50, 'Lesson completed');
+            // Lesson completed - award XP with power-up multiplier
+            const xpMultiplier = powerUpSystem.getActiveMultiplier('xp');
+            xpSystem.awardXP(50 * xpMultiplier, 'Lesson completed');
+            
+            // Record progress for daily challenges and missions
+            dailyChallengeSystem.recordProgress('lesson');
+            missionSystem.recordProgress('lesson', lessonId);
+            missionSystem.recordProgress('js-lesson', lessonId >= 3 ? 1 : 0);
         }
         
         achievementSystem.checkAchievements(this.progressData.completedLessons.length);
