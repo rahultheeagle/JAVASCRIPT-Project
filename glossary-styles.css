@@ -1,0 +1,183 @@
+.glossary-container {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+}
+
+.glossary-header {
+    margin-bottom: 30px;
+}
+
+#search-input {
+    width: 100%;
+    padding: 15px 20px;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    font-size: 16px;
+    margin-bottom: 20px;
+    transition: border-color 0.3s ease;
+}
+
+#search-input:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+.alphabet-filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    justify-content: center;
+}
+
+.letter-btn {
+    width: 35px;
+    height: 35px;
+    border: 1px solid #ddd;
+    background: white;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    font-size: 14px;
+}
+
+.letter-btn:hover {
+    background: #f8f9fa;
+    border-color: #667eea;
+}
+
+.letter-btn.active {
+    background: #667eea;
+    color: white;
+    border-color: #667eea;
+}
+
+.letter-btn[data-letter="all"] {
+    width: 50px;
+}
+
+.glossary-content {
+    max-height: calc(100vh - 400px);
+    overflow-y: auto;
+}
+
+.results-count {
+    color: #666;
+    font-size: 14px;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.glossary-list {
+    display: grid;
+    gap: 15px;
+}
+
+.glossary-term {
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    padding: 20px;
+    transition: all 0.3s ease;
+}
+
+.glossary-term:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-color: #667eea;
+}
+
+.term-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 10px;
+}
+
+.term-name {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+    margin: 0;
+}
+
+.term-category {
+    background: #667eea;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.term-definition {
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 15px;
+}
+
+.term-example {
+    background: #f8f9fa;
+    border-left: 4px solid #667eea;
+    padding: 15px;
+    border-radius: 0 6px 6px 0;
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.term-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.term-tag {
+    background: #f1f3f4;
+    color: #5f6368;
+    padding: 3px 8px;
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: 500;
+}
+
+.no-results {
+    text-align: center;
+    color: #666;
+    font-style: italic;
+    margin-top: 50px;
+    padding: 40px;
+}
+
+.highlight {
+    background: #fff3cd;
+    padding: 1px 3px;
+    border-radius: 2px;
+}
+
+@media (max-width: 768px) {
+    .glossary-container {
+        padding: 20px;
+    }
+    
+    .alphabet-filter {
+        gap: 3px;
+    }
+    
+    .letter-btn {
+        width: 30px;
+        height: 30px;
+        font-size: 12px;
+    }
+    
+    .letter-btn[data-letter="all"] {
+        width: 40px;
+    }
+    
+    .term-header {
+        flex-direction: column;
+        gap: 10px;
+    }
+}

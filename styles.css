@@ -260,6 +260,11 @@ header h1 {
     color: white;
 }
 
+.glossary-btn:hover {
+    background: linear-gradient(135deg, #607D8B, #90A4AE);
+    color: white;
+}
+
 .btn-icon {
     font-size: 2.5rem;
 }
