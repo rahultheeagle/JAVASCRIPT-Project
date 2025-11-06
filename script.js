@@ -220,10 +220,125 @@ class ProgressTracker {
     }
 }
 
-// Initialize both systems when DOM loads
+// Achievement System
+class AchievementSystem {
+    constructor() {
+        this.achievementData = this.loadAchievements();
+        this.milestones = {
+            'first-lesson': { threshold: 1, name: 'First Steps' },
+            'early-bird': { threshold: 3, name: 'Early Bird' },
+            'dedicated': { threshold: 5, name: 'Dedicated Learner' },
+            'halfway': { threshold: 6, name: 'Halfway Hero' },
+            'almost-there': { threshold: 9, name: 'Almost There' },
+            'champion': { threshold: 12, name: 'CodeQuest Champion' }
+        };
+        this.initializeElements();
+        this.updateBadgeDisplay();
+    }
+
+    // Load achievements from localStorage
+    loadAchievements() {
+        const saved = localStorage.getItem('codequest_achievements');
+        return saved ? JSON.parse(saved) : {
+            earnedBadges: []
+        };
+    }
+
+    // Save achievements to localStorage
+    saveAchievements() {
+        localStorage.setItem('codequest_achievements', JSON.stringify(this.achievementData));
+    }
+
+    // Initialize DOM elements
+    initializeElements() {
+        this.badgeElements = document.querySelectorAll('.badge');
+    }
+
+    // Check and award achievements based on completed lessons
+    checkAchievements(completedCount) {
+        const newBadges = [];
+        
+        Object.keys(this.milestones).forEach(badgeId => {
+            const milestone = this.milestones[badgeId];
+            const alreadyEarned = this.achievementData.earnedBadges.includes(badgeId);
+            
+            if (completedCount >= milestone.threshold && !alreadyEarned) {
+                this.achievementData.earnedBadges.push(badgeId);
+                newBadges.push(milestone.name);
+            }
+        });
+        
+        if (newBadges.length > 0) {
+            this.saveAchievements();
+            this.updateBadgeDisplay();
+            this.showAchievementNotification(newBadges);
+        }
+    }
+
+    // Update badge display
+    updateBadgeDisplay() {
+        this.badgeElements.forEach(badge => {
+            const badgeId = badge.dataset.badge;
+            const isEarned = this.achievementData.earnedBadges.includes(badgeId);
+            
+            if (isEarned) {
+                badge.classList.add('earned');
+            } else {
+                badge.classList.remove('earned');
+            }
+        });
+    }
+
+    // Show achievement notification
+    showAchievementNotification(newBadges) {
+        newBadges.forEach((badgeName, index) => {
+            setTimeout(() => {
+                const notification = document.createElement('div');
+                notification.innerHTML = `
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <span style="font-size: 1.5rem;">🏆</span>
+                        <div>
+                            <strong>Achievement Unlocked!</strong><br>
+                            ${badgeName}
+                        </div>
+                    </div>
+                `;
+                notification.style.cssText = `
+                    position: fixed;
+                    top: ${20 + (index * 80)}px;
+                    right: 20px;
+                    background: linear-gradient(135deg, #FFD700, #FFA500);
+                    color: #333;
+                    padding: 15px 20px;
+                    border-radius: 10px;
+                    z-index: 1002;
+                    animation: badgeEarned 0.6s ease;
+                    box-shadow: 0 8px 20px rgba(255, 215, 0, 0.4);
+                    border: 2px solid #B8860B;
+                `;
+                
+                document.body.appendChild(notification);
+                
+                setTimeout(() => {
+                    notification.remove();
+                }, 4000);
+            }, index * 500);
+        });
+    }
+}
+
+// Initialize all systems when DOM loads
 document.addEventListener('DOMContentLoaded', () => {
-    new ProfileSystem();
-    new ProgressTracker();
+    const profileSystem = new ProfileSystem();
+    const progressTracker = new ProgressTracker();
+    const achievementSystem = new AchievementSystem();
+    
+    // Connect progress tracker with achievement system
+    const originalToggle = progressTracker.toggleLessonCompletion;
+    progressTracker.toggleLessonCompletion = function(lessonId) {
+        originalToggle.call(this, lessonId);
+        achievementSystem.checkAchievements(this.progressData.completedLessons.length);
+    };
 });
 
 // Add CSS animation for notifications

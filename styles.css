@@ -291,3 +291,101 @@ header h1 {
     font-size: 0.9rem;
     margin: 0;
 }
+
+.achievements-section {
+    margin-top: 50px;
+}
+
+.achievements-section h3 {
+    color: #333;
+    font-size: 1.8rem;
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+.badges-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.badge {
+    display: flex;
+    align-items: center;
+    background: white;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    opacity: 0.4;
+    transform: scale(0.95);
+    border: 2px solid #e0e0e0;
+}
+
+.badge.earned {
+    opacity: 1;
+    transform: scale(1);
+    border: 2px solid #FFD700;
+    background: linear-gradient(135deg, #fff9e6, #ffffff);
+    box-shadow: 0 8px 20px rgba(255, 215, 0, 0.3);
+}
+
+.badge.earned:hover {
+    transform: scale(1.05);
+    box-shadow: 0 12px 25px rgba(255, 215, 0, 0.4);
+}
+
+.badge-icon {
+    font-size: 3rem;
+    margin-right: 20px;
+    filter: grayscale(100%);
+    transition: filter 0.3s ease;
+}
+
+.badge.earned .badge-icon {
+    filter: grayscale(0%);
+    animation: bounce 0.6s ease;
+}
+
+.badge-info h4 {
+    color: #333;
+    margin: 0 0 8px 0;
+    font-size: 1.3rem;
+}
+
+.badge-info p {
+    color: #666;
+    margin: 0;
+    font-size: 0.95rem;
+}
+
+.badge.earned .badge-info h4 {
+    color: #B8860B;
+    font-weight: bold;
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-10px);
+    }
+    60% {
+        transform: translateY(-5px);
+    }
+}
+
+@keyframes badgeEarned {
+    0% {
+        transform: scale(0.8);
+        opacity: 0.5;
+    }
+    50% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
