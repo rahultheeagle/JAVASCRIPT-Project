@@ -156,11 +156,52 @@ body {
     position: relative;
 }
 
+.editor-wrapper {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: none;
+}
+
+.editor-wrapper.active {
+    display: block;
+}
+
+.code-display {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 20px;
+    background: transparent;
+    pointer-events: none;
+    z-index: 1;
+    overflow: hidden;
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    font-size: 14px;
+    line-height: 1.5;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+.code-display code {
+    background: transparent !important;
+    padding: 0 !important;
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+}
+
 .code-editor {
     width: 100%;
     height: 100%;
-    background: #1e1e1e;
-    color: #d4d4d4;
+    background: transparent;
+    color: transparent;
+    caret-color: #fff;
     border: none;
     outline: none;
     font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
@@ -171,15 +212,17 @@ body {
     position: absolute;
     top: 0;
     left: 0;
-    display: none;
-}
-
-.code-editor.active {
-    display: block;
+    z-index: 2;
+    white-space: pre-wrap;
+    word-wrap: break-word;
 }
 
 .code-editor:focus {
-    background: #1e1e1e;
+    background: transparent;
+}
+
+.code-editor::selection {
+    background: rgba(255, 255, 255, 0.2);
 }
 
 .preview-content {
@@ -230,4 +273,60 @@ body {
     .editor-controls {
         justify-content: center;
     }
+}
+
+/* Custom Prism theme overrides */
+.code-display .token.comment,
+.code-display .token.prolog,
+.code-display .token.doctype,
+.code-display .token.cdata {
+    color: #6a9955;
+}
+
+.code-display .token.punctuation {
+    color: #d4d4d4;
+}
+
+.code-display .token.property,
+.code-display .token.tag,
+.code-display .token.boolean,
+.code-display .token.number,
+.code-display .token.constant,
+.code-display .token.symbol,
+.code-display .token.deleted {
+    color: #b5cea8;
+}
+
+.code-display .token.selector,
+.code-display .token.attr-name,
+.code-display .token.string,
+.code-display .token.char,
+.code-display .token.builtin,
+.code-display .token.inserted {
+    color: #ce9178;
+}
+
+.code-display .token.operator,
+.code-display .token.entity,
+.code-display .token.url,
+.code-display .language-css .token.string,
+.code-display .style .token.string {
+    color: #d4d4d4;
+}
+
+.code-display .token.atrule,
+.code-display .token.attr-value,
+.code-display .token.keyword {
+    color: #569cd6;
+}
+
+.code-display .token.function,
+.code-display .token.class-name {
+    color: #dcdcaa;
+}
+
+.code-display .token.regex,
+.code-display .token.important,
+.code-display .token.variable {
+    color: #d16969;
 }

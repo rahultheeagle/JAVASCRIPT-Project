@@ -4,9 +4,12 @@ class CodeEditor {
         this.htmlEditor = document.getElementById('html-editor');
         this.cssEditor = document.getElementById('css-editor');
         this.jsEditor = document.getElementById('js-editor');
+        this.htmlHighlight = document.getElementById('html-highlight');
+        this.cssHighlight = document.getElementById('css-highlight');
+        this.jsHighlight = document.getElementById('js-highlight');
         this.previewFrame = document.getElementById('preview-frame');
         this.tabs = document.querySelectorAll('.tab');
-        this.editors = document.querySelectorAll('.code-editor');
+        this.editorWrappers = document.querySelectorAll('.editor-wrapper');
         this.runBtn = document.getElementById('run-code');
         this.refreshBtn = document.getElementById('refresh-preview');
         this.backBtn = document.getElementById('back-to-dashboard');
@@ -24,6 +27,35 @@ class CodeEditor {
     initializeEditor() {
         // Set initial active tab
         this.switchTab('html');
+        
+        // Initialize syntax highlighting
+        this.initializeSyntaxHighlighting();
+    }
+    
+    // Initialize syntax highlighting
+    initializeSyntaxHighlighting() {
+        // Wait for Prism to load
+        if (typeof Prism !== 'undefined') {
+            this.updateAllHighlighting();
+        } else {
+            setTimeout(() => this.initializeSyntaxHighlighting(), 100);
+        }
+    }
+    
+    // Update syntax highlighting for all editors
+    updateAllHighlighting() {
+        this.updateHighlighting('html', this.htmlEditor.value, this.htmlHighlight);
+        this.updateHighlighting('css', this.cssEditor.value, this.cssHighlight);
+        this.updateHighlighting('javascript', this.jsEditor.value, this.jsHighlight);
+    }
+    
+    // Update syntax highlighting for specific language
+    updateHighlighting(language, code, highlightElement) {
+        if (typeof Prism !== 'undefined') {
+            highlightElement.textContent = code;
+            highlightElement.className = `language-${language}`;
+            Prism.highlightElement(highlightElement);
+        }
     }
     
     // Bind all event listeners
@@ -40,13 +72,38 @@ class CodeEditor {
         this.runBtn.addEventListener('click', () => this.updatePreview());
         this.refreshBtn.addEventListener('click', () => this.updatePreview());
         
-        // Auto-update preview on code change (with debounce)
+        // Auto-update preview and syntax highlighting on code change
         let updateTimeout;
-        [this.htmlEditor, this.cssEditor, this.jsEditor].forEach(editor => {
-            editor.addEventListener('input', () => {
-                clearTimeout(updateTimeout);
-                updateTimeout = setTimeout(() => this.updatePreview(), 500);
-            });
+        let highlightTimeout;
+        
+        this.htmlEditor.addEventListener('input', () => {
+            clearTimeout(highlightTimeout);
+            highlightTimeout = setTimeout(() => {
+                this.updateHighlighting('html', this.htmlEditor.value, this.htmlHighlight);
+            }, 100);
+            
+            clearTimeout(updateTimeout);
+            updateTimeout = setTimeout(() => this.updatePreview(), 500);
+        });
+        
+        this.cssEditor.addEventListener('input', () => {
+            clearTimeout(highlightTimeout);
+            highlightTimeout = setTimeout(() => {
+                this.updateHighlighting('css', this.cssEditor.value, this.cssHighlight);
+            }, 100);
+            
+            clearTimeout(updateTimeout);
+            updateTimeout = setTimeout(() => this.updatePreview(), 500);
+        });
+        
+        this.jsEditor.addEventListener('input', () => {
+            clearTimeout(highlightTimeout);
+            highlightTimeout = setTimeout(() => {
+                this.updateHighlighting('javascript', this.jsEditor.value, this.jsHighlight);
+            }, 100);
+            
+            clearTimeout(updateTimeout);
+            updateTimeout = setTimeout(() => this.updatePreview(), 500);
         });
         
         // Back to dashboard
@@ -94,11 +151,12 @@ class CodeEditor {
             }
         });
         
-        // Update editor visibility
-        this.editors.forEach(editor => {
-            editor.classList.remove('active');
-            if (editor.id === `${lang}-editor`) {
-                editor.classList.add('active');
+        // Update editor wrapper visibility
+        this.editorWrappers.forEach(wrapper => {
+            wrapper.classList.remove('active');
+            if (wrapper.dataset.lang === lang) {
+                wrapper.classList.add('active');
+                const editor = wrapper.querySelector('.code-editor');
                 editor.focus();
             }
         });
