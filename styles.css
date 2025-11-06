@@ -197,6 +197,52 @@ header h1 {
     font-size: 1.2rem;
 }
 
+.quick-actions {
+    margin: 30px 0;
+    display: flex;
+    justify-content: center;
+}
+
+.action-btn {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background: white;
+    padding: 20px 30px;
+    border-radius: 12px;
+    text-decoration: none;
+    color: #333;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.action-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+    border-color: #667eea;
+}
+
+.editor-btn:hover {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+}
+
+.btn-icon {
+    font-size: 2.5rem;
+}
+
+.btn-content h4 {
+    margin: 0 0 5px 0;
+    font-size: 1.3rem;
+}
+
+.btn-content p {
+    margin: 0;
+    font-size: 0.9rem;
+    opacity: 0.8;
+}
+
 .progress-section {
     margin-top: 40px;
     text-align: left;
