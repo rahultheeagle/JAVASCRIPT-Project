@@ -166,8 +166,8 @@ header h1 {
 }
 
 .progress-overview {
-    display: flex;
-    justify-content: space-around;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     margin-bottom: 30px;
     gap: 20px;
 }
@@ -193,6 +193,44 @@ header h1 {
     font-size: 0.9rem;
     text-transform: uppercase;
     letter-spacing: 1px;
+}
+
+.streak-stat {
+    position: relative;
+}
+
+.streak-stat.hot-streak {
+    background: linear-gradient(135deg, #ff6b6b, #ff8e8e);
+    color: white;
+    transform: scale(1.05);
+    box-shadow: 0 8px 20px rgba(255, 107, 107, 0.3);
+}
+
+.streak-stat.hot-streak .stat-number {
+    color: white;
+    animation: fireGlow 2s ease-in-out infinite alternate;
+}
+
+.streak-stat.hot-streak .stat-label {
+    color: #ffe0e0;
+}
+
+.streak-info {
+    margin-top: 8px;
+}
+
+.streak-info small {
+    font-size: 0.75rem;
+    opacity: 0.8;
+}
+
+@keyframes fireGlow {
+    0% {
+        text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+    }
+    100% {
+        text-shadow: 0 0 20px rgba(255, 255, 255, 0.8), 0 0 30px rgba(255, 107, 107, 0.5);
+    }
 }
 
 .progress-bar-container {
