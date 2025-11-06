@@ -435,7 +435,9 @@ class PowerUpSystem {
         this.powerUps = {
             'double-xp': { name: 'Double XP', cost: 200, duration: 3600000 }, // 1 hour
             'hint-master': { name: 'Hint Master', cost: 150, duration: 1800000 }, // 30 min
-            'streak-shield': { name: 'Streak Shield', cost: 100, duration: 86400000 } // 24 hours
+            'streak-shield': { name: 'Streak Shield', cost: 100, duration: 86400000 }, // 24 hours
+            'dark-theme': { name: 'Dark Theme', cost: 50, duration: 0 }, // Permanent
+            'skip-challenge': { name: 'Skip Challenge', cost: 75, duration: 0 } // One-time use
         };
         this.initializeElements();
         this.updatePowerUps();
@@ -468,18 +470,24 @@ class PowerUpSystem {
             const powerUpId = element.dataset.powerup;
             const btn = element.querySelector('.power-up-btn');
             const isActive = this.isPowerUpActive(powerUpId);
+            const isOwned = this.hasPowerUp(powerUpId);
+            const powerUp = this.powerUps[powerUpId];
             
             if (isActive) {
                 element.classList.add('active');
                 btn.textContent = 'Active';
                 btn.disabled = true;
+            } else if (isOwned && powerUp.duration === 0) {
+                element.classList.add('owned');
+                btn.textContent = 'Owned';
+                btn.disabled = true;
             } else {
-                element.classList.remove('active');
-                btn.textContent = 'Activate';
+                element.classList.remove('active', 'owned');
+                btn.textContent = powerUp.duration === 0 ? (powerUpId === 'dark-theme' ? 'Unlock' : 'Buy') : 'Activate';
                 btn.disabled = false;
                 
                 // Check if user has enough XP
-                const cost = this.powerUps[powerUpId].cost;
+                const cost = powerUp.cost;
                 const userXP = window.xpSystem ? window.xpSystem.xpData.totalXP : 0;
                 if (userXP < cost) {
                     btn.disabled = true;
@@ -511,14 +519,25 @@ class PowerUpSystem {
         }
         
         // Activate power-up
-        this.powerUpData.active[powerUpId] = {
-            activatedAt: Date.now(),
-            expiresAt: Date.now() + powerUp.duration
-        };
+        if (powerUp.duration === 0) {
+            // Permanent power-ups go to inventory
+            this.powerUpData.inventory[powerUpId] = true;
+        } else {
+            // Temporary power-ups go to active
+            this.powerUpData.active[powerUpId] = {
+                activatedAt: Date.now(),
+                expiresAt: Date.now() + powerUp.duration
+            };
+        }
         
         this.savePowerUpData();
         this.updatePowerUps();
         this.showActivationNotification(powerUp);
+        
+        // Apply theme if dark theme was purchased
+        if (powerUpId === 'dark-theme') {
+            this.applyTheme();
+        }
     }
 
     isPowerUpActive(powerUpId) {
@@ -557,9 +576,26 @@ class PowerUpSystem {
                 return this.isPowerUpActive('hint-master') ? 0 : 1; // Free hints
             case 'streak':
                 return this.isPowerUpActive('streak-shield') ? 1 : 0; // Streak protection
+            case 'theme':
+                return this.hasPowerUp('dark-theme') ? 'dark' : 'light';
+            case 'skip':
+                return this.hasPowerUp('skip-challenge');
             default:
                 return 1;
         }
+    }
+    
+    hasPowerUp(powerUpId) {
+        return this.powerUpData.inventory[powerUpId] || false;
+    }
+    
+    usePowerUp(powerUpId) {
+        if (powerUpId === 'skip-challenge' && this.hasPowerUp('skip-challenge')) {
+            this.powerUpData.inventory['skip-challenge'] = false;
+            this.savePowerUpData();
+            return true;
+        }
+        return false;
     }
 
     showActivationNotification(powerUp) {
@@ -619,6 +655,23 @@ class PowerUpSystem {
         setTimeout(() => {
             notification.remove();
         }, 3000);
+    }
+    
+    applyTheme() {
+        if (this.hasPowerUp('dark-theme')) {
+            document.body.classList.add('dark-theme');
+            const themeToggle = document.getElementById('theme-toggle');
+            if (themeToggle) {
+                themeToggle.style.display = 'block';
+                themeToggle.addEventListener('click', this.toggleTheme.bind(this));
+            }
+        }
+    }
+    
+    toggleTheme() {
+        document.body.classList.toggle('dark-theme');
+        const toggle = document.getElementById('theme-toggle');
+        toggle.textContent = document.body.classList.contains('dark-theme') ? '☀️' : '🌙';
     }
 }
 

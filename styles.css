@@ -939,6 +939,31 @@ header h1 {
     background: linear-gradient(135deg, #f8fff8, #ffffff);
 }
 
+.power-up.owned {
+    border-color: #FFD700;
+    background: linear-gradient(135deg, #fffbf0, #ffffff);
+}
+
+/* Dark Theme */
+body.dark-theme {
+    background: linear-gradient(135deg, #2c3e50, #34495e);
+    color: #ecf0f1;
+}
+
+.dark-theme .dashboard {
+    background: rgba(52, 73, 94, 0.9);
+    color: #ecf0f1;
+}
+
+.dark-theme .lesson-card,
+.dark-theme .badge,
+.dark-theme .mission-card,
+.dark-theme .power-up {
+    background: #34495e;
+    color: #ecf0f1;
+    border-color: #4a6741;
+}
+
 .power-up-icon {
     font-size: 2.5rem;
     text-align: center;
@@ -1112,6 +1137,27 @@ header h1 {
 
 .leaderboard-item.current-user .leaderboard-xp {
     color: #FFD700;
+}
+
+/* Theme Toggle Button */
+.theme-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #667eea;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 1000;
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+}
+
+.theme-toggle:hover {
+    background: #5a6fd8;
+    transform: scale(1.1);
 }
 
 @media (max-width: 768px) {

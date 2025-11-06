@@ -827,6 +827,9 @@ document.addEventListener('DOMContentLoaded', () => {
     window.powerUpSystem = powerUpSystem;
     window.leaderboardSystem = leaderboardSystem;
     
+    // Initialize theme
+    powerUpSystem.applyTheme();
+    
     // Connect progress tracker with all systems
     const originalToggle = progressTracker.toggleLessonCompletion;
     progressTracker.toggleLessonCompletion = function(lessonId) {
