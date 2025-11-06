@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>External Resources - CodeQuest</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="resources-styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>External Resources</h1>
+            <a href="index.html" class="back-btn">← Back to Dashboard</a>
+        </header>
+
+        <main>
+            <div class="resources-container">
+                <div class="resources-tabs">
+                    <button class="tab-btn active" data-tab="documentation">Documentation</button>
+                    <button class="tab-btn" data-tab="tutorials">Tutorials</button>
+                    <button class="tab-btn" data-tab="tools">Tools</button>
+                    <button class="tab-btn" data-tab="practice">Practice</button>
+                </div>
+
+                <div class="resources-content" id="resources-content">
+                    <!-- Content populated by JS -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="resources-system.js"></script>
+</body>
+</html>
