@@ -21,6 +21,9 @@ class CodeEditor {
         this.clearConsoleBtn = document.getElementById('clear-console');
         this.toggleConsoleBtn = document.getElementById('toggle-console');
         this.consoleSection = document.querySelector('.console-section');
+        this.saveStatus = document.getElementById('save-status');
+        this.saveBtn = document.getElementById('save-code');
+        this.loadBtn = document.getElementById('load-code');
         
         this.currentTab = 'html';
         this.isResizing = false;
@@ -29,6 +32,8 @@ class CodeEditor {
         this.updateTimeout = null;
         this.highlightTimeout = null;
         this.consoleVisible = true;
+        this.autoSaveTimeout = null;
+        this.lastSavedContent = { html: '', css: '', js: '' };
         
         this.initializeEditor();
         this.bindEvents();
@@ -52,6 +57,9 @@ class CodeEditor {
         
         // Initialize syntax highlighting
         this.initializeSyntaxHighlighting();
+        
+        // Load saved content
+        this.loadSavedContent();
     }
     
     // Initialize syntax highlighting
@@ -80,7 +88,7 @@ class CodeEditor {
         }
     }
     
-    // Handle code changes with real-time execution
+    // Handle code changes with real-time execution and auto-save
     handleCodeChange(language, code, highlightElement) {
         // Update syntax highlighting immediately
         clearTimeout(this.highlightTimeout);
@@ -96,6 +104,13 @@ class CodeEditor {
                 this.updatePreview();
             }, this.executionDelay);
         }
+        
+        // Auto-save functionality
+        this.setSaveStatus('unsaved', '✏ Unsaved');
+        clearTimeout(this.autoSaveTimeout);
+        this.autoSaveTimeout = setTimeout(() => {
+            this.autoSave();
+        }, 2000); // Auto-save after 2 seconds of inactivity
     }
     
     // Set execution status
@@ -145,6 +160,138 @@ class CodeEditor {
         } else {
             this.consoleSection.classList.add('hidden');
             this.toggleConsoleBtn.textContent = 'Show';
+        }
+    }
+    
+    // Set save status
+    setSaveStatus(status, text) {
+        this.saveStatus.className = `save-status ${status}`;
+        this.saveStatus.textContent = text;
+    }
+    
+    // Auto-save to localStorage
+    autoSave() {
+        const currentContent = {
+            html: this.htmlEditor.value,
+            css: this.cssEditor.value,
+            js: this.jsEditor.value
+        };
+        
+        // Only save if content has changed
+        if (JSON.stringify(currentContent) !== JSON.stringify(this.lastSavedContent)) {
+            this.setSaveStatus('saving', '💾 Saving...');
+            
+            setTimeout(() => {
+                localStorage.setItem('codequest_editor_autosave', JSON.stringify({
+                    ...currentContent,
+                    timestamp: new Date().toISOString()
+                }));
+                
+                this.lastSavedContent = { ...currentContent };
+                this.setSaveStatus('saved', '✓ Auto-saved');
+                
+                setTimeout(() => {
+                    this.setSaveStatus('saved', '✓ Saved');
+                }, 1500);
+            }, 300);
+        }
+    }
+    
+    // Manual save to localStorage
+    saveToStorage() {
+        this.setSaveStatus('saving', '💾 Saving...');
+        
+        const content = {
+            html: this.htmlEditor.value,
+            css: this.cssEditor.value,
+            js: this.jsEditor.value,
+            timestamp: new Date().toISOString()
+        };
+        
+        localStorage.setItem('codequest_editor_manual', JSON.stringify(content));
+        localStorage.setItem('codequest_editor_autosave', JSON.stringify(content));
+        
+        this.lastSavedContent = {
+            html: content.html,
+            css: content.css,
+            js: content.js
+        };
+        
+        setTimeout(() => {
+            this.setSaveStatus('saved', '✓ Saved manually');
+            this.addConsoleMessage('info', 'Code saved to local storage');
+            
+            setTimeout(() => {
+                this.setSaveStatus('saved', '✓ Saved');
+            }, 2000);
+        }, 300);
+    }
+    
+    // Load from localStorage
+    loadFromStorage() {
+        const saved = localStorage.getItem('codequest_editor_manual') || localStorage.getItem('codequest_editor_autosave');
+        
+        if (saved) {
+            try {
+                const content = JSON.parse(saved);
+                
+                this.htmlEditor.value = content.html || '';
+                this.cssEditor.value = content.css || '';
+                this.jsEditor.value = content.js || '';
+                
+                this.updateAllHighlighting();
+                if (this.isAutoRun) {
+                    this.updatePreview();
+                }
+                
+                this.lastSavedContent = {
+                    html: content.html || '',
+                    css: content.css || '',
+                    js: content.js || ''
+                };
+                
+                const saveDate = new Date(content.timestamp).toLocaleString();
+                this.addConsoleMessage('info', `Code loaded from ${saveDate}`);
+                this.setSaveStatus('saved', '✓ Loaded');
+                
+                setTimeout(() => {
+                    this.setSaveStatus('saved', '✓ Saved');
+                }, 2000);
+                
+            } catch (error) {
+                this.addConsoleMessage('error', 'Failed to load saved code: ' + error.message);
+            }
+        } else {
+            this.addConsoleMessage('warn', 'No saved code found');
+        }
+    }
+    
+    // Load saved content on initialization
+    loadSavedContent() {
+        const autoSaved = localStorage.getItem('codequest_editor_autosave');
+        
+        if (autoSaved) {
+            try {
+                const content = JSON.parse(autoSaved);
+                
+                this.htmlEditor.value = content.html || this.htmlEditor.value;
+                this.cssEditor.value = content.css || this.cssEditor.value;
+                this.jsEditor.value = content.js || this.jsEditor.value;
+                
+                this.lastSavedContent = {
+                    html: content.html || '',
+                    css: content.css || '',
+                    js: content.js || ''
+                };
+                
+                this.setSaveStatus('saved', '✓ Restored');
+                setTimeout(() => {
+                    this.setSaveStatus('saved', '✓ Saved');
+                }, 2000);
+                
+            } catch (error) {
+                console.error('Failed to load auto-saved content:', error);
+            }
         }
     }
     
@@ -200,6 +347,25 @@ class CodeEditor {
         
         this.toggleConsoleBtn.addEventListener('click', () => {
             this.toggleConsole();
+        });
+        
+        // Save/Load controls
+        this.saveBtn.addEventListener('click', () => {
+            this.saveToStorage();
+        });
+        
+        this.loadBtn.addEventListener('click', () => {
+            this.loadFromStorage();
+        });
+        
+        // Keyboard shortcuts for save/load
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey || e.metaKey) {
+                if (e.key === 's') {
+                    e.preventDefault();
+                    this.saveToStorage();
+                }
+            }
         });
         
         // Resizer functionality

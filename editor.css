@@ -27,9 +27,34 @@ body {
     border-bottom: 1px solid #3e3e42;
 }
 
+.editor-title {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
 .editor-header h1 {
     color: #fff;
     font-size: 1.5rem;
+    margin: 0;
+}
+
+.save-status {
+    font-size: 0.85rem;
+    padding: 4px 8px;
+    border-radius: 4px;
+    background: #4CAF50;
+    color: white;
+    transition: all 0.3s;
+}
+
+.save-status.saving {
+    background: #FF9800;
+    animation: pulse 1s infinite;
+}
+
+.save-status.unsaved {
+    background: #f44336;
 }
 
 .editor-controls {
@@ -43,6 +68,35 @@ body {
     display: flex;
     align-items: center;
     gap: 15px;
+}
+
+.save-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.save-btn, .load-btn {
+    background: #2196F3;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background 0.3s;
+}
+
+.save-btn:hover {
+    background: #1976D2;
+}
+
+.load-btn {
+    background: #9C27B0;
+}
+
+.load-btn:hover {
+    background: #7B1FA2;
 }
 
 .run-btn {

@@ -12,7 +12,10 @@
 <body>
     <div class="editor-container">
         <header class="editor-header">
-            <h1>CodeQuest Code Editor</h1>
+            <div class="editor-title">
+                <h1>CodeQuest Code Editor</h1>
+                <span id="save-status" class="save-status">✓ Saved</span>
+            </div>
             <div class="editor-controls">
                 <div class="execution-controls">
                     <button id="run-code" class="run-btn">▶ Run Code</button>
@@ -28,7 +31,11 @@
                         <option value="1000">Slow (1s)</option>
                     </select>
                 </div>
-                <button id="back-to-dashboard" class="back-btn">← Dashboard</button>
+                <div class="save-controls">
+                    <button id="save-code" class="save-btn">💾 Save</button>
+                    <button id="load-code" class="load-btn">📁 Load</button>
+                    <button id="back-to-dashboard" class="back-btn">← Dashboard</button>
+                </div>
             </div>
         </header>
 
