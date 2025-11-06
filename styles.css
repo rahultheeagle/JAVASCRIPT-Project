@@ -201,6 +201,8 @@ header h1 {
     margin: 30px 0;
     display: flex;
     justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
 }
 
 .action-btn {
@@ -225,6 +227,11 @@ header h1 {
 
 .editor-btn:hover {
     background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+}
+
+.challenges-btn:hover {
+    background: linear-gradient(135deg, #4CAF50, #66BB6A);
     color: white;
 }
 

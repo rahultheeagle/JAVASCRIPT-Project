@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeQuest - Challenges</title>
+    <link rel="stylesheet" href="challenges.css">
+</head>
+<body>
+    <div class="challenges-container">
+        <header class="challenges-header">
+            <h1>CodeQuest Challenges</h1>
+            <div class="header-controls">
+                <button id="back-to-dashboard" class="back-btn">← Dashboard</button>
+            </div>
+        </header>
+
+        <div class="challenges-content">
+            <div class="categories-grid">
+                <div class="category-card" data-category="html-basics">
+                    <div class="category-icon">🏗️</div>
+                    <h3>HTML Basics</h3>
+                    <p>Learn the fundamentals of HTML structure and elements</p>
+                    <div class="category-stats">
+                        <span class="challenge-count">10 Challenges</span>
+                        <span class="progress-indicator">
+                            <span class="completed" id="html-completed">0</span>/10
+                        </span>
+                    </div>
+                    <div class="category-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="html-progress"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="category-card" data-category="css-styling">
+                    <div class="category-icon">🎨</div>
+                    <h3>CSS Styling</h3>
+                    <p>Master CSS properties, layouts, and visual design</p>
+                    <div class="category-stats">
+                        <span class="challenge-count">10 Challenges</span>
+                        <span class="progress-indicator">
+                            <span class="completed" id="css-completed">0</span>/10
+                        </span>
+                    </div>
+                    <div class="category-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="css-progress"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="category-card" data-category="js-fundamentals">
+                    <div class="category-icon">⚡</div>
+                    <h3>JavaScript Fundamentals</h3>
+                    <p>Build interactive functionality with JavaScript</p>
+                    <div class="category-stats">
+                        <span class="challenge-count">10 Challenges</span>
+                        <span class="progress-indicator">
+                            <span class="completed" id="js-completed">0</span>/10
+                        </span>
+                    </div>
+                    <div class="category-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="js-progress"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="category-card" data-category="mini-projects">
+                    <div class="category-icon">🚀</div>
+                    <h3>Mini-Projects</h3>
+                    <p>Complete projects combining HTML, CSS, and JavaScript</p>
+                    <div class="category-stats">
+                        <span class="challenge-count">5 Challenges</span>
+                        <span class="progress-indicator">
+                            <span class="completed" id="projects-completed">0</span>/5
+                        </span>
+                    </div>
+                    <div class="category-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="projects-progress"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="challenges-list" id="challenges-list" style="display: none;">
+                <div class="list-header">
+                    <button id="back-to-categories" class="back-btn">← Categories</button>
+                    <h2 id="category-title">Category Challenges</h2>
+                </div>
+                <div class="challenges-grid" id="challenges-grid">
+                    <!-- Challenges will be populated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="challenges.js"></script>
+</body>
+</html>
