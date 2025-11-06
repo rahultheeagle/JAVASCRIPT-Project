@@ -125,6 +125,135 @@ body {
     animation: pulse 0.5s ease;
 }
 
+.validation-panel {
+    background: #2d2d30;
+    border-top: 1px solid #3e3e42;
+    max-height: 300px;
+    display: flex;
+    flex-direction: column;
+}
+
+.validation-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 20px;
+    border-bottom: 1px solid #3e3e42;
+}
+
+.validation-header h4 {
+    color: #cccccc;
+    font-size: 1rem;
+    margin: 0;
+}
+
+.validate-btn {
+    background: #4CAF50;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background 0.3s;
+}
+
+.validate-btn:hover {
+    background: #45a049;
+}
+
+.validate-btn.validating {
+    background: #FF9800;
+    animation: pulse 1s infinite;
+}
+
+.validation-results {
+    flex: 1;
+    overflow-y: auto;
+    padding: 15px 20px;
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    font-size: 0.9rem;
+}
+
+.validation-message {
+    color: #cccccc;
+    text-align: center;
+    padding: 20px;
+}
+
+.validation-summary {
+    background: rgba(76, 175, 80, 0.1);
+    border-left: 4px solid #4CAF50;
+    padding: 12px 15px;
+    margin-bottom: 15px;
+    border-radius: 4px;
+}
+
+.validation-summary.failed {
+    background: rgba(244, 67, 54, 0.1);
+    border-left-color: #f44336;
+}
+
+.validation-summary.partial {
+    background: rgba(255, 152, 0, 0.1);
+    border-left-color: #ff9800;
+}
+
+.validation-item {
+    display: flex;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid #3e3e42;
+}
+
+.validation-item:last-child {
+    border-bottom: none;
+}
+
+.validation-icon {
+    margin-right: 10px;
+    font-size: 1.1rem;
+}
+
+.validation-icon.passed {
+    color: #4CAF50;
+}
+
+.validation-icon.failed {
+    color: #f44336;
+}
+
+.validation-text {
+    flex: 1;
+    color: #cccccc;
+}
+
+.validation-text.passed {
+    color: #a5d6a7;
+}
+
+.validation-text.failed {
+    color: #ffcdd2;
+}
+
+.syntax-issues {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #3e3e42;
+}
+
+.syntax-issues h5 {
+    color: #ff9800;
+    margin-bottom: 10px;
+    font-size: 0.95rem;
+}
+
+.syntax-issue {
+    color: #ffcc02;
+    padding: 4px 0;
+    font-size: 0.85rem;
+}
+
 .run-btn {
     background: #4CAF50;
     color: white;

@@ -26,8 +26,12 @@ class CodeEditor {
         this.loadBtn = document.getElementById('load-code');
         this.formatBtn = document.getElementById('format-code');
         this.resetBtn = document.getElementById('reset-code');
+        this.validateBtn = document.getElementById('validate-solution');
+        this.validationResults = document.getElementById('validation-results');
         
         this.currentTab = 'html';
+        this.validator = new ChallengeValidator();
+        this.challengeInfo = this.loadChallengeInfo();
         this.isResizing = false;
         this.isAutoRun = true;
         this.executionDelay = 300;
@@ -635,6 +639,10 @@ h1 {
             this.showResetConfirmation();
         });
         
+        this.validateBtn.addEventListener('click', () => {
+            this.validateSolution();
+        });
+        
         // Keyboard shortcuts for save/load/format
         document.addEventListener('keydown', (e) => {
             if (e.ctrlKey || e.metaKey) {
@@ -855,5 +863,155 @@ h1 {
 
 // Initialize editor when DOM loads
 document.addEventListener('DOMContentLoaded', () => {
-    new CodeEditor();
+    const editor = new CodeEditor();
+    
+    // Add validation methods to editor
+    editor.loadChallengeInfo = function() {
+        const saved = localStorage.getItem('codequest_editor_challenge');
+        return saved ? JSON.parse(saved) : null;
+    };
+    
+    editor.validateSolution = function() {
+        if (!this.challengeInfo) {
+            this.showValidationResults({
+                challenge: {
+                    isValid: false,
+                    message: 'No challenge loaded. Open a challenge from the challenges page.',
+                    results: []
+                },
+                syntax: { html: [], css: [], js: [] },
+                hasIssues: false
+            });
+            return;
+        }
+        
+        this.validateBtn.classList.add('validating');
+        this.validateBtn.textContent = 'Validating...';
+        
+        setTimeout(() => {
+            const html = this.htmlEditor.value;
+            const css = this.cssEditor.value;
+            const js = this.jsEditor.value;
+            
+            const validation = this.validator.runFullValidation(
+                this.challengeInfo.category,
+                this.challengeInfo.challengeId,
+                html,
+                css,
+                js
+            );
+            
+            this.showValidationResults(validation);
+            
+            if (validation.challenge.isValid) {
+                this.markChallengeCompleted();
+            }
+            
+            this.validateBtn.classList.remove('validating');
+            this.validateBtn.textContent = 'Check Solution';
+        }, 1000);
+    };
+    
+    editor.showValidationResults = function(validation) {
+        const { challenge, syntax, hasIssues } = validation;
+        
+        let summaryClass = 'validation-summary';
+        if (challenge.isValid) {
+            summaryClass += ' passed';
+        } else if (challenge.percentage >= 50) {
+            summaryClass += ' partial';
+        } else {
+            summaryClass += ' failed';
+        }
+        
+        let html = `
+            <div class="${summaryClass}">
+                <strong>${challenge.message}</strong>
+                ${challenge.totalTests ? `<br><small>${challenge.passedCount}/${challenge.totalTests} requirements met</small>` : ''}
+            </div>
+        `;
+        
+        if (challenge.results && challenge.results.length > 0) {
+            html += '<div class="validation-items">';
+            challenge.results.forEach(result => {
+                const iconClass = result.passed ? 'passed' : 'failed';
+                const textClass = result.passed ? 'passed' : 'failed';
+                const icon = result.passed ? '✓' : '✗';
+                
+                html += `
+                    <div class="validation-item">
+                        <span class="validation-icon ${iconClass}">${icon}</span>
+                        <span class="validation-text ${textClass}">
+                            <strong>${result.name}:</strong> ${result.message}
+                        </span>
+                    </div>
+                `;
+            });
+            html += '</div>';
+        }
+        
+        if (hasIssues) {
+            html += '<div class="syntax-issues">';
+            html += '<h5>⚠ Code Issues:</h5>';
+            
+            ['html', 'css', 'js'].forEach(lang => {
+                if (syntax[lang].length > 0) {
+                    html += `<div><strong>${lang.toUpperCase()}:</strong></div>`;
+                    syntax[lang].forEach(issue => {
+                        html += `<div class="syntax-issue">• ${issue}</div>`;
+                    });
+                }
+            });
+            
+            html += '</div>';
+        }
+        
+        this.validationResults.innerHTML = html;
+    };
+    
+    editor.markChallengeCompleted = function() {
+        if (!this.challengeInfo) return;
+        
+        const challengeData = JSON.parse(localStorage.getItem('codequest_challenges') || '{}');
+        const category = this.challengeInfo.category;
+        const challengeId = this.challengeInfo.challengeId;
+        
+        if (!challengeData[category]) {
+            challengeData[category] = [];
+        }
+        
+        if (!challengeData[category].includes(challengeId)) {
+            challengeData[category].push(challengeId);
+            localStorage.setItem('codequest_challenges', JSON.stringify(challengeData));
+            
+            const notification = document.createElement('div');
+            notification.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 15px;">
+                    <span style="font-size: 2rem;">🎉</span>
+                    <div>
+                        <strong>Challenge Completed!</strong><br>
+                        <span>Great job! Your solution passed all tests.</span>
+                    </div>
+                </div>
+            `;
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: linear-gradient(135deg, #4CAF50, #66BB6A);
+                color: white;
+                padding: 20px 25px;
+                border-radius: 10px;
+                z-index: 1003;
+                animation: slideIn 0.3s ease;
+                box-shadow: 0 8px 20px rgba(76, 175, 80, 0.3);
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 5000);
+        }
+    };
 });
