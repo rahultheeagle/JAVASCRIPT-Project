@@ -14,9 +14,16 @@ class CodeEditor {
         this.refreshBtn = document.getElementById('refresh-preview');
         this.backBtn = document.getElementById('back-to-dashboard');
         this.resizer = document.querySelector('.resizer');
+        this.autoRunToggle = document.getElementById('auto-run');
+        this.delaySelect = document.getElementById('delay-select');
+        this.executionStatus = document.getElementById('execution-status');
         
         this.currentTab = 'html';
         this.isResizing = false;
+        this.isAutoRun = true;
+        this.executionDelay = 300;
+        this.updateTimeout = null;
+        this.highlightTimeout = null;
         
         this.initializeEditor();
         this.bindEvents();
@@ -58,6 +65,30 @@ class CodeEditor {
         }
     }
     
+    // Handle code changes with real-time execution
+    handleCodeChange(language, code, highlightElement) {
+        // Update syntax highlighting immediately
+        clearTimeout(this.highlightTimeout);
+        this.highlightTimeout = setTimeout(() => {
+            this.updateHighlighting(language, code, highlightElement);
+        }, 50);
+        
+        // Update preview if auto-run is enabled
+        if (this.isAutoRun) {
+            this.setExecutionStatus('running', '⏳ Executing...');
+            clearTimeout(this.updateTimeout);
+            this.updateTimeout = setTimeout(() => {
+                this.updatePreview();
+            }, this.executionDelay);
+        }
+    }
+    
+    // Set execution status
+    setExecutionStatus(status, text) {
+        this.executionStatus.className = `status-indicator ${status}`;
+        this.executionStatus.textContent = text;
+    }
+    
     // Bind all event listeners
     bindEvents() {
         // Tab switching
@@ -72,43 +103,35 @@ class CodeEditor {
         this.runBtn.addEventListener('click', () => this.updatePreview());
         this.refreshBtn.addEventListener('click', () => this.updatePreview());
         
-        // Auto-update preview and syntax highlighting on code change
-        let updateTimeout;
-        let highlightTimeout;
-        
+        // Real-time code execution and syntax highlighting
         this.htmlEditor.addEventListener('input', () => {
-            clearTimeout(highlightTimeout);
-            highlightTimeout = setTimeout(() => {
-                this.updateHighlighting('html', this.htmlEditor.value, this.htmlHighlight);
-            }, 100);
-            
-            clearTimeout(updateTimeout);
-            updateTimeout = setTimeout(() => this.updatePreview(), 500);
+            this.handleCodeChange('html', this.htmlEditor.value, this.htmlHighlight);
         });
         
         this.cssEditor.addEventListener('input', () => {
-            clearTimeout(highlightTimeout);
-            highlightTimeout = setTimeout(() => {
-                this.updateHighlighting('css', this.cssEditor.value, this.cssHighlight);
-            }, 100);
-            
-            clearTimeout(updateTimeout);
-            updateTimeout = setTimeout(() => this.updatePreview(), 500);
+            this.handleCodeChange('css', this.cssEditor.value, this.cssHighlight);
         });
         
         this.jsEditor.addEventListener('input', () => {
-            clearTimeout(highlightTimeout);
-            highlightTimeout = setTimeout(() => {
-                this.updateHighlighting('javascript', this.jsEditor.value, this.jsHighlight);
-            }, 100);
-            
-            clearTimeout(updateTimeout);
-            updateTimeout = setTimeout(() => this.updatePreview(), 500);
+            this.handleCodeChange('javascript', this.jsEditor.value, this.jsHighlight);
         });
         
         // Back to dashboard
         this.backBtn.addEventListener('click', () => {
             window.location.href = 'index.html';
+        });
+        
+        // Auto-run toggle
+        this.autoRunToggle.addEventListener('change', (e) => {
+            this.isAutoRun = e.target.checked;
+            if (this.isAutoRun) {
+                this.updatePreview();
+            }
+        });
+        
+        // Execution delay selector
+        this.delaySelect.addEventListener('change', (e) => {
+            this.executionDelay = parseInt(e.target.value);
         });
         
         // Resizer functionality
@@ -162,49 +185,72 @@ class CodeEditor {
         });
     }
     
-    // Update live preview
+    // Update live preview with enhanced error handling
     updatePreview() {
-        const html = this.htmlEditor.value;
-        const css = this.cssEditor.value;
-        const js = this.jsEditor.value;
-        
-        // Create complete HTML document
-        const fullHTML = `
-            <!DOCTYPE html>
-            <html>
-            <head>
-                <meta charset="UTF-8">
-                <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <style>
-                    ${css}
-                </style>
-            </head>
-            <body>
-                ${html}
-                <script>
-                    try {
-                        ${js}
-                    } catch (error) {
-                        console.error('JavaScript Error:', error);
-                        document.body.innerHTML += '<div style="background: #ffebee; color: #c62828; padding: 10px; margin: 10px; border-radius: 4px; font-family: monospace;"><strong>JavaScript Error:</strong><br>' + error.message + '</div>';
-                    }
-                </script>
-            </body>
-            </html>
-        `;
-        
-        // Update iframe content
-        const blob = new Blob([fullHTML], { type: 'text/html' });
-        const url = URL.createObjectURL(blob);
-        this.previewFrame.src = url;
-        
-        // Clean up blob URL after loading
-        this.previewFrame.onload = () => {
-            URL.revokeObjectURL(url);
-        };
-        
-        // Show run feedback
-        this.showRunFeedback();
+        try {
+            const html = this.htmlEditor.value;
+            const css = this.cssEditor.value;
+            const js = this.jsEditor.value;
+            
+            // Create complete HTML document with enhanced error handling
+            const fullHTML = `
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <style>
+                        ${css}
+                    </style>
+                </head>
+                <body>
+                    ${html}
+                    <script>
+                        // Enhanced error handling
+                        window.onerror = function(msg, url, line, col, error) {
+                            const errorDiv = document.createElement('div');
+                            errorDiv.style.cssText = 'background: #ffebee; color: #c62828; padding: 10px; margin: 10px; border-radius: 4px; font-family: monospace; border-left: 4px solid #c62828;';
+                            errorDiv.innerHTML = '<strong>⚠ JavaScript Error:</strong><br>' + msg + '<br><small>Line: ' + line + ', Column: ' + col + '</small>';
+                            document.body.appendChild(errorDiv);
+                            return true;
+                        };
+                        
+                        try {
+                            ${js}
+                        } catch (error) {
+                            console.error('JavaScript Error:', error);
+                            const errorDiv = document.createElement('div');
+                            errorDiv.style.cssText = 'background: #ffebee; color: #c62828; padding: 10px; margin: 10px; border-radius: 4px; font-family: monospace; border-left: 4px solid #c62828;';
+                            errorDiv.innerHTML = '<strong>⚠ JavaScript Error:</strong><br>' + error.message;
+                            document.body.appendChild(errorDiv);
+                        }
+                    </script>
+                </body>
+                </html>
+            `;
+            
+            // Update iframe content
+            const blob = new Blob([fullHTML], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            this.previewFrame.src = url;
+            
+            // Clean up blob URL and update status after loading
+            this.previewFrame.onload = () => {
+                URL.revokeObjectURL(url);
+                this.setExecutionStatus('ready', '✓ Ready');
+            };
+            
+            this.previewFrame.onerror = () => {
+                this.setExecutionStatus('error', '⚠ Error');
+            };
+            
+            // Show run feedback
+            this.showRunFeedback();
+            
+        } catch (error) {
+            console.error('Preview update error:', error);
+            this.setExecutionStatus('error', '⚠ Error');
+        }
     }
     
     // Show run feedback

@@ -14,7 +14,20 @@
         <header class="editor-header">
             <h1>CodeQuest Code Editor</h1>
             <div class="editor-controls">
-                <button id="run-code" class="run-btn">▶ Run Code</button>
+                <div class="execution-controls">
+                    <button id="run-code" class="run-btn">▶ Run Code</button>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="auto-run" checked>
+                        <span class="slider"></span>
+                        <span class="toggle-label">Auto-Run</span>
+                    </label>
+                    <select id="delay-select" class="delay-select">
+                        <option value="100">Instant</option>
+                        <option value="300" selected>Fast (300ms)</option>
+                        <option value="500">Normal (500ms)</option>
+                        <option value="1000">Slow (1s)</option>
+                    </select>
+                </div>
                 <button id="back-to-dashboard" class="back-btn">← Dashboard</button>
             </div>
         </header>
@@ -90,7 +103,10 @@ h1 {
             <div class="preview-pane">
                 <div class="pane-header">
                     <h3>Live Preview</h3>
-                    <button id="refresh-preview" class="refresh-btn">🔄</button>
+                    <div class="preview-controls">
+                        <span id="execution-status" class="status-indicator">✓ Ready</span>
+                        <button id="refresh-preview" class="refresh-btn">🔄</button>
+                    </div>
                 </div>
                 <div class="preview-content">
                     <iframe id="preview-frame" sandbox="allow-scripts"></iframe>
