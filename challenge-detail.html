@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeQuest - Challenge Detail</title>
+    <link rel="stylesheet" href="challenge-detail.css">
+</head>
+<body>
+    <div class="challenge-container">
+        <header class="challenge-header">
+            <div class="header-left">
+                <button id="back-to-challenges" class="back-btn">← Back to Challenges</button>
+                <div class="challenge-info">
+                    <h1 id="challenge-title">Challenge Title</h1>
+                    <div class="challenge-meta">
+                        <span class="difficulty-badge" id="difficulty-badge">Easy</span>
+                        <span class="xp-badge" id="xp-badge">+10 XP</span>
+                        <span class="category-badge" id="category-badge">HTML Basics</span>
+                    </div>
+                </div>
+            </div>
+            <div class="header-actions">
+                <button id="start-challenge" class="start-btn">Start Challenge</button>
+            </div>
+        </header>
+
+        <div class="challenge-content">
+            <div class="instructions-panel">
+                <div class="panel-header">
+                    <h3>📋 Instructions</h3>
+                </div>
+                <div class="instructions-content">
+                    <div class="description" id="challenge-description">
+                        Challenge description will appear here...
+                    </div>
+                    
+                    <div class="requirements-section">
+                        <h4>Requirements:</h4>
+                        <ul id="requirements-list">
+                            <!-- Requirements will be populated here -->
+                        </ul>
+                    </div>
+                    
+                    <div class="hints-section">
+                        <h4>💡 Hints:</h4>
+                        <div class="hints-container">
+                            <button id="show-hint" class="hint-btn">Show Hint</button>
+                            <div id="hint-content" class="hint-content" style="display: none;">
+                                <!-- Hints will appear here -->
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="example-section">
+                        <h4>📝 Expected Output:</h4>
+                        <div class="example-preview" id="example-preview">
+                            <!-- Example will be shown here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="starter-code-panel">
+                <div class="panel-header">
+                    <h3>🚀 Starter Code</h3>
+                    <button id="copy-starter" class="copy-btn">Copy Code</button>
+                </div>
+                <div class="code-sections">
+                    <div class="code-section" id="html-section">
+                        <h5>HTML</h5>
+                        <pre><code id="starter-html" class="language-html"><!-- HTML starter code --></code></pre>
+                    </div>
+                    <div class="code-section" id="css-section">
+                        <h5>CSS</h5>
+                        <pre><code id="starter-css" class="language-css">/* CSS starter code */</code></pre>
+                    </div>
+                    <div class="code-section" id="js-section">
+                        <h5>JavaScript</h5>
+                        <pre><code id="starter-js" class="language-javascript">// JavaScript starter code</code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="challenge-footer">
+            <div class="progress-info">
+                <span id="challenge-progress">Challenge 1 of 10</span>
+            </div>
+            <div class="action-buttons">
+                <button id="skip-challenge" class="skip-btn">Skip Challenge</button>
+                <button id="start-coding" class="primary-btn">Start Coding</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="challenge-detail.js"></script>
+</body>
+</html>

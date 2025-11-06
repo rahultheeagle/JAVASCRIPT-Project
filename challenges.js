@@ -229,22 +229,8 @@ class ChallengeSystem {
     
     // Start a challenge
     startChallenge(category, challengeId) {
-        // For now, just mark as completed (will be enhanced in future features)
-        if (!this.challengeData[category]) {
-            this.challengeData[category] = [];
-        }
-        
-        if (!this.challengeData[category].includes(challengeId)) {
-            this.challengeData[category].push(challengeId);
-            this.saveChallengeData();
-            this.updateCategoryProgress();
-            this.updateDifficultyProgress(category);
-            this.renderChallenges(category);
-            
-            // Show completion message
-            const challenge = this.challenges[category].find(c => c.id === challengeId);
-            this.showCompletionMessage(challenge);
-        }
+        // Navigate to challenge detail page
+        window.location.href = `challenge-detail.html?category=${category}&id=${challengeId}`;
     }
     
     // Show challenge completion message
