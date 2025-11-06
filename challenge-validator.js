@@ -202,6 +202,11 @@ class ChallengeValidator {
         
         // Record progress for gamification systems if challenge is completed
         if (isValid && typeof window !== 'undefined') {
+            // Check achievements
+            if (window.achievementSystem) {
+                window.achievementSystem.checkChallengeAchievements(category, false);
+            }
+            
             // Record for daily challenges
             if (window.dailyChallengeSystem) {
                 window.dailyChallengeSystem.recordProgress('challenge');

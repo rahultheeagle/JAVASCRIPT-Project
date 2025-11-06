@@ -768,24 +768,63 @@ class LeaderboardSystem {
 class EnhancedAchievementSystem extends AchievementSystem {
     constructor() {
         super();
-        this.dailyAchievements = {
-            'daily-warrior': { threshold: 7, name: 'Daily Warrior' }
-        };
-        this.missionAchievements = {
-            'mission-master': { threshold: 5, name: 'Mission Master' }
-        };
+        this.challengeStartTime = null;
+        this.initializeTracking();
     }
-
-    checkDailyAchievements(completedChallenges) {
-        const newBadges = [];
+    
+    initializeTracking() {
+        if (!this.achievementData.counters) {
+            this.achievementData.counters = {
+                challenges: 0, htmlChallenges: 0, cssChallenges: 0, jsChallenges: 0,
+                hintsUsed: 0, errorsFixed: 0, powerUpsUsed: 0, weekendChallenges: 0,
+                nightOwlChallenges: 0, earlyBirdChallenges: 0, speedChallenges: 0, perfectChallenges: 0
+            };
+            this.saveAchievements();
+        }
+    }
+    
+    startChallenge() {
+        this.challengeStartTime = Date.now();
+    }
+    
+    checkChallengeAchievements(category, usedHints = false) {
+        const counters = this.achievementData.counters;
+        const hour = new Date().getHours();
+        const isWeekend = [0, 6].includes(new Date().getDay());
+        const completionTime = this.challengeStartTime ? (Date.now() - this.challengeStartTime) / 1000 : 0;
         
-        Object.keys(this.dailyAchievements).forEach(badgeId => {
-            const achievement = this.dailyAchievements[badgeId];
-            const alreadyEarned = this.achievementData.earnedBadges.includes(badgeId);
-            
-            if (completedChallenges >= achievement.threshold && !alreadyEarned) {
+        counters.challenges++;
+        if (category === 'html-basics') counters.htmlChallenges++;
+        if (category === 'css-styling') counters.cssChallenges++;
+        if (category === 'js-fundamentals') counters.jsChallenges++;
+        if (isWeekend) counters.weekendChallenges++;
+        if (hour >= 22 || hour < 6) counters.nightOwlChallenges++;
+        if (hour >= 4 && hour < 6) counters.earlyBirdChallenges++;
+        if (completionTime > 0 && completionTime < 300) counters.speedChallenges++;
+        if (!usedHints) counters.perfectChallenges++;
+        
+        const achievements = {
+            'first-challenge': () => counters.challenges >= 1,
+            'streak-master': () => window.streakCounter?.streakData.currentStreak >= 10,
+            'speed-demon': () => counters.speedChallenges >= 1,
+            'perfectionist': () => counters.perfectChallenges >= 5,
+            'night-owl': () => counters.nightOwlChallenges >= 3,
+            'html-expert': () => counters.htmlChallenges >= 10,
+            'css-master': () => counters.cssChallenges >= 10,
+            'js-ninja': () => counters.jsChallenges >= 15,
+            'code-warrior': () => counters.challenges >= 50,
+            'early-bird-coder': () => counters.earlyBirdChallenges >= 3,
+            'weekend-warrior': () => counters.weekendChallenges >= 5,
+            'daily-warrior': () => window.dailyChallengeSystem?.challengeData.completedChallenges >= 7,
+            'mission-master': () => window.missionSystem?.missionData.completedMissions.length >= 5,
+            'xp-collector': () => window.xpSystem?.xpData.totalXP >= 5000
+        };
+        
+        const newBadges = [];
+        Object.keys(achievements).forEach(badgeId => {
+            if (!this.achievementData.earnedBadges.includes(badgeId) && achievements[badgeId]()) {
                 this.achievementData.earnedBadges.push(badgeId);
-                newBadges.push(achievement.name);
+                newBadges.push(badgeId.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()));
             }
         });
         
@@ -795,6 +834,35 @@ class EnhancedAchievementSystem extends AchievementSystem {
             this.showAchievementNotification(newBadges);
         }
     }
+    
+    trackActivity(type) {
+        const counters = this.achievementData.counters;
+        if (type === 'hint-used') counters.hintsUsed++;
+        if (type === 'error-fixed') counters.errorsFixed++;
+        if (type === 'power-up-used') counters.powerUpsUsed++;
+        
+        const specialAchievements = {
+            'bug-hunter': () => counters.errorsFixed >= 20,
+            'power-user': () => counters.powerUpsUsed >= 10,
+            'marathon-coder': () => Date.now() - this.sessionStartTime >= 7200000
+        };
+        
+        const newBadges = [];
+        Object.keys(specialAchievements).forEach(badgeId => {
+            if (!this.achievementData.earnedBadges.includes(badgeId) && specialAchievements[badgeId]()) {
+                this.achievementData.earnedBadges.push(badgeId);
+                newBadges.push(badgeId.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()));
+            }
+        });
+        
+        if (newBadges.length > 0) {
+            this.saveAchievements();
+            this.updateBadgeDisplay();
+            this.showAchievementNotification(newBadges);
+        }
+    }
+
+
 
     checkMissionAchievements(completedMissions) {
         const newBadges = [];
