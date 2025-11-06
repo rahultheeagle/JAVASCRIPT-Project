@@ -511,21 +511,207 @@ class StreakCounter {
     }
 }
 
+// XP and Level System
+class XPSystem {
+    constructor() {
+        this.xpData = this.loadXPData();
+        this.levelThresholds = [0, 100, 250, 450, 700, 1000, 1350, 1750, 2200, 2700, 3250];
+        this.initializeElements();
+        this.updateXPDisplay();
+    }
+
+    // Load XP data from localStorage
+    loadXPData() {
+        const saved = localStorage.getItem('codequest_xp');
+        return saved ? JSON.parse(saved) : {
+            totalXP: 0,
+            currentLevel: 1
+        };
+    }
+
+    // Save XP data to localStorage
+    saveXPData() {
+        localStorage.setItem('codequest_xp', JSON.stringify(this.xpData));
+    }
+
+    // Initialize DOM elements
+    initializeElements() {
+        this.levelBadge = document.getElementById('level-badge');
+        this.xpFill = document.getElementById('xp-fill');
+        this.xpText = document.getElementById('xp-text');
+        this.totalXPEl = document.getElementById('total-xp');
+        this.currentLevelText = document.getElementById('current-level-text');
+    }
+
+    // Award XP for different activities
+    awardXP(amount, reason) {
+        const oldLevel = this.xpData.currentLevel;
+        this.xpData.totalXP += amount;
+        
+        // Calculate new level
+        this.xpData.currentLevel = this.calculateLevel(this.xpData.totalXP);
+        
+        this.saveXPData();
+        this.updateXPDisplay();
+        
+        // Show XP notification
+        this.showXPNotification(amount, reason);
+        
+        // Check for level up
+        if (this.xpData.currentLevel > oldLevel) {
+            this.showLevelUpNotification(this.xpData.currentLevel);
+        }
+    }
+
+    // Calculate level based on total XP
+    calculateLevel(totalXP) {
+        for (let i = this.levelThresholds.length - 1; i >= 0; i--) {
+            if (totalXP >= this.levelThresholds[i]) {
+                return i + 1;
+            }
+        }
+        return 1;
+    }
+
+    // Get XP needed for current level progress
+    getCurrentLevelProgress() {
+        const currentLevel = this.xpData.currentLevel;
+        const currentThreshold = this.levelThresholds[currentLevel - 1] || 0;
+        const nextThreshold = this.levelThresholds[currentLevel] || this.levelThresholds[this.levelThresholds.length - 1];
+        
+        const currentLevelXP = this.xpData.totalXP - currentThreshold;
+        const xpNeededForLevel = nextThreshold - currentThreshold;
+        
+        return {
+            current: currentLevelXP,
+            needed: xpNeededForLevel,
+            percentage: Math.min((currentLevelXP / xpNeededForLevel) * 100, 100)
+        };
+    }
+
+    // Update XP display
+    updateXPDisplay() {
+        const progress = this.getCurrentLevelProgress();
+        
+        // Update level badge
+        this.levelBadge.textContent = `Level ${this.xpData.currentLevel}`;
+        
+        // Update XP bar
+        this.xpFill.style.width = `${progress.percentage}%`;
+        
+        // Update XP text
+        if (this.xpData.currentLevel >= this.levelThresholds.length) {
+            this.xpText.textContent = 'MAX LEVEL';
+        } else {
+            this.xpText.textContent = `${progress.current} / ${progress.needed} XP`;
+        }
+        
+        // Update total XP
+        this.totalXPEl.textContent = this.xpData.totalXP;
+        this.currentLevelText.textContent = `Level ${this.xpData.currentLevel}`;
+    }
+
+    // Show XP notification
+    showXPNotification(amount, reason) {
+        const notification = document.createElement('div');
+        notification.innerHTML = `
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <span style="font-size: 1.5rem;">⭐</span>
+                <div>
+                    <strong>+${amount} XP</strong><br>
+                    <small>${reason}</small>
+                </div>
+            </div>
+        `;
+        notification.style.cssText = `
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            background: linear-gradient(135deg, #00ff88, #00cc6a);
+            color: white;
+            padding: 12px 18px;
+            border-radius: 8px;
+            z-index: 1002;
+            animation: slideIn 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 255, 136, 0.3);
+        `;
+        
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            notification.remove();
+        }, 2500);
+    }
+
+    // Show level up notification
+    showLevelUpNotification(newLevel) {
+        const notification = document.createElement('div');
+        notification.innerHTML = `
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <span style="font-size: 2rem;">🎉</span>
+                <div>
+                    <strong style="font-size: 1.2rem;">LEVEL UP!</strong><br>
+                    <span style="font-size: 1.1rem;">You reached Level ${newLevel}!</span>
+                </div>
+            </div>
+        `;
+        notification.style.cssText = `
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            color: #333;
+            padding: 25px 35px;
+            border-radius: 15px;
+            z-index: 1003;
+            animation: levelUpPulse 0.8s ease;
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.5);
+            border: 3px solid #B8860B;
+        `;
+        
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            notification.remove();
+        }, 4000);
+    }
+}
+
 // Initialize all systems when DOM loads
 document.addEventListener('DOMContentLoaded', () => {
     const profileSystem = new ProfileSystem();
     const progressTracker = new ProgressTracker();
     const achievementSystem = new AchievementSystem();
     const streakCounter = new StreakCounter();
+    const xpSystem = new XPSystem();
     
-    // Connect progress tracker with achievement system and streak counter
+    // Connect progress tracker with all systems
     const originalToggle = progressTracker.toggleLessonCompletion;
     progressTracker.toggleLessonCompletion = function(lessonId) {
+        const wasCompleted = this.progressData.completedLessons.includes(lessonId);
         originalToggle.call(this, lessonId);
+        
+        if (!wasCompleted && this.progressData.completedLessons.includes(lessonId)) {
+            // Lesson completed - award XP
+            xpSystem.awardXP(50, 'Lesson completed');
+        }
+        
         achievementSystem.checkAchievements(this.progressData.completedLessons.length);
         streakCounter.recordActivity();
     };
 });
+
+// Add level up animation CSS
+const levelUpStyle = document.createElement('style');
+levelUpStyle.textContent = `
+    @keyframes levelUpPulse {
+        0% { transform: translate(-50%, -50%) scale(0.5); opacity: 0; }
+        50% { transform: translate(-50%, -50%) scale(1.1); }
+        100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+    }
+`;
+document.head.appendChild(levelUpStyle);
 
 // Add CSS animation for notifications
 const style = document.createElement('style');

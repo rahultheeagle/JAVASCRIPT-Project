@@ -39,9 +39,53 @@ header h1 {
     align-items: center;
     gap: 15px;
     background: rgba(255, 255, 255, 0.2);
-    padding: 10px 20px;
+    padding: 15px 25px;
     border-radius: 25px;
     color: white;
+}
+
+.profile-info {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.level-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.85rem;
+}
+
+.level-badge {
+    background: linear-gradient(135deg, #FFD700, #FFA500);
+    color: #333;
+    padding: 4px 12px;
+    border-radius: 15px;
+    font-weight: bold;
+    font-size: 0.8rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.xp-bar {
+    width: 120px;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.xp-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #00ff88, #00cc6a);
+    width: 0%;
+    transition: width 0.5s ease;
+    border-radius: 4px;
+}
+
+.xp-text {
+    font-size: 0.75rem;
+    opacity: 0.9;
 }
 
 #profile-avatar {
@@ -231,6 +275,24 @@ header h1 {
     100% {
         text-shadow: 0 0 20px rgba(255, 255, 255, 0.8), 0 0 30px rgba(255, 107, 107, 0.5);
     }
+}
+
+.xp-stat {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+}
+
+.xp-stat .stat-number {
+    color: #FFD700;
+}
+
+.xp-stat .stat-label {
+    color: #e0e0e0;
+}
+
+.xp-info small {
+    font-size: 0.75rem;
+    opacity: 0.9;
 }
 
 .progress-bar-container {

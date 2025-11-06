@@ -13,7 +13,16 @@
             <div class="profile-section">
                 <div id="profile-display" class="profile-display">
                     <img id="profile-avatar" src="https://via.placeholder.com/50" alt="Avatar">
-                    <span id="profile-name">Guest</span>
+                    <div class="profile-info">
+                        <span id="profile-name">Guest</span>
+                        <div class="level-info">
+                            <span class="level-badge" id="level-badge">Level 1</span>
+                            <div class="xp-bar">
+                                <div class="xp-fill" id="xp-fill"></div>
+                            </div>
+                            <span class="xp-text" id="xp-text">0 / 100 XP</span>
+                        </div>
+                    </div>
                     <button id="edit-profile-btn">Edit Profile</button>
                 </div>
             </div>
@@ -63,6 +72,13 @@
                             <span class="stat-label">Day Streak 🔥</span>
                             <div class="streak-info">
                                 <small id="last-activity">No activity yet</small>
+                            </div>
+                        </div>
+                        <div class="progress-stat xp-stat">
+                            <span class="stat-number" id="total-xp">0</span>
+                            <span class="stat-label">Total XP ⭐</span>
+                            <div class="xp-info">
+                                <small id="current-level-text">Level 1</small>
                             </div>
                         </div>
                     </div>
