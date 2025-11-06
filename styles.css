@@ -245,6 +245,11 @@ header h1 {
     color: white;
 }
 
+.cheatsheet-btn:hover {
+    background: linear-gradient(135deg, #00BCD4, #4DD0E1);
+    color: white;
+}
+
 .btn-icon {
     font-size: 2.5rem;
 }
