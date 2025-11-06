@@ -152,3 +152,142 @@ header h1 {
     color: #666;
     font-size: 1.2rem;
 }
+
+.progress-section {
+    margin-top: 40px;
+    text-align: left;
+}
+
+.progress-section h3 {
+    color: #333;
+    font-size: 1.8rem;
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+.progress-overview {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 30px;
+    gap: 20px;
+}
+
+.progress-stat {
+    text-align: center;
+    background: rgba(102, 126, 234, 0.1);
+    padding: 20px;
+    border-radius: 10px;
+    flex: 1;
+}
+
+.stat-number {
+    display: block;
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #667eea;
+    margin-bottom: 5px;
+}
+
+.stat-label {
+    color: #666;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.progress-bar-container {
+    margin-bottom: 40px;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 20px;
+    background: #e0e0e0;
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #667eea, #764ba2);
+    width: 0%;
+    transition: width 0.5s ease;
+    border-radius: 10px;
+}
+
+.lessons-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    margin-top: 30px;
+}
+
+.lesson-card {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+    cursor: pointer;
+    position: relative;
+    border-left: 4px solid #ddd;
+}
+
+.lesson-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+}
+
+.lesson-card.completed {
+    border-left-color: #4CAF50;
+    background: linear-gradient(135deg, #f8fff8, #ffffff);
+}
+
+.lesson-card.in-progress {
+    border-left-color: #FF9800;
+    background: linear-gradient(135deg, #fff8f0, #ffffff);
+}
+
+.lesson-status {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #ddd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    color: white;
+}
+
+.lesson-card.completed .lesson-status {
+    background: #4CAF50;
+}
+
+.lesson-card.completed .lesson-status::after {
+    content: '✓';
+}
+
+.lesson-card.in-progress .lesson-status {
+    background: #FF9800;
+}
+
+.lesson-card.in-progress .lesson-status::after {
+    content: '⏳';
+}
+
+.lesson-card h4 {
+    color: #333;
+    margin-bottom: 10px;
+    font-size: 1.2rem;
+}
+
+.lesson-card p {
+    color: #666;
+    font-size: 0.9rem;
+    margin: 0;
+}

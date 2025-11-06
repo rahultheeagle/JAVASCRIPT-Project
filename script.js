@@ -107,9 +107,123 @@ class ProfileSystem {
     }
 }
 
-// Initialize Profile System when DOM loads
+// Progress Tracker System
+class ProgressTracker {
+    constructor() {
+        this.progressData = this.loadProgress();
+        this.totalLessons = 12;
+        this.initializeElements();
+        this.bindEvents();
+        this.updateProgressDisplay();
+    }
+
+    // Load progress from localStorage
+    loadProgress() {
+        const saved = localStorage.getItem('codequest_progress');
+        return saved ? JSON.parse(saved) : {
+            completedLessons: [],
+            currentLesson: 1
+        };
+    }
+
+    // Save progress to localStorage
+    saveProgress() {
+        localStorage.setItem('codequest_progress', JSON.stringify(this.progressData));
+    }
+
+    // Initialize DOM elements
+    initializeElements() {
+        this.completedLessonsEl = document.getElementById('completed-lessons');
+        this.totalLessonsEl = document.getElementById('total-lessons');
+        this.completionPercentageEl = document.getElementById('completion-percentage');
+        this.progressFillEl = document.getElementById('progress-fill');
+        this.lessonCards = document.querySelectorAll('.lesson-card');
+    }
+
+    // Bind event listeners
+    bindEvents() {
+        this.lessonCards.forEach(card => {
+            card.addEventListener('click', () => {
+                const lessonId = parseInt(card.dataset.lesson);
+                this.toggleLessonCompletion(lessonId);
+            });
+        });
+    }
+
+    // Toggle lesson completion status
+    toggleLessonCompletion(lessonId) {
+        const index = this.progressData.completedLessons.indexOf(lessonId);
+        
+        if (index === -1) {
+            // Mark as completed
+            this.progressData.completedLessons.push(lessonId);
+            this.showNotification(`Lesson ${lessonId} completed! 🎉`);
+        } else {
+            // Mark as incomplete
+            this.progressData.completedLessons.splice(index, 1);
+            this.showNotification(`Lesson ${lessonId} marked as incomplete`);
+        }
+        
+        this.saveProgress();
+        this.updateProgressDisplay();
+    }
+
+    // Update progress display
+    updateProgressDisplay() {
+        const completedCount = this.progressData.completedLessons.length;
+        const percentage = Math.round((completedCount / this.totalLessons) * 100);
+        
+        // Update stats
+        this.completedLessonsEl.textContent = completedCount;
+        this.totalLessonsEl.textContent = this.totalLessons;
+        this.completionPercentageEl.textContent = `${percentage}%`;
+        
+        // Update progress bar
+        this.progressFillEl.style.width = `${percentage}%`;
+        
+        // Update lesson cards
+        this.lessonCards.forEach(card => {
+            const lessonId = parseInt(card.dataset.lesson);
+            const isCompleted = this.progressData.completedLessons.includes(lessonId);
+            
+            card.classList.remove('completed', 'in-progress');
+            
+            if (isCompleted) {
+                card.classList.add('completed');
+            } else if (lessonId === this.progressData.currentLesson) {
+                card.classList.add('in-progress');
+            }
+        });
+    }
+
+    // Show notification
+    showNotification(message) {
+        const notification = document.createElement('div');
+        notification.textContent = message;
+        notification.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #667eea;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 5px;
+            z-index: 1001;
+            animation: slideIn 0.3s ease;
+        `;
+        
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            notification.remove();
+        }, 3000);
+    }
+}
+
+// Initialize both systems when DOM loads
 document.addEventListener('DOMContentLoaded', () => {
     new ProfileSystem();
+    new ProgressTracker();
 });
 
 // Add CSS animation for notifications
