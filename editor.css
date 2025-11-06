@@ -329,13 +329,123 @@ input:checked + .slider:before {
 .preview-content {
     flex: 1;
     background: white;
+    display: flex;
+    flex-direction: column;
 }
 
 #preview-frame {
-    width: 100%;
-    height: 100%;
+    flex: 1;
     border: none;
     background: white;
+    min-height: 60%;
+}
+
+.console-section {
+    background: #1e1e1e;
+    border-top: 1px solid #3e3e42;
+    display: flex;
+    flex-direction: column;
+    max-height: 40%;
+    min-height: 150px;
+}
+
+.console-header {
+    background: #2d2d30;
+    padding: 8px 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #3e3e42;
+    font-size: 0.9rem;
+    color: #cccccc;
+}
+
+.console-controls {
+    display: flex;
+    gap: 8px;
+}
+
+.console-btn {
+    background: transparent;
+    color: #cccccc;
+    border: 1px solid #555;
+    padding: 4px 8px;
+    border-radius: 3px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.console-btn:hover {
+    background: #3e3e42;
+    border-color: #666;
+}
+
+.error-console {
+    flex: 1;
+    overflow-y: auto;
+    padding: 10px;
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    font-size: 12px;
+    line-height: 1.4;
+}
+
+.console-message {
+    display: flex;
+    margin-bottom: 4px;
+    padding: 4px 8px;
+    border-radius: 3px;
+    word-wrap: break-word;
+}
+
+.console-message.error {
+    background: rgba(244, 67, 54, 0.1);
+    border-left: 3px solid #f44336;
+    color: #ffcdd2;
+}
+
+.console-message.warn {
+    background: rgba(255, 152, 0, 0.1);
+    border-left: 3px solid #ff9800;
+    color: #ffcc02;
+}
+
+.console-message.info {
+    background: rgba(33, 150, 243, 0.1);
+    border-left: 3px solid #2196f3;
+    color: #bbdefb;
+}
+
+.console-message.log {
+    background: rgba(76, 175, 80, 0.1);
+    border-left: 3px solid #4caf50;
+    color: #c8e6c9;
+}
+
+.timestamp {
+    color: #666;
+    margin-right: 8px;
+    font-size: 11px;
+    flex-shrink: 0;
+}
+
+.message {
+    flex: 1;
+}
+
+.error-details {
+    font-size: 11px;
+    color: #999;
+    margin-top: 2px;
+    font-style: italic;
+}
+
+.console-section.hidden {
+    display: none;
+}
+
+.console-section.hidden ~ #preview-frame {
+    height: 100%;
 }
 
 /* Syntax highlighting colors */

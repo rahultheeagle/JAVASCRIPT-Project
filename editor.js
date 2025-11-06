@@ -17,6 +17,10 @@ class CodeEditor {
         this.autoRunToggle = document.getElementById('auto-run');
         this.delaySelect = document.getElementById('delay-select');
         this.executionStatus = document.getElementById('execution-status');
+        this.errorConsole = document.getElementById('error-console');
+        this.clearConsoleBtn = document.getElementById('clear-console');
+        this.toggleConsoleBtn = document.getElementById('toggle-console');
+        this.consoleSection = document.querySelector('.console-section');
         
         this.currentTab = 'html';
         this.isResizing = false;
@@ -24,10 +28,21 @@ class CodeEditor {
         this.executionDelay = 300;
         this.updateTimeout = null;
         this.highlightTimeout = null;
+        this.consoleVisible = true;
         
         this.initializeEditor();
         this.bindEvents();
+        this.setupConsoleListener();
         this.updatePreview();
+    }
+    
+    // Setup console message listener
+    setupConsoleListener() {
+        window.addEventListener('message', (event) => {
+            if (event.data && event.data.type === 'console') {
+                this.addConsoleMessage(event.data.level, event.data.message);
+            }
+        });
     }
     
     // Initialize editor
@@ -89,6 +104,50 @@ class CodeEditor {
         this.executionStatus.textContent = text;
     }
     
+    // Add message to console
+    addConsoleMessage(type, message, details = '') {
+        const timestamp = new Date().toLocaleTimeString();
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `console-message ${type}`;
+        
+        messageDiv.innerHTML = `
+            <span class="timestamp">[${timestamp}]</span>
+            <span class="message">${message}</span>
+            ${details ? `<div class="error-details">${details}</div>` : ''}
+        `;
+        
+        this.errorConsole.appendChild(messageDiv);
+        this.errorConsole.scrollTop = this.errorConsole.scrollHeight;
+        
+        // Limit console messages to 100
+        const messages = this.errorConsole.querySelectorAll('.console-message');
+        if (messages.length > 100) {
+            messages[0].remove();
+        }
+    }
+    
+    // Clear console
+    clearConsole() {
+        this.errorConsole.innerHTML = `
+            <div class="console-message info">
+                <span class="timestamp">[${new Date().toLocaleTimeString()}]</span>
+                <span class="message">Console cleared</span>
+            </div>
+        `;
+    }
+    
+    // Toggle console visibility
+    toggleConsole() {
+        this.consoleVisible = !this.consoleVisible;
+        if (this.consoleVisible) {
+            this.consoleSection.classList.remove('hidden');
+            this.toggleConsoleBtn.textContent = 'Hide';
+        } else {
+            this.consoleSection.classList.add('hidden');
+            this.toggleConsoleBtn.textContent = 'Show';
+        }
+    }
+    
     // Bind all event listeners
     bindEvents() {
         // Tab switching
@@ -132,6 +191,15 @@ class CodeEditor {
         // Execution delay selector
         this.delaySelect.addEventListener('change', (e) => {
             this.executionDelay = parseInt(e.target.value);
+        });
+        
+        // Console controls
+        this.clearConsoleBtn.addEventListener('click', () => {
+            this.clearConsole();
+        });
+        
+        this.toggleConsoleBtn.addEventListener('click', () => {
+            this.toggleConsole();
         });
         
         // Resizer functionality
@@ -192,7 +260,10 @@ class CodeEditor {
             const css = this.cssEditor.value;
             const js = this.jsEditor.value;
             
-            // Create complete HTML document with enhanced error handling
+            // Clear previous execution messages
+            this.addConsoleMessage('info', 'Code executed');
+            
+            // Create complete HTML document with console integration
             const fullHTML = `
                 <!DOCTYPE html>
                 <html>
@@ -206,8 +277,40 @@ class CodeEditor {
                 <body>
                     ${html}
                     <script>
+                        // Console integration
+                        const originalConsole = {
+                            log: console.log,
+                            error: console.error,
+                            warn: console.warn,
+                            info: console.info
+                        };
+                        
+                        // Override console methods to send to parent
+                        console.log = function(...args) {
+                            originalConsole.log.apply(console, args);
+                            parent.postMessage({type: 'console', level: 'log', message: args.join(' ')}, '*');
+                        };
+                        
+                        console.error = function(...args) {
+                            originalConsole.error.apply(console, args);
+                            parent.postMessage({type: 'console', level: 'error', message: args.join(' ')}, '*');
+                        };
+                        
+                        console.warn = function(...args) {
+                            originalConsole.warn.apply(console, args);
+                            parent.postMessage({type: 'console', level: 'warn', message: args.join(' ')}, '*');
+                        };
+                        
+                        console.info = function(...args) {
+                            originalConsole.info.apply(console, args);
+                            parent.postMessage({type: 'console', level: 'info', message: args.join(' ')}, '*');
+                        };
+                        
                         // Enhanced error handling
                         window.onerror = function(msg, url, line, col, error) {
+                            const errorMsg = msg + (line ? ' (Line: ' + line + ', Column: ' + col + ')' : '');
+                            parent.postMessage({type: 'console', level: 'error', message: errorMsg}, '*');
+                            
                             const errorDiv = document.createElement('div');
                             errorDiv.style.cssText = 'background: #ffebee; color: #c62828; padding: 10px; margin: 10px; border-radius: 4px; font-family: monospace; border-left: 4px solid #c62828;';
                             errorDiv.innerHTML = '<strong>⚠ JavaScript Error:</strong><br>' + msg + '<br><small>Line: ' + line + ', Column: ' + col + '</small>';
@@ -215,10 +318,16 @@ class CodeEditor {
                             return true;
                         };
                         
+                        window.addEventListener('unhandledrejection', function(event) {
+                            parent.postMessage({type: 'console', level: 'error', message: 'Unhandled Promise Rejection: ' + event.reason}, '*');
+                        });
+                        
                         try {
                             ${js}
                         } catch (error) {
-                            console.error('JavaScript Error:', error);
+                            const errorMsg = 'JavaScript Error: ' + error.message + (error.stack ? '\n' + error.stack : '');
+                            parent.postMessage({type: 'console', level: 'error', message: errorMsg}, '*');
+                            
                             const errorDiv = document.createElement('div');
                             errorDiv.style.cssText = 'background: #ffebee; color: #c62828; padding: 10px; margin: 10px; border-radius: 4px; font-family: monospace; border-left: 4px solid #c62828;';
                             errorDiv.innerHTML = '<strong>⚠ JavaScript Error:</strong><br>' + error.message;
