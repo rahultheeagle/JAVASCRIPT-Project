@@ -905,6 +905,9 @@ document.addEventListener('DOMContentLoaded', () => {
             
             if (validation.challenge.isValid) {
                 this.markChallengeCompleted();
+            } else {
+                // Record failed attempt for solution reveal
+                this.recordFailedAttempt();
             }
             
             this.validateBtn.classList.remove('validating');
@@ -1012,6 +1015,50 @@ document.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => {
                 notification.remove();
             }, 5000);
+        }
+    };
+    
+    editor.recordFailedAttempt = function() {
+        if (!this.challengeInfo) return;
+        
+        const saved = localStorage.getItem('codequest_failed_attempts');
+        const attempts = saved ? JSON.parse(saved) : {};
+        const key = `${this.challengeInfo.category}-${this.challengeInfo.challengeId}`;
+        const currentAttempts = attempts[key] || 0;
+        const newAttempts = currentAttempts + 1;
+        
+        attempts[key] = newAttempts;
+        localStorage.setItem('codequest_failed_attempts', JSON.stringify(attempts));
+        
+        if (newAttempts >= 3) {
+            const notification = document.createElement('div');
+            notification.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 15px;">
+                    <span style="font-size: 2rem;">🔓</span>
+                    <div>
+                        <strong>Solution Unlocked!</strong><br>
+                        <span>After 3 failed attempts, you can now view the solution in the challenge details.</span>
+                    </div>
+                </div>
+            `;
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                left: 20px;
+                background: linear-gradient(135deg, #28a745, #34ce57);
+                color: white;
+                padding: 20px 25px;
+                border-radius: 10px;
+                z-index: 1003;
+                animation: slideIn 0.3s ease;
+                box-shadow: 0 8px 20px rgba(40, 167, 69, 0.3);
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 6000);
         }
     };
 });
