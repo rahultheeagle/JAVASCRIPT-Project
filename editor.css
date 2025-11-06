@@ -76,7 +76,7 @@ body {
     gap: 10px;
 }
 
-.save-btn, .load-btn, .format-btn {
+.save-btn, .load-btn, .format-btn, .reset-btn {
     background: #2196F3;
     color: white;
     border: none;
@@ -110,6 +110,19 @@ body {
 
 .load-btn:hover {
     background: #7B1FA2;
+}
+
+.reset-btn {
+    background: #f44336;
+}
+
+.reset-btn:hover {
+    background: #d32f2f;
+}
+
+.reset-btn.resetting {
+    background: #FF9800;
+    animation: pulse 0.5s ease;
 }
 
 .run-btn {

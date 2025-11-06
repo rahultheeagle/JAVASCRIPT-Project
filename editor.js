@@ -25,6 +25,7 @@ class CodeEditor {
         this.saveBtn = document.getElementById('save-code');
         this.loadBtn = document.getElementById('load-code');
         this.formatBtn = document.getElementById('format-code');
+        this.resetBtn = document.getElementById('reset-code');
         
         this.currentTab = 'html';
         this.isResizing = false;
@@ -35,6 +36,33 @@ class CodeEditor {
         this.consoleVisible = true;
         this.autoSaveTimeout = null;
         this.lastSavedContent = { html: '', css: '', js: '' };
+        
+        // Default template content
+        this.defaultTemplate = {
+            html: `<!DOCTYPE html>
+<html>
+<head>
+    <title>My Project</title>
+</head>
+<body>
+    <h1>Hello CodeQuest!</h1>
+    <p>Start coding here...</p>
+</body>
+</html>`,
+            css: `body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    background: #f0f0f0;
+}
+
+h1 {
+    color: #333;
+    text-align: center;
+}`,
+            js: `console.log('Welcome to CodeQuest!');
+
+// Your JavaScript code here`
+        };
         
         this.initializeEditor();
         this.bindEvents();
@@ -275,14 +303,14 @@ class CodeEditor {
             try {
                 const content = JSON.parse(autoSaved);
                 
-                this.htmlEditor.value = content.html || this.htmlEditor.value;
-                this.cssEditor.value = content.css || this.cssEditor.value;
-                this.jsEditor.value = content.js || this.jsEditor.value;
+                this.htmlEditor.value = content.html || this.defaultTemplate.html;
+                this.cssEditor.value = content.css || this.defaultTemplate.css;
+                this.jsEditor.value = content.js || this.defaultTemplate.js;
                 
                 this.lastSavedContent = {
-                    html: content.html || '',
-                    css: content.css || '',
-                    js: content.js || ''
+                    html: content.html || this.defaultTemplate.html,
+                    css: content.css || this.defaultTemplate.css,
+                    js: content.js || this.defaultTemplate.js
                 };
                 
                 this.setSaveStatus('saved', '✓ Restored');
@@ -292,8 +320,30 @@ class CodeEditor {
                 
             } catch (error) {
                 console.error('Failed to load auto-saved content:', error);
+                this.setDefaultTemplate();
             }
+        } else {
+            // No saved content, use default template
+            this.setDefaultTemplate();
         }
+    }
+    
+    // Set default template content
+    setDefaultTemplate() {
+        this.htmlEditor.value = this.defaultTemplate.html;
+        this.cssEditor.value = this.defaultTemplate.css;
+        this.jsEditor.value = this.defaultTemplate.js;
+        
+        this.lastSavedContent = {
+            html: this.defaultTemplate.html,
+            css: this.defaultTemplate.css,
+            js: this.defaultTemplate.js
+        };
+        
+        this.setSaveStatus('saved', '✓ Template loaded');
+        setTimeout(() => {
+            this.setSaveStatus('saved', '✓ Saved');
+        }, 2000);
     }
     
     // Format current active code
@@ -444,6 +494,76 @@ class CodeEditor {
         }, 1000);
     }
     
+    // Show reset confirmation dialog
+    showResetConfirmation() {
+        const hasUnsavedChanges = this.hasUnsavedChanges();
+        const message = hasUnsavedChanges 
+            ? 'Are you sure you want to reset to template? You have unsaved changes that will be lost.'
+            : 'Are you sure you want to reset to the default template?';
+        
+        if (confirm(message)) {
+            this.resetToTemplate();
+        }
+    }
+    
+    // Check if there are unsaved changes
+    hasUnsavedChanges() {
+        const currentContent = {
+            html: this.htmlEditor.value,
+            css: this.cssEditor.value,
+            js: this.jsEditor.value
+        };
+        
+        return JSON.stringify(currentContent) !== JSON.stringify(this.lastSavedContent);
+    }
+    
+    // Reset to default template
+    resetToTemplate() {
+        this.resetBtn.classList.add('resetting');
+        this.resetBtn.textContent = '🔄 Resetting...';
+        
+        setTimeout(() => {
+            // Set template content
+            this.htmlEditor.value = this.defaultTemplate.html;
+            this.cssEditor.value = this.defaultTemplate.css;
+            this.jsEditor.value = this.defaultTemplate.js;
+            
+            // Update syntax highlighting
+            this.updateAllHighlighting();
+            
+            // Update preview if auto-run is enabled
+            if (this.isAutoRun) {
+                this.updatePreview();
+            }
+            
+            // Clear console
+            this.clearConsole();
+            
+            // Update save status
+            this.lastSavedContent = {
+                html: this.defaultTemplate.html,
+                css: this.defaultTemplate.css,
+                js: this.defaultTemplate.js
+            };
+            
+            this.setSaveStatus('saved', '✓ Reset to template');
+            this.addConsoleMessage('info', 'Code reset to default template');
+            
+            // Auto-save the template
+            setTimeout(() => {
+                this.autoSave();
+            }, 500);
+            
+            setTimeout(() => {
+                this.setSaveStatus('saved', '✓ Saved');
+            }, 2000);
+            
+            this.resetBtn.classList.remove('resetting');
+            this.resetBtn.textContent = '🔄 Reset';
+            
+        }, 300);
+    }
+    
     // Bind all event listeners
     bindEvents() {
         // Tab switching
@@ -509,6 +629,10 @@ class CodeEditor {
         
         this.formatBtn.addEventListener('click', () => {
             this.formatCurrentCode();
+        });
+        
+        this.resetBtn.addEventListener('click', () => {
+            this.showResetConfirmation();
         });
         
         // Keyboard shortcuts for save/load/format
