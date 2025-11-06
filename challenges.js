@@ -29,6 +29,17 @@ class ChallengeSystem {
         this.cssProgress = document.getElementById('css-progress');
         this.jsProgress = document.getElementById('js-progress');
         this.projectsProgress = document.getElementById('projects-progress');
+        
+        // Difficulty filter elements
+        this.difficultyFilters = document.querySelectorAll('.difficulty-filter');
+        this.easyProgress = document.getElementById('easy-progress');
+        this.mediumProgress = document.getElementById('medium-progress');
+        this.hardProgress = document.getElementById('hard-progress');
+        this.easyCount = document.getElementById('easy-count');
+        this.mediumCount = document.getElementById('medium-count');
+        this.hardCount = document.getElementById('hard-count');
+        
+        this.currentDifficultyFilter = 'all';
     }
     
     // Load challenge data from localStorage
@@ -115,6 +126,17 @@ class ChallengeSystem {
                 this.showChallenges(category);
             });
         });
+        
+        // Difficulty filter clicks
+        this.difficultyFilters.forEach(filter => {
+            filter.addEventListener('click', () => {
+                this.currentDifficultyFilter = filter.dataset.difficulty;
+                this.updateDifficultyFilters();
+                if (this.currentCategory) {
+                    this.renderChallenges(this.currentCategory);
+                }
+            });
+        });
     }
     
     // Show categories view
@@ -130,6 +152,10 @@ class ChallengeSystem {
         this.categoriesGrid.parentElement.style.display = 'none';
         this.challengesList.style.display = 'block';
         
+        // Reset difficulty filter
+        this.currentDifficultyFilter = 'all';
+        this.updateDifficultyFilters();
+        
         // Update title
         const categoryNames = {
             'html-basics': 'HTML Basics',
@@ -138,6 +164,9 @@ class ChallengeSystem {
             'mini-projects': 'Mini-Projects'
         };
         this.categoryTitle.textContent = categoryNames[category];
+        
+        // Update difficulty progress
+        this.updateDifficultyProgress(category);
         
         // Render challenges
         this.renderChallenges(category);
@@ -148,9 +177,14 @@ class ChallengeSystem {
         const challenges = this.challenges[category];
         const completedChallenges = this.challengeData[category] || [];
         
-        this.challengesGrid.innerHTML = challenges.map((challenge, index) => {
+        // Filter challenges by difficulty if needed
+        const filteredChallenges = this.currentDifficultyFilter === 'all' 
+            ? challenges 
+            : challenges.filter(c => c.difficulty === this.currentDifficultyFilter);
+        
+        this.challengesGrid.innerHTML = filteredChallenges.map((challenge, index) => {
             const isCompleted = completedChallenges.includes(challenge.id);
-            const isLocked = index > 0 && !completedChallenges.includes(challenges[index - 1].id);
+            const isLocked = this.isChallengeLockedByDifficulty(challenge, category, completedChallenges);
             
             let statusClass = 'status-available';
             let statusText = 'Available';
@@ -160,12 +194,12 @@ class ChallengeSystem {
                 statusText = 'Completed ✓';
             } else if (isLocked) {
                 statusClass = 'status-locked';
-                statusText = 'Locked 🔒';
+                statusText = this.getLockReason(challenge, category, completedChallenges);
             }
             
             return `
                 <div class="challenge-item ${isCompleted ? 'completed' : ''} ${isLocked ? 'locked' : ''}" 
-                     data-challenge-id="${challenge.id}" data-category="${category}">
+                     data-challenge-id="${challenge.id}" data-category="${category}" data-difficulty="${challenge.difficulty}">
                     <div class="challenge-header">
                         <span class="challenge-title">${challenge.title}</span>
                         <span class="challenge-difficulty difficulty-${challenge.difficulty}">${challenge.difficulty}</span>
@@ -186,6 +220,8 @@ class ChallengeSystem {
                     const challengeId = parseInt(item.dataset.challengeId);
                     const category = item.dataset.category;
                     this.startChallenge(category, challengeId);
+                } else {
+                    this.showLockMessage(item);
                 }
             });
         });
@@ -202,6 +238,7 @@ class ChallengeSystem {
             this.challengeData[category].push(challengeId);
             this.saveChallengeData();
             this.updateCategoryProgress();
+            this.updateDifficultyProgress(category);
             this.renderChallenges(category);
             
             // Show completion message
@@ -240,6 +277,147 @@ class ChallengeSystem {
         setTimeout(() => {
             notification.remove();
         }, 4000);
+    }
+    
+    // Check if challenge is locked by difficulty progression
+    isChallengeLockedByDifficulty(challenge, category, completedChallenges) {
+        const challenges = this.challenges[category];
+        const challengeIndex = challenges.findIndex(c => c.id === challenge.id);
+        
+        // First challenge is always unlocked
+        if (challengeIndex === 0) return false;
+        
+        // Check if previous challenge is completed (sequential unlock)
+        const previousChallenge = challenges[challengeIndex - 1];
+        if (!completedChallenges.includes(previousChallenge.id)) {
+            return true;
+        }
+        
+        // Check difficulty progression: must complete easier difficulties first
+        if (challenge.difficulty === 'medium') {
+            const easyCompleted = this.getDifficultyCompletedCount(category, 'easy', completedChallenges);
+            const easyTotal = this.getDifficultyTotal(category, 'easy');
+            return easyCompleted < Math.ceil(easyTotal * 0.7); // Need 70% of easy challenges
+        }
+        
+        if (challenge.difficulty === 'hard') {
+            const easyCompleted = this.getDifficultyCompletedCount(category, 'easy', completedChallenges);
+            const mediumCompleted = this.getDifficultyCompletedCount(category, 'medium', completedChallenges);
+            const easyTotal = this.getDifficultyTotal(category, 'easy');
+            const mediumTotal = this.getDifficultyTotal(category, 'medium');
+            
+            return easyCompleted < easyTotal || mediumCompleted < Math.ceil(mediumTotal * 0.6); // Need all easy + 60% medium
+        }
+        
+        return false;
+    }
+    
+    // Get lock reason message
+    getLockReason(challenge, category, completedChallenges) {
+        const challenges = this.challenges[category];
+        const challengeIndex = challenges.findIndex(c => c.id === challenge.id);
+        const previousChallenge = challenges[challengeIndex - 1];
+        
+        if (!completedChallenges.includes(previousChallenge.id)) {
+            return `Complete "${previousChallenge.title}" first 🔒`;
+        }
+        
+        if (challenge.difficulty === 'medium') {
+            const easyCompleted = this.getDifficultyCompletedCount(category, 'easy', completedChallenges);
+            const easyTotal = this.getDifficultyTotal(category, 'easy');
+            const needed = Math.ceil(easyTotal * 0.7);
+            return `Complete ${needed - easyCompleted} more Easy challenges 🔒`;
+        }
+        
+        if (challenge.difficulty === 'hard') {
+            const easyCompleted = this.getDifficultyCompletedCount(category, 'easy', completedChallenges);
+            const mediumCompleted = this.getDifficultyCompletedCount(category, 'medium', completedChallenges);
+            const easyTotal = this.getDifficultyTotal(category, 'easy');
+            const mediumTotal = this.getDifficultyTotal(category, 'medium');
+            
+            if (easyCompleted < easyTotal) {
+                return `Complete all Easy challenges first 🔒`;
+            }
+            const needed = Math.ceil(mediumTotal * 0.6);
+            return `Complete ${needed - mediumCompleted} more Medium challenges 🔒`;
+        }
+        
+        return 'Locked 🔒';
+    }
+    
+    // Get completed count for specific difficulty
+    getDifficultyCompletedCount(category, difficulty, completedChallenges) {
+        return this.challenges[category]
+            .filter(c => c.difficulty === difficulty && completedChallenges.includes(c.id))
+            .length;
+    }
+    
+    // Get total count for specific difficulty
+    getDifficultyTotal(category, difficulty) {
+        return this.challenges[category].filter(c => c.difficulty === difficulty).length;
+    }
+    
+    // Show lock message
+    showLockMessage(item) {
+        const statusBadge = item.querySelector('.status-badge');
+        const message = statusBadge.textContent;
+        
+        const notification = document.createElement('div');
+        notification.innerHTML = `
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <span style="font-size: 1.5rem;">🔒</span>
+                <div>
+                    <strong>Challenge Locked</strong><br>
+                    <span>${message}</span>
+                </div>
+            </div>
+        `;
+        notification.style.cssText = `
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #ff6b6b;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            z-index: 1000;
+            animation: slideIn 0.3s ease;
+            box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
+        `;
+        
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            notification.remove();
+        }, 3000);
+    }
+    
+    // Update difficulty filters
+    updateDifficultyFilters() {
+        this.difficultyFilters.forEach(filter => {
+            filter.classList.remove('active');
+            if (filter.dataset.difficulty === this.currentDifficultyFilter) {
+                filter.classList.add('active');
+            }
+        });
+    }
+    
+    // Update difficulty progress for current category
+    updateDifficultyProgress(category) {
+        const completedChallenges = this.challengeData[category] || [];
+        const difficulties = ['easy', 'medium', 'hard'];
+        const progressElements = [this.easyProgress, this.mediumProgress, this.hardProgress];
+        const countElements = [this.easyCount, this.mediumCount, this.hardCount];
+        
+        difficulties.forEach((difficulty, index) => {
+            const completed = this.getDifficultyCompletedCount(category, difficulty, completedChallenges);
+            const total = this.getDifficultyTotal(category, difficulty);
+            const percentage = total > 0 ? (completed / total) * 100 : 0;
+            
+            progressElements[index].style.width = `${percentage}%`;
+            countElements[index].textContent = `${completed}/${total}`;
+        });
     }
     
     // Update category progress indicators

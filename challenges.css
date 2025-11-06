@@ -150,10 +150,109 @@ body {
 .list-header {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: 20px;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
     padding-bottom: 15px;
     border-bottom: 2px solid #e0e0e0;
+    flex-wrap: wrap;
+}
+
+.difficulty-filters {
+    display: flex;
+    gap: 8px;
+}
+
+.difficulty-filter {
+    padding: 6px 12px;
+    border: 2px solid #ddd;
+    background: white;
+    color: #666;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.difficulty-filter:hover {
+    border-color: #667eea;
+    color: #667eea;
+}
+
+.difficulty-filter.active {
+    background: #667eea;
+    color: white;
+    border-color: #667eea;
+}
+
+.difficulty-progress {
+    display: flex;
+    gap: 30px;
+    margin-bottom: 25px;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 10px;
+    flex-wrap: wrap;
+}
+
+.progress-section {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+    min-width: 150px;
+}
+
+.progress-label {
+    font-weight: bold;
+    font-size: 0.9rem;
+    min-width: 60px;
+}
+
+.progress-label:nth-child(1) {
+    color: #2e7d32;
+}
+
+.progress-section:nth-child(2) .progress-label {
+    color: #f57c00;
+}
+
+.progress-section:nth-child(3) .progress-label {
+    color: #c62828;
+}
+
+.mini-progress-bar {
+    flex: 1;
+    height: 6px;
+    background: #e0e0e0;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.mini-progress-fill {
+    height: 100%;
+    width: 0%;
+    transition: width 0.5s ease;
+    border-radius: 3px;
+}
+
+.progress-section:nth-child(1) .mini-progress-fill {
+    background: #4caf50;
+}
+
+.progress-section:nth-child(2) .mini-progress-fill {
+    background: #ff9800;
+}
+
+.progress-section:nth-child(3) .mini-progress-fill {
+    background: #f44336;
+}
+
+.progress-count {
+    font-size: 0.8rem;
+    color: #666;
+    min-width: 35px;
 }
 
 .list-header h2 {

@@ -90,6 +90,35 @@
                 <div class="list-header">
                     <button id="back-to-categories" class="back-btn">← Categories</button>
                     <h2 id="category-title">Category Challenges</h2>
+                    <div class="difficulty-filters">
+                        <button class="difficulty-filter active" data-difficulty="all">All</button>
+                        <button class="difficulty-filter" data-difficulty="easy">Easy</button>
+                        <button class="difficulty-filter" data-difficulty="medium">Medium</button>
+                        <button class="difficulty-filter" data-difficulty="hard">Hard</button>
+                    </div>
+                </div>
+                <div class="difficulty-progress">
+                    <div class="progress-section">
+                        <span class="progress-label">Easy</span>
+                        <div class="mini-progress-bar">
+                            <div class="mini-progress-fill" id="easy-progress"></div>
+                        </div>
+                        <span class="progress-count" id="easy-count">0/0</span>
+                    </div>
+                    <div class="progress-section">
+                        <span class="progress-label">Medium</span>
+                        <div class="mini-progress-bar">
+                            <div class="mini-progress-fill" id="medium-progress"></div>
+                        </div>
+                        <span class="progress-count" id="medium-count">0/0</span>
+                    </div>
+                    <div class="progress-section">
+                        <span class="progress-label">Hard</span>
+                        <div class="mini-progress-bar">
+                            <div class="mini-progress-fill" id="hard-progress"></div>
+                        </div>
+                        <span class="progress-count" id="hard-count">0/0</span>
+                    </div>
                 </div>
                 <div class="challenges-grid" id="challenges-grid">
                     <!-- Challenges will be populated here -->
