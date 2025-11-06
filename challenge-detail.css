@@ -201,27 +201,107 @@ body {
     margin-right: 10px;
 }
 
+.hint-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 15px;
+}
+
 .hint-btn {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     background: #ff9800;
     color: white;
     border: none;
-    padding: 8px 16px;
+    padding: 10px 16px;
     border-radius: 6px;
     cursor: pointer;
     font-size: 0.9rem;
-    transition: background 0.3s;
+    transition: all 0.3s;
+    text-align: left;
 }
 
 .hint-btn:hover {
     background: #f57c00;
+    transform: translateY(-1px);
+}
+
+.hint-btn.unlocked {
+    background: #4caf50;
+    cursor: default;
+}
+
+.hint-btn.unlocked:hover {
+    background: #4caf50;
+    transform: none;
+}
+
+.hint-btn.insufficient-xp {
+    background: #ccc;
+    color: #666;
+    cursor: not-allowed;
+}
+
+.hint-btn.insufficient-xp:hover {
+    background: #ccc;
+    transform: none;
+}
+
+.hint-cost {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: bold;
 }
 
 .hint-content {
     background: #fff3e0;
-    padding: 15px;
     border-radius: 8px;
-    margin-top: 10px;
     border-left: 4px solid #ff9800;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.hint-item {
+    padding: 15px;
+    border-bottom: 1px solid #ffe0b2;
+}
+
+.hint-item:last-child {
+    border-bottom: none;
+}
+
+.hint-item h5 {
+    color: #e65100;
+    margin: 0 0 8px 0;
+    font-size: 1rem;
+}
+
+.hint-item p {
+    margin: 0;
+    color: #bf360c;
+    line-height: 1.4;
+}
+
+.xp-display {
+    background: rgba(255, 215, 0, 0.1);
+    border: 1px solid #ffd700;
+    padding: 8px 12px;
+    border-radius: 6px;
+    margin-bottom: 15px;
+    text-align: center;
+    font-weight: bold;
+    color: #b8860b;
+}
+
+.no-hints {
+    text-align: center;
+    color: #666;
+    font-style: italic;
+    padding: 20px;
 }
 
 .example-preview {
