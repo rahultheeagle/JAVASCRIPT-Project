@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Tutorials - CodeQuest</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="tutorial-styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Interactive Tutorials</h1>
+            <a href="index.html" class="back-btn">← Back to Dashboard</a>
+        </header>
+
+        <main>
+            <div class="tutorial-container">
+                <div class="tutorial-sidebar">
+                    <h3>Tutorial Steps</h3>
+                    <div class="steps-list" id="steps-list">
+                        <!-- Steps populated by JS -->
+                    </div>
+                </div>
+
+                <div class="tutorial-content">
+                    <div class="tutorial-header">
+                        <h2 id="tutorial-title">HTML Basics Tutorial</h2>
+                        <div class="tutorial-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="tutorial-progress"></div>
+                            </div>
+                            <span id="progress-text">Step 1 of 5</span>
+                        </div>
+                    </div>
+
+                    <div class="step-content" id="step-content">
+                        <h3 id="step-title">Step 1: Create HTML Document</h3>
+                        <div id="step-description">
+                            <p>Let's start by creating a basic HTML document structure.</p>
+                        </div>
+                        
+                        <div class="code-example" id="code-example">
+                            <pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;title&gt;My First Page&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;Hello World!&lt;/h1&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+                        </div>
+
+                        <div class="interactive-area">
+                            <h4>Try it yourself:</h4>
+                            <textarea id="user-code" placeholder="Type your code here..."></textarea>
+                            <button id="check-code" class="btn-primary">Check Code</button>
+                            <div id="feedback" class="feedback"></div>
+                        </div>
+                    </div>
+
+                    <div class="tutorial-navigation">
+                        <button id="prev-btn" class="btn-secondary" disabled>Previous</button>
+                        <button id="next-btn" class="btn-primary" disabled>Next</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="tutorial-system.js"></script>
+</body>
+</html>

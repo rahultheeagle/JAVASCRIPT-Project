@@ -235,6 +235,11 @@ header h1 {
     color: white;
 }
 
+.tutorials-btn:hover {
+    background: linear-gradient(135deg, #FF9800, #FFB74D);
+    color: white;
+}
+
 .btn-icon {
     font-size: 2.5rem;
 }
