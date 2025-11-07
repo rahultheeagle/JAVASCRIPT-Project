@@ -230,6 +230,11 @@ header h1 {
     color: white;
 }
 
+.js-executor-btn:hover {
+    background: linear-gradient(135deg, #FFC107, #FFD54F);
+    color: #333;
+}
+
 .challenges-btn:hover {
     background: linear-gradient(135deg, #4CAF50, #66BB6A);
     color: white;

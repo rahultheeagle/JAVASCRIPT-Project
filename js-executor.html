@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript Executor - CodeQuest</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="js-executor-styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>JavaScript Code Executor</h1>
+            <a href="index.html" class="back-btn">← Back to Dashboard</a>
+        </header>
+
+        <main>
+            <div class="executor-container">
+                <div class="code-panel">
+                    <div class="panel-header">
+                        <h3>JavaScript Code</h3>
+                        <div class="code-actions">
+                            <button id="run-btn" class="btn-primary">Run Code</button>
+                            <button id="clear-btn" class="btn-secondary">Clear</button>
+                        </div>
+                    </div>
+                    <textarea id="code-input" placeholder="// Enter your JavaScript code here
+console.log('Hello World!');
+
+let numbers = [1, 2, 3, 4, 5];
+let doubled = numbers.map(n => n * 2);
+console.log(doubled);"></textarea>
+                </div>
+
+                <div class="output-panel">
+                    <div class="panel-header">
+                        <h3>Output</h3>
+                        <button id="clear-output-btn" class="btn-secondary">Clear Output</button>
+                    </div>
+                    <div id="output-content" class="output-content">
+                        <div class="output-placeholder">Run your code to see output here...</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="examples-section">
+                <h3>Quick Examples</h3>
+                <div class="examples-grid">
+                    <button class="example-btn" data-code="console.log('Hello World!');">Hello World</button>
+                    <button class="example-btn" data-code="let arr = [1,2,3]; console.log(arr.map(x => x*2));">Array Map</button>
+                    <button class="example-btn" data-code="function factorial(n) { return n <= 1 ? 1 : n * factorial(n-1); } console.log(factorial(5));">Recursion</button>
+                    <button class="example-btn" data-code="const obj = {name: 'John', age: 30}; console.log(Object.keys(obj));">Object Keys</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="js-executor-system.js"></script>
+</body>
+</html>
