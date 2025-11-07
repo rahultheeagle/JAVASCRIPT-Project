@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript Validator - CodeQuest</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="js-validator-styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>JavaScript Code Validator</h1>
+            <a href="index.html" class="back-btn">← Back to Dashboard</a>
+        </header>
+
+        <main>
+            <div class="validator-container">
+                <div class="challenge-panel">
+                    <h3>Challenge</h3>
+                    <div class="challenge-selector">
+                        <select id="challenge-select">
+                            <option value="sum">Sum Two Numbers</option>
+                            <option value="factorial">Calculate Factorial</option>
+                            <option value="reverse">Reverse String</option>
+                            <option value="fibonacci">Fibonacci Sequence</option>
+                            <option value="palindrome">Check Palindrome</option>
+                        </select>
+                    </div>
+                    <div id="challenge-description" class="challenge-description"></div>
+                    <div id="expected-output" class="expected-output"></div>
+                </div>
+
+                <div class="code-panel">
+                    <h3>Your Solution</h3>
+                    <textarea id="code-input" placeholder="// Write your solution here"></textarea>
+                    <div class="code-actions">
+                        <button id="validate-btn" class="btn-primary">Validate Code</button>
+                        <button id="clear-btn" class="btn-secondary">Clear</button>
+                    </div>
+                </div>
+
+                <div class="results-panel">
+                    <h3>Validation Results</h3>
+                    <div id="results-content" class="results-content">
+                        <div class="results-placeholder">Select a challenge and write your solution to see validation results.</div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="js-validator-system.js"></script>
+</body>
+</html>

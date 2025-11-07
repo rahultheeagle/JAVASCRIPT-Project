@@ -235,6 +235,11 @@ header h1 {
     color: #333;
 }
 
+.js-validator-btn:hover {
+    background: linear-gradient(135deg, #4CAF50, #66BB6A);
+    color: white;
+}
+
 .challenges-btn:hover {
     background: linear-gradient(135deg, #4CAF50, #66BB6A);
     color: white;
