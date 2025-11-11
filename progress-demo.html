@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animated Progress Bars Demo - CodeQuest</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="progress-bars.css">
+    <link rel="stylesheet" href="toast-system.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <h2>CodeQuest</h2>
+            </div>
+            <div class="nav-links">
+                <a href="index.html">Dashboard</a>
+                <button id="theme-toggle" class="theme-toggle">🌙</button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="page-header">
+            <h1>Animated Progress Bars Demo</h1>
+            <p>Visual feedback on completion with smooth animations</p>
+        </div>
+
+        <div class="demo-container">
+            <div class="demo-section">
+                <h3>Basic Progress Bars</h3>
+                <div id="basic-progress"></div>
+                <div class="demo-controls">
+                    <button class="btn-primary" onclick="updateBasic(25)">25%</button>
+                    <button class="btn-primary" onclick="updateBasic(50)">50%</button>
+                    <button class="btn-primary" onclick="updateBasic(75)">75%</button>
+                    <button class="btn-primary" onclick="updateBasic(100)">100%</button>
+                    <button class="btn-secondary" onclick="resetBasic()">Reset</button>
+                </div>
+            </div>
+
+            <div class="demo-section">
+                <h3>Lesson Progress</h3>
+                <div id="lesson-progress"></div>
+                <div class="demo-controls">
+                    <button class="btn-primary" onclick="simulateLesson()">Simulate Lesson</button>
+                    <button class="btn-secondary" onclick="resetLesson()">Reset</button>
+                </div>
+            </div>
+
+            <div class="demo-section">
+                <h3>Challenge Progress</h3>
+                <div id="challenge-progress"></div>
+                <div class="demo-controls">
+                    <button class="btn-success" onclick="simulateChallenge()">Simulate Challenge</button>
+                    <button class="btn-secondary" onclick="resetChallenge()">Reset</button>
+                </div>
+            </div>
+
+            <div class="demo-section">
+                <h3>File Upload Progress</h3>
+                <div id="upload-progress"></div>
+                <div class="demo-controls">
+                    <button class="btn-info" onclick="simulateUpload()">Simulate Upload</button>
+                    <button class="btn-secondary" onclick="resetUpload()">Reset</button>
+                </div>
+            </div>
+
+            <div class="demo-section">
+                <h3>XP Progress</h3>
+                <div id="xp-progress"></div>
+                <div class="demo-controls">
+                    <button class="btn-primary" onclick="addXP(50)">+50 XP</button>
+                    <button class="btn-primary" onclick="addXP(100)">+100 XP</button>
+                    <button class="btn-primary" onclick="addXP(200)">+200 XP</button>
+                    <button class="btn-secondary" onclick="resetXP()">Reset</button>
+                </div>
+            </div>
+
+            <div class="demo-section">
+                <h3>Circular Progress</h3>
+                <div class="progress-demos">
+                    <div class="progress-circle" id="circle-1">
+                        <svg>
+                            <circle class="progress-circle-bg" cx="60" cy="60" r="45"></circle>
+                            <circle class="progress-circle-fill" cx="60" cy="60" r="45"></circle>
+                        </svg>
+                        <div class="progress-circle-text">0%</div>
+                    </div>
+                    <div class="progress-circle" id="circle-2">
+                        <svg>
+                            <circle class="progress-circle-bg" cx="60" cy="60" r="45"></circle>
+                            <circle class="progress-circle-fill" cx="60" cy="60" r="45" style="stroke: var(--success-color);"></circle>
+                        </svg>
+                        <div class="progress-circle-text">0%</div>
+                    </div>
+                </div>
+                <div class="demo-controls">
+                    <button class="btn-primary" onclick="updateCircular(65)">65%</button>
+                    <button class="btn-primary" onclick="updateCircular(100)">100%</button>
+                    <button class="btn-secondary" onclick="resetCircular()">Reset</button>
+                </div>
+            </div>
+
+            <div class="demo-section">
+                <h3>Skill Progress Bars</h3>
+                <div class="skills-container">
+                    <div class="skill-progress">
+                        <div class="skill-name">HTML</div>
+                        <div class="skill-bar">
+                            <div class="skill-fill" id="html-skill"></div>
+                        </div>
+                        <div class="skill-percentage">0%</div>
+                    </div>
+                    <div class="skill-progress">
+                        <div class="skill-name">CSS</div>
+                        <div class="skill-bar">
+                            <div class="skill-fill" id="css-skill"></div>
+                        </div>
+                        <div class="skill-percentage">0%</div>
+                    </div>
+                    <div class="skill-progress">
+                        <div class="skill-name">JavaScript</div>
+                        <div class="skill-bar">
+                            <div class="skill-fill" id="js-skill"></div>
+                        </div>
+                        <div class="skill-percentage">0%</div>
+                    </div>
+                </div>
+                <div class="demo-controls">
+                    <button class="btn-primary" onclick="updateSkills()">Update Skills</button>
+                    <button class="btn-secondary" onclick="resetSkills()">Reset Skills</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="storage-manager.js"></script>
+    <script src="theme-system.js"></script>
+    <script src="toast-system.js"></script>
+    <script src="progress-bars.js"></script>
+    
+    <script>
+        let basicId, lessonId, challengeId, uploadId, xpId;
+        let currentXP = 150, maxXP = 1000;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Create progress bars
+            basicId = window.progressBars.create('#basic-progress', {
+                label: 'Basic Progress Bar',
+                height: '12px'
+            });
+
+            lessonId = window.progressBars.createLessonProgress('#lesson-progress');
+            challengeId = window.progressBars.createChallengeProgress('#challenge-progress');
+            uploadId = window.progressBars.createUploadProgress('#upload-progress');
+            xpId = window.progressBars.createXPProgress('#xp-progress', currentXP, maxXP);
+        });
+
+        function updateBasic(value) {
+            window.progressBars.update(basicId, value);
+        }
+
+        function resetBasic() {
+            window.progressBars.reset(basicId);
+        }
+
+        function simulateLesson() {
+            window.progressBars.reset(lessonId);
+            window.progressBars.simulate(lessonId, 4000);
+        }
+
+        function resetLesson() {
+            window.progressBars.reset(lessonId);
+        }
+
+        function simulateChallenge() {
+            window.progressBars.reset(challengeId);
+            window.progressBars.simulate(challengeId, 3000);
+        }
+
+        function resetChallenge() {
+            window.progressBars.reset(challengeId);
+        }
+
+        function simulateUpload() {
+            window.progressBars.reset(uploadId);
+            window.progressBars.simulate(uploadId, 2500);
+        }
+
+        function resetUpload() {
+            window.progressBars.reset(uploadId);
+        }
+
+        function addXP(amount) {
+            currentXP = Math.min(currentXP + amount, maxXP);
+            window.progressBars.update(xpId, currentXP);
+        }
+
+        function resetXP() {
+            currentXP = 150;
+            window.progressBars.update(xpId, currentXP);
+        }
+
+        function updateCircular(percentage) {
+            const circles = document.querySelectorAll('.progress-circle');
+            circles.forEach((circle, index) => {
+                const fill = circle.querySelector('.progress-circle-fill');
+                const text = circle.querySelector('.progress-circle-text');
+                const circumference = 2 * Math.PI * 45;
+                const offset = circumference - (percentage / 100) * circumference;
+                
+                fill.style.strokeDashoffset = offset;
+                text.textContent = `${percentage}%`;
+            });
+        }
+
+        function resetCircular() {
+            updateCircular(0);
+        }
+
+        function updateSkills() {
+            const skills = [
+                { id: 'html-skill', value: 85 },
+                { id: 'css-skill', value: 70 },
+                { id: 'js-skill', value: 60 }
+            ];
+
+            skills.forEach((skill, index) => {
+                setTimeout(() => {
+                    const fill = document.getElementById(skill.id);
+                    const percentage = fill.parentElement.parentElement.querySelector('.skill-percentage');
+                    
+                    fill.style.width = `${skill.value}%`;
+                    percentage.textContent = `${skill.value}%`;
+                }, index * 300);
+            });
+        }
+
+        function resetSkills() {
+            const skills = ['html-skill', 'css-skill', 'js-skill'];
+            skills.forEach(skillId => {
+                const fill = document.getElementById(skillId);
+                const percentage = fill.parentElement.parentElement.querySelector('.skill-percentage');
+                
+                fill.style.width = '0%';
+                percentage.textContent = '0%';
+            });
+        }
+    </script>
+
+    <style>
+        .demo-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+        }
+
+        .demo-section {
+            background: var(--card-bg);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+        }
+
+        .demo-section h3 {
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+        }
+
+        .demo-controls {
+            margin-top: 1.5rem;
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .demo-controls button {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-success {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .btn-info {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .btn-secondary {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .progress-demos {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+
+        .skills-container {
+            margin-bottom: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .progress-demos {
+                flex-direction: column;
+                align-items: center;
+                gap: 1rem;
+            }
+        }
+    </style>
+</body>
+</html>

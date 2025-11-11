@@ -1,0 +1,260 @@
+.progress-container {
+    margin-bottom: 1.5rem;
+}
+
+.progress-label {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.progress-bar {
+    position: relative;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.progress-fill {
+    height: 100%;
+    background: var(--primary-color);
+    border-radius: 10px;
+    width: 0%;
+    position: relative;
+    transition: width 0.8s ease-out;
+    background-image: linear-gradient(45deg, 
+        rgba(255, 255, 255, 0.1) 25%, 
+        transparent 25%, 
+        transparent 50%, 
+        rgba(255, 255, 255, 0.1) 50%, 
+        rgba(255, 255, 255, 0.1) 75%, 
+        transparent 75%, 
+        transparent
+    );
+    background-size: 20px 20px;
+    animation: progress-stripes 1s linear infinite;
+}
+
+.progress-fill.completed {
+    animation: progress-stripes 1s linear infinite, completion-glow 0.6s ease-out;
+}
+
+.progress-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    z-index: 1;
+}
+
+/* Progress bar types */
+.progress-container.lesson .progress-fill {
+    background: linear-gradient(90deg, var(--primary-color), var(--primary-hover));
+}
+
+.progress-container.challenge .progress-fill {
+    background: linear-gradient(90deg, var(--success-color), #22c55e);
+}
+
+.progress-container.upload .progress-fill {
+    background: linear-gradient(90deg, #3b82f6, #1d4ed8);
+}
+
+.progress-container.download .progress-fill {
+    background: linear-gradient(90deg, #10b981, #059669);
+}
+
+/* Animations */
+@keyframes progress-stripes {
+    0% {
+        background-position: 0 0;
+    }
+    100% {
+        background-position: 20px 0;
+    }
+}
+
+@keyframes completion-glow {
+    0% {
+        box-shadow: 0 0 0 rgba(34, 197, 94, 0.5);
+    }
+    50% {
+        box-shadow: 0 0 20px rgba(34, 197, 94, 0.8);
+    }
+    100% {
+        box-shadow: 0 0 0 rgba(34, 197, 94, 0.5);
+    }
+}
+
+/* Circular progress bars */
+.progress-circle {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    margin: 0 auto;
+}
+
+.progress-circle svg {
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+}
+
+.progress-circle-bg {
+    fill: none;
+    stroke: var(--bg-secondary);
+    stroke-width: 8;
+}
+
+.progress-circle-fill {
+    fill: none;
+    stroke: var(--primary-color);
+    stroke-width: 8;
+    stroke-linecap: round;
+    stroke-dasharray: 283;
+    stroke-dashoffset: 283;
+    transition: stroke-dashoffset 0.8s ease-out;
+}
+
+.progress-circle-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+/* Mini progress bars */
+.progress-mini {
+    height: 4px !important;
+    border-radius: 2px;
+}
+
+.progress-mini .progress-fill {
+    border-radius: 2px;
+}
+
+.progress-mini .progress-text {
+    display: none;
+}
+
+/* Skill progress bars */
+.skill-progress {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.skill-name {
+    min-width: 100px;
+    font-size: 0.875rem;
+    color: var(--text-primary);
+}
+
+.skill-bar {
+    flex: 1;
+    height: 8px;
+    background: var(--bg-secondary);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.skill-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary-color), var(--primary-hover));
+    border-radius: 4px;
+    width: 0%;
+    transition: width 1s ease-out;
+}
+
+.skill-percentage {
+    min-width: 40px;
+    text-align: right;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+}
+
+/* Loading states */
+.progress-loading .progress-fill {
+    background: linear-gradient(90deg, 
+        var(--border-color) 25%, 
+        var(--bg-secondary) 50%, 
+        var(--border-color) 75%
+    );
+    background-size: 200% 100%;
+    animation: loading-shimmer 1.5s infinite;
+}
+
+@keyframes loading-shimmer {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .progress-circle {
+        width: 80px;
+        height: 80px;
+    }
+    
+    .progress-circle-text {
+        font-size: 1rem;
+    }
+    
+    .skill-progress {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+    
+    .skill-name {
+        min-width: auto;
+    }
+    
+    .skill-bar {
+        width: 100%;
+    }
+}
+
+/* Dark theme adjustments */
+[data-theme="dark"] .progress-bar {
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .progress-text {
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+    .progress-fill,
+    .progress-circle-fill,
+    .skill-fill {
+        transition: none;
+    }
+    
+    .progress-fill {
+        animation: none;
+    }
+    
+    .progress-loading .progress-fill {
+        animation: none;
+        background: var(--border-color);
+    }
+}
