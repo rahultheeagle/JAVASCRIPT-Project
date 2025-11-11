@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Content Demo - CodeQuest</title>
+    <link rel="stylesheet" href="design-system.css">
+    <style>
+        .demo-section {
+            margin: 2rem 0;
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+        }
+        
+        .filter-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .filter-btn {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border-color);
+            background: var(--background-primary);
+            color: var(--text-primary);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+        
+        .challenges-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+        
+        .challenge-card {
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            background: var(--background-primary);
+            transition: all 0.2s ease;
+            position: relative;
+        }
+        
+        .challenge-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .challenge-card.completed {
+            border-color: var(--success-color);
+            background: var(--success-light);
+        }
+        
+        .challenge-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .challenge-category {
+            background: var(--primary-light);
+            color: var(--primary-color);
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .challenge-difficulty {
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .challenge-difficulty.beginner {
+            background: var(--success-light);
+            color: var(--success-color);
+        }
+        
+        .challenge-difficulty.intermediate {
+            background: var(--warning-light);
+            color: var(--warning-color);
+        }
+        
+        .challenge-difficulty.advanced {
+            background: var(--error-light);
+            color: var(--error-color);
+        }
+        
+        .challenge-title {
+            margin: 0 0 0.5rem 0;
+            color: var(--text-primary);
+        }
+        
+        .challenge-description {
+            color: var(--text-secondary);
+            margin: 0 0 1rem 0;
+            line-height: 1.5;
+        }
+        
+        .challenge-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+        }
+        
+        .challenge-meta {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.9rem;
+        }
+        
+        .challenge-xp {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+        
+        .challenge-time {
+            color: var(--text-secondary);
+        }
+        
+        .challenge-btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+        
+        .challenge-btn.start {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        .challenge-btn.start:hover {
+            background: var(--primary-dark);
+        }
+        
+        .challenge-btn.completed {
+            background: var(--success-color);
+            color: white;
+            cursor: default;
+        }
+        
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: var(--background-secondary);
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            display: block;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+    </style>
+</head>
+<body>
+    <header role="banner">
+        <nav aria-label="Main navigation">
+            <div class="nav-brand">
+                <h1>CodeQuest</h1>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html">Dashboard</a></li>
+                <li><a href="#" class="active">Dynamic Content</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main role="main">
+        <section class="hero">
+            <h1>Dynamic Content Demo</h1>
+            <p>Generate challenge cards via JavaScript</p>
+        </section>
+
+        <section class="demo-section">
+            <h2>Challenge Statistics</h2>
+            <div class="stats-container" id="stats-container">
+                <!-- Stats will be populated by JavaScript -->
+            </div>
+        </section>
+
+        <section class="demo-section">
+            <h2>Challenge Filters</h2>
+            <div class="filter-buttons">
+                <button class="filter-btn active" onclick="filterChallenges('all')">All Challenges</button>
+                <button class="filter-btn" onclick="filterChallenges('JavaScript')">JavaScript</button>
+                <button class="filter-btn" onclick="filterChallenges('CSS')">CSS</button>
+                <button class="filter-btn" onclick="filterChallenges('Beginner')">Beginner</button>
+                <button class="filter-btn" onclick="filterChallenges('Intermediate')">Intermediate</button>
+                <button class="filter-btn" onclick="filterChallenges('Advanced')">Advanced</button>
+            </div>
+        </section>
+
+        <section class="demo-section">
+            <h2>Dynamic Challenge Cards</h2>
+            <div class="challenges-grid" id="challenges-container">
+                <!-- Challenge cards will be populated by JavaScript -->
+            </div>
+        </section>
+
+        <section class="demo-section">
+            <h2>Add New Challenge</h2>
+            <button class="btn btn-primary" onclick="addSampleChallenge()">Add Sample Challenge</button>
+        </section>
+    </main>
+
+    <script src="js/template-system.js"></script>
+    <script src="js/dynamic-content.js"></script>
+    <script src="toast-system.js"></script>
+    <script>
+        // Initialize dynamic content
+        document.addEventListener('DOMContentLoaded', function() {
+            // Render initial challenges
+            dynamicContent.renderChallenges('#challenges-container');
+            
+            // Update statistics
+            updateStats();
+        });
+
+        // Filter challenges
+        function filterChallenges(filter) {
+            // Update active button
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Filter and render challenges
+            dynamicContent.filterChallenges('#challenges-container', filter);
+        }
+
+        // Update statistics
+        function updateStats() {
+            const challenges = dynamicContent.challenges;
+            const completed = challenges.filter(c => c.completed).length;
+            const totalXP = challenges.filter(c => c.completed).reduce((sum, c) => sum + c.xp, 0);
+            
+            const statsHTML = `
+                <div class="stat-card">
+                    <span class="stat-number">${challenges.length}</span>
+                    <span class="stat-label">Total Challenges</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number">${completed}</span>
+                    <span class="stat-label">Completed</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number">${Math.round((completed / challenges.length) * 100)}%</span>
+                    <span class="stat-label">Progress</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number">${totalXP}</span>
+                    <span class="stat-label">XP Earned</span>
+                </div>
+            `;
+            
+            document.getElementById('stats-container').innerHTML = statsHTML;
+        }
+
+        // Add sample challenge
+        function addSampleChallenge() {
+            const sampleChallenges = [
+                {
+                    title: "Event Listeners",
+                    description: "Handle user interactions with event listeners",
+                    difficulty: "Intermediate",
+                    xp: 100,
+                    category: "JavaScript",
+                    timeEstimate: "15 min"
+                },
+                {
+                    title: "CSS Grid Layout",
+                    description: "Create complex layouts with CSS Grid",
+                    difficulty: "Advanced",
+                    xp: 175,
+                    category: "CSS",
+                    timeEstimate: "25 min"
+                }
+            ];
+            
+            const randomChallenge = sampleChallenges[Math.floor(Math.random() * sampleChallenges.length)];
+            dynamicContent.addChallenge(randomChallenge);
+            dynamicContent.renderChallenges('#challenges-container');
+            updateStats();
+            
+            if (window.toastSystem) {
+                toastSystem.show(`New challenge "${randomChallenge.title}" added!`, 'success');
+            }
+        }
+
+        // Override the startChallenge method to update stats
+        const originalStartChallenge = dynamicContent.startChallenge.bind(dynamicContent);
+        dynamicContent.startChallenge = function(id) {
+            originalStartChallenge(id);
+            updateStats();
+        };
+    </script>
+</body>
+</html>
