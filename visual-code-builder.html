@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visual Code Builder - CodeQuest</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="theme-styles.css">
+    <link rel="stylesheet" href="drag-drop-styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-left">
+                <h1>🎨 Visual Code Builder</h1>
+                <p>Build code visually with drag-and-drop blocks</p>
+            </div>
+            <div class="header-actions">
+                <a href="index.html" class="back-btn">← Dashboard</a>
+            </div>
+        </header>
+
+        <div class="builder-intro">
+            <div class="intro-content">
+                <h2>Welcome to Visual Code Builder</h2>
+                <p>Create HTML, CSS, and JavaScript code by dragging and dropping pre-built code blocks. Perfect for beginners learning to code or experienced developers prototyping quickly.</p>
+                
+                <div class="feature-highlights">
+                    <div class="feature">
+                        <span class="feature-icon">🧩</span>
+                        <div class="feature-text">
+                            <h4>Drag & Drop</h4>
+                            <p>Simply drag code blocks to build your project</p>
+                        </div>
+                    </div>
+                    <div class="feature">
+                        <span class="feature-icon">👁️</span>
+                        <div class="feature-text">
+                            <h4>Live Preview</h4>
+                            <p>See your code in action with instant preview</p>
+                        </div>
+                    </div>
+                    <div class="feature">
+                        <span class="feature-icon">💾</span>
+                        <div class="feature-text">
+                            <h4>Export Code</h4>
+                            <p>Generate clean, ready-to-use code</p>
+                        </div>
+                    </div>
+                    <div class="feature">
+                        <span class="feature-icon">🎯</span>
+                        <div class="feature-text">
+                            <h4>Learn by Doing</h4>
+                            <p>Understand code structure visually</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="getting-started">
+                    <h3>Getting Started</h3>
+                    <ol class="steps-list">
+                        <li>Choose a language tab (HTML, CSS, or JavaScript)</li>
+                        <li>Drag code blocks from the left panel to the canvas</li>
+                        <li>Arrange and connect blocks to build your code</li>
+                        <li>Use the properties panel to customize blocks</li>
+                        <li>Generate and preview your code</li>
+                        <li>Export your finished project</li>
+                    </ol>
+                </div>
+
+                <button class="start-building-btn" onclick="startBuilding()">🚀 Start Building</button>
+            </div>
+        </div>
+
+        <!-- The drag-drop workspace will be inserted here -->
+        <div class="drag-drop-container"></div>
+
+        <div class="builder-tips">
+            <h3>💡 Pro Tips</h3>
+            <div class="tips-grid">
+                <div class="tip-card">
+                    <h4>🏗️ Structure First</h4>
+                    <p>Start with HTML structure blocks like div, header, and section before adding content.</p>
+                </div>
+                <div class="tip-card">
+                    <h4>🎨 Style Smart</h4>
+                    <p>Use CSS layout blocks (Flexbox, Grid) to create responsive designs easily.</p>
+                </div>
+                <div class="tip-card">
+                    <h4>⚡ Add Interactivity</h4>
+                    <p>Combine JavaScript event listeners with DOM manipulation for dynamic features.</p>
+                </div>
+                <div class="tip-card">
+                    <h4>🔍 Preview Often</h4>
+                    <p>Use the preview feature frequently to see how your code looks and behaves.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="code-examples">
+            <h3>📚 Example Projects</h3>
+            <div class="examples-grid">
+                <div class="example-card" onclick="loadExample('landing-page')">
+                    <div class="example-preview">
+                        <div class="preview-mockup">
+                            <div class="mockup-header"></div>
+                            <div class="mockup-content">
+                                <div class="mockup-text"></div>
+                                <div class="mockup-button"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="example-info">
+                        <h4>Landing Page</h4>
+                        <p>Simple landing page with header, hero section, and call-to-action button</p>
+                        <span class="example-difficulty easy">Easy</span>
+                    </div>
+                </div>
+
+                <div class="example-card" onclick="loadExample('contact-form')">
+                    <div class="example-preview">
+                        <div class="preview-mockup">
+                            <div class="mockup-form">
+                                <div class="mockup-input"></div>
+                                <div class="mockup-input"></div>
+                                <div class="mockup-textarea"></div>
+                                <div class="mockup-button"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="example-info">
+                        <h4>Contact Form</h4>
+                        <p>Interactive contact form with validation and styling</p>
+                        <span class="example-difficulty medium">Medium</span>
+                    </div>
+                </div>
+
+                <div class="example-card" onclick="loadExample('dashboard')">
+                    <div class="example-preview">
+                        <div class="preview-mockup">
+                            <div class="mockup-nav"></div>
+                            <div class="mockup-grid">
+                                <div class="mockup-card"></div>
+                                <div class="mockup-card"></div>
+                                <div class="mockup-card"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="example-info">
+                        <h4>Dashboard</h4>
+                        <p>Modern dashboard with navigation, cards, and responsive grid layout</p>
+                        <span class="example-difficulty hard">Hard</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="theme-system.js"></script>
+    <script src="drag-drop-system.js"></script>
+    <script>
+        function startBuilding() {
+            const workspace = document.querySelector('.drag-drop-workspace');
+            if (workspace) {
+                workspace.scrollIntoView({ behavior: 'smooth' });
+            } else {
+                // Initialize workspace if not already done
+                setTimeout(() => {
+                    const newWorkspace = document.querySelector('.drag-drop-workspace');
+                    if (newWorkspace) {
+                        newWorkspace.scrollIntoView({ behavior: 'smooth' });
+                    }
+                }, 500);
+            }
+        }
+
+        function loadExample(exampleType) {
+            // This would load pre-built examples
+            alert(`Loading ${exampleType} example... (Feature coming soon!)`);
+        }
+
+        // Initialize drag-drop system when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            // The drag-drop system will auto-initialize
+            console.log('Visual Code Builder loaded');
+        });
+    </script>
+</body>
+</html>
