@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Async Operations Demo - CodeQuest</title>
+    <link rel="stylesheet" href="design-system.css">
+    <style>
+        .demo-section { margin: 2rem 0; padding: 1.5rem; border: 1px solid var(--border-color); border-radius: 8px; }
+        .demo-controls { margin-bottom: 1rem; display: flex; gap: 0.5rem; flex-wrap: wrap; }
+        .demo-output { min-height: 150px; border: 1px solid #ddd; padding: 1rem; border-radius: 4px; background: #f9f9f9; font-family: monospace; white-space: pre-wrap; overflow-y: auto; }
+        .loading { opacity: 0.6; pointer-events: none; }
+        .progress-bar { width: 100%; height: 20px; background: #eee; border-radius: 10px; overflow: hidden; margin: 0.5rem 0; }
+        .progress-fill { height: 100%; background: var(--primary-color); transition: width 0.3s; }
+        .status-success { color: #28a745; }
+        .status-error { color: #dc3545; }
+        .status-pending { color: #ffc107; }
+        .timer-display { font-size: 1.2rem; font-weight: bold; margin: 0.5rem 0; }
+        .request-item { padding: 0.5rem; margin: 0.25rem 0; border: 1px solid #ddd; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <h1>Async Operations Demo</h1>
+            <nav>
+                <a href="index.html">← Back to Dashboard</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- API Calls -->
+        <section class="demo-section">
+            <h2>Simulated API Calls</h2>
+            <div class="demo-controls">
+                <button onclick="fetchUsers()">GET Users</button>
+                <button onclick="fetchPosts()">GET Posts</button>
+                <button onclick="createPost()">POST Data</button>
+                <button onclick="updatePost()">PUT Update</button>
+                <button onclick="deletePost()">DELETE</button>
+                <button onclick="failedRequest()">Failed Request</button>
+                <button onclick="clearApiOutput()">Clear</button>
+            </div>
+            <div id="api-output" class="demo-output"></div>
+        </section>
+
+        <!-- Batch Operations -->
+        <section class="demo-section">
+            <h2>Batch Operations</h2>
+            <div class="demo-controls">
+                <button onclick="batchRequests()">Batch All</button>
+                <button onclick="batchSettled()">Batch Settled</button>
+                <button onclick="parallelRequests()">Parallel</button>
+                <button onclick="seriesRequests()">Series</button>
+                <button onclick="raceRequests()">Race</button>
+            </div>
+            <div id="batch-output" class="demo-output"></div>
+        </section>
+
+        <!-- Timers & Delays -->
+        <section class="demo-section">
+            <h2>Timers & Delays</h2>
+            <div class="demo-controls">
+                <button onclick="simpleDelay()">Simple Delay</button>
+                <button onclick="timeoutDemo()">Timeout</button>
+                <button onclick="retryDemo()">Retry</button>
+                <button onclick="pollingDemo()">Polling</button>
+                <button onclick="startTimer()">Start Timer</button>
+                <button onclick="stopTimer()">Stop Timer</button>
+            </div>
+            <div class="timer-display" id="timer-display">Timer: 00:00</div>
+            <div id="timer-output" class="demo-output"></div>
+        </section>
+
+        <!-- Progress Tracking -->
+        <section class="demo-section">
+            <h2>Progress Tracking</h2>
+            <div class="demo-controls">
+                <button onclick="progressDemo()">Track Progress</button>
+                <button onclick="longOperation()">Long Operation</button>
+                <button onclick="cancelableDemo()">Cancelable Request</button>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
+            </div>
+            <div id="progress-output" class="demo-output"></div>
+        </section>
+
+        <!-- Debounce & Throttle -->
+        <section class="demo-section">
+            <h2>Debounce & Throttle</h2>
+            <div class="demo-controls">
+                <input type="text" id="search-input" placeholder="Type to search (debounced)">
+                <button onclick="throttledClick()" id="throttle-btn">Throttled Button</button>
+                <button onclick="clearDebounceOutput()">Clear</button>
+            </div>
+            <div id="debounce-output" class="demo-output"></div>
+        </section>
+
+        <!-- Queue Operations -->
+        <section class="demo-section">
+            <h2>Queue Operations</h2>
+            <div class="demo-controls">
+                <button onclick="queueDemo()">Queue Operations</button>
+                <button onclick="addToQueue()">Add to Queue</button>
+                <button onclick="processQueue()">Process Queue</button>
+                <button onclick="clearQueue()">Clear Queue</button>
+            </div>
+            <div id="queue-output" class="demo-output"></div>
+        </section>
+    </main>
+
+    <script src="js/async-operations.js"></script>
+    <script>
+        let currentTimer = null;
+        let timerSeconds = 0;
+        let operationQueue = [];
+        let cancelableRequest = null;
+
+        // API call functions
+        async function fetchUsers() {
+            const output = document.getElementById('api-output');
+            output.textContent += 'Fetching users...\n';
+            
+            try {
+                const users = await asyncOps.get('/users', { delay: 1500 });
+                output.textContent += `✅ Users: ${JSON.stringify(users, null, 2)}\n\n`;
+            } catch (error) {
+                output.textContent += `❌ Error: ${error.message}\n\n`;
+            }
+        }
+
+        async function fetchPosts() {
+            const output = document.getElementById('api-output');
+            output.textContent += 'Fetching posts...\n';
+            
+            try {
+                const posts = await asyncOps.get('/posts', { delay: 1000, cache: true });
+                output.textContent += `✅ Posts: ${JSON.stringify(posts, null, 2)}\n\n`;
+            } catch (error) {
+                output.textContent += `❌ Error: ${error.message}\n\n`;
+            }
+        }
+
+        async function createPost() {
+            const output = document.getElementById('api-output');
+            const data = { title: 'New Post', content: 'This is a new post' };
+            output.textContent += `Creating post: ${JSON.stringify(data)}\n`;
+            
+            try {
+                const result = await asyncOps.post('/posts', data, { delay: 800 });
+                output.textContent += `✅ Created: ${JSON.stringify(result, null, 2)}\n\n`;
+            } catch (error) {
+                output.textContent += `❌ Error: ${error.message}\n\n`;
+            }
+        }
+
+        async function updatePost() {
+            const output = document.getElementById('api-output');
+            const data = { id: 1, title: 'Updated Post' };
+            output.textContent += `Updating post: ${JSON.stringify(data)}\n`;
+            
+            try {
+                const result = await asyncOps.put('/posts/1', data, { delay: 600 });
+                output.textContent += `✅ Updated: ${JSON.stringify(result, null, 2)}\n\n`;
+            } catch (error) {
+                output.textContent += `❌ Error: ${error.message}\n\n`;
+            }
+        }
+
+        async function deletePost() {
+            const output = document.getElementById('api-output');
+            output.textContent += 'Deleting post...\n';
+            
+            try {
+                const result = await asyncOps.delete('/posts/1', { delay: 500 });
+                output.textContent += `✅ Deleted: ${JSON.stringify(result, null, 2)}\n\n`;
+            } catch (error) {
+                output.textContent += `❌ Error: ${error.message}\n\n`;
+            }
+        }
+
+        async function failedRequest() {
+            const output = document.getElementById('api-output');
+            output.textContent += 'Making failed request...\n';
+            
+            try {
+                await asyncOps.get('/nonexistent', { delay: 500, fail: true });
+            } catch (error) {
+                output.textContent += `❌ Expected Error: ${error.message}\n\n`;
+            }
+        }
+
+        function clearApiOutput() {
+            document.getElementById('api-output').textContent = '';
+        }
+
+        // Batch operations
+        async function batchRequests() {
+            const output = document.getElementById('batch-output');
+            output.textContent += 'Starting batch requests...\n';
+            
+            const requests = [
+                { method: 'get', url: '/users', options: { delay: 500 } },
+                { method: 'get', url: '/posts', options: { delay: 700 } },
+                { method: 'get', url: '/products', options: { delay: 300 } }
+            ];
+            
+            try {
+                const results = await asyncOps.batch(requests);
+                output.textContent += `✅ Batch completed: ${results.length} results\n\n`;
+            } catch (error) {
+                output.textContent += `❌ Batch failed: ${error.message}\n\n`;
+            }
+        }
+
+        async function batchSettled() {
+            const output = document.getElementById('batch-output');
+            output.textContent += 'Starting batch settled...\n';
+            
+            const requests = [
+                { method: 'get', url: '/users', options: { delay: 500 } },
+                { method: 'get', url: '/fail', options: { delay: 300, fail: true } },
+                { method: 'get', url: '/posts', options: { delay: 400 } }
+            ];
+            
+            const results = await asyncOps.batchSettled(requests);
+            const fulfilled = results.filter(r => r.status === 'fulfilled').length;
+            const rejected = results.filter(r => r.status === 'rejected').length;
+            output.textContent += `✅ Settled: ${fulfilled} fulfilled, ${rejected} rejected\n\n`;
+        }
+
+        async function parallelRequests() {
+            const output = document.getElementById('batch-output');
+            output.textContent += 'Parallel requests...\n';
+            
+            const promises = [
+                asyncOps.get('/users', { delay: 800 }),
+                asyncOps.get('/posts', { delay: 600 }),
+                asyncOps.get('/products', { delay: 400 })
+            ];
+            
+            const results = await asyncOps.parallel(promises);
+            output.textContent += `✅ Parallel completed: ${results.length} results\n\n`;
+        }
+
+        async function seriesRequests() {
+            const output = document.getElementById('batch-output');
+            output.textContent += 'Series requests...\n';
+            
+            const promises = [
+                asyncOps.get('/users', { delay: 500 }),
+                asyncOps.get('/posts', { delay: 500 }),
+                asyncOps.get('/products', { delay: 500 })
+            ];
+            
+            const results = await asyncOps.series(promises);
+            output.textContent += `✅ Series completed: ${results.length} results\n\n`;
+        }
+
+        async function raceRequests() {
+            const output = document.getElementById('batch-output');
+            output.textContent += 'Race requests...\n';
+            
+            const promises = [
+                asyncOps.get('/users', { delay: 800 }),
+                asyncOps.get('/posts', { delay: 600 }),
+                asyncOps.get('/products', { delay: 400 })
+            ];
+            
+            const result = await asyncOps.race(promises);
+            output.textContent += `✅ Race winner: ${JSON.stringify(result)}\n\n`;
+        }
+
+        // Timer functions
+        async function simpleDelay() {
+            const output = document.getElementById('timer-output');
+            output.textContent += 'Starting 2 second delay...\n';
+            
+            await asyncOps.delay(2000);
+            output.textContent += '✅ Delay completed!\n\n';
+        }
+
+        async function timeoutDemo() {
+            const output = document.getElementById('timer-output');
+            output.textContent += 'Testing timeout (3s limit)...\n';
+            
+            try {
+                const slowRequest = asyncOps.get('/users', { delay: 5000 });
+                await asyncOps.timeout(slowRequest, 3000);
+                output.textContent += '✅ Request completed\n\n';
+            } catch (error) {
+                output.textContent += `❌ ${error.message}\n\n`;
+            }
+        }
+
+        async function retryDemo() {
+            const output = document.getElementById('timer-output');
+            output.textContent += 'Testing retry (3 attempts)...\n';
+            
+            let attempts = 0;
+            const flakyOperation = () => {
+                attempts++;
+                if (attempts < 3) {
+                    throw new Error(`Attempt ${attempts} failed`);
+                }
+                return { success: true, attempts };
+            };
+            
+            try {
+                const result = await asyncOps.retry(flakyOperation, 3, 500);
+                output.textContent += `✅ Success after ${result.attempts} attempts\n\n`;
+            } catch (error) {
+                output.textContent += `❌ ${error.message}\n\n`;
+            }
+        }
+
+        async function pollingDemo() {
+            const output = document.getElementById('timer-output');
+            output.textContent += 'Starting polling (every 1s)...\n';
+            
+            let pollCount = 0;
+            const pollFunction = () => {
+                pollCount++;
+                output.textContent += `Poll attempt ${pollCount}\n`;
+                return pollCount >= 3 ? { success: true, polls: pollCount } : null;
+            };
+            
+            try {
+                const result = await asyncOps.poll(pollFunction, 1000, 5);
+                output.textContent += `✅ Polling completed: ${JSON.stringify(result)}\n\n`;
+            } catch (error) {
+                output.textContent += `❌ ${error.message}\n\n`;
+            }
+        }
+
+        function startTimer() {
+            if (currentTimer) return;
+            
+            timerSeconds = 0;
+            currentTimer = setInterval(() => {
+                timerSeconds++;
+                const minutes = Math.floor(timerSeconds / 60);
+                const seconds = timerSeconds % 60;
+                document.getElementById('timer-display').textContent = 
+                    `Timer: ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            }, 1000);
+        }
+
+        function stopTimer() {
+            if (currentTimer) {
+                clearInterval(currentTimer);
+                currentTimer = null;
+                document.getElementById('timer-display').textContent = 'Timer: 00:00';
+            }
+        }
+
+        // Progress tracking
+        async function progressDemo() {
+            const output = document.getElementById('progress-output');
+            const progressFill = document.getElementById('progress-fill');
+            
+            output.textContent += 'Starting progress tracking...\n';
+            
+            const longTask = asyncOps.get('/users', { delay: 3000 });
+            
+            await asyncOps.withProgress(longTask, (progress) => {
+                const percentage = Math.min((progress.elapsed / 3000) * 100, 100);
+                progressFill.style.width = `${percentage}%`;
+                
+                if (progress.status === 'completed') {
+                    output.textContent += '✅ Task completed!\n\n';
+                    progressFill.style.width = '0%';
+                }
+            });
+        }
+
+        async function longOperation() {
+            const output = document.getElementById('progress-output');
+            output.textContent += 'Long operation with steps...\n';
+            
+            const steps = ['Initializing', 'Processing', 'Validating', 'Completing'];
+            
+            for (let i = 0; i < steps.length; i++) {
+                output.textContent += `${steps[i]}...\n`;
+                await asyncOps.delay(1000);
+            }
+            
+            output.textContent += '✅ Long operation completed!\n\n';
+        }
+
+        function cancelableDemo() {
+            const output = document.getElementById('progress-output');
+            output.textContent += 'Starting cancelable request...\n';
+            
+            cancelableRequest = asyncOps.cancelableRequest('/users', { delay: 5000 });
+            
+            cancelableRequest.promise
+                .then(result => {
+                    output.textContent += '✅ Request completed\n\n';
+                })
+                .catch(error => {
+                    output.textContent += `❌ ${error.message}\n\n`;
+                });
+            
+            // Auto-cancel after 2 seconds
+            setTimeout(() => {
+                if (cancelableRequest) {
+                    cancelableRequest.cancel();
+                    output.textContent += '🚫 Request cancelled\n';
+                }
+            }, 2000);
+        }
+
+        // Debounce & Throttle
+        const debouncedSearch = asyncOps.debounce(async (query) => {
+            const output = document.getElementById('debounce-output');
+            output.textContent += `Searching for: "${query}"\n`;
+            
+            const results = await asyncOps.get('/search', { delay: 500 });
+            output.textContent += `✅ Search results: ${results.length || 0} items\n\n`;
+        }, 500);
+
+        document.getElementById('search-input').addEventListener('input', (e) => {
+            if (e.target.value.trim()) {
+                debouncedSearch(e.target.value);
+            }
+        });
+
+        const throttledClick = asyncOps.throttle(async () => {
+            const output = document.getElementById('debounce-output');
+            output.textContent += 'Throttled click executed\n';
+            
+            await asyncOps.delay(500);
+            output.textContent += '✅ Throttled operation completed\n\n';
+        }, 2000);
+
+        function clearDebounceOutput() {
+            document.getElementById('debounce-output').textContent = '';
+        }
+
+        // Queue operations
+        async function queueDemo() {
+            const output = document.getElementById('queue-output');
+            output.textContent += 'Processing queue operations...\n';
+            
+            const operations = [
+                () => asyncOps.get('/users', { delay: 500 }),
+                () => asyncOps.get('/posts', { delay: 300 }),
+                () => asyncOps.get('/products', { delay: 400 })
+            ];
+            
+            const results = await asyncOps.queue(operations);
+            output.textContent += `✅ Queue completed: ${results.length} operations\n\n`;
+        }
+
+        function addToQueue() {
+            const operation = () => asyncOps.get(`/item-${Date.now()}`, { delay: 300 });
+            operationQueue.push(operation);
+            
+            const output = document.getElementById('queue-output');
+            output.textContent += `Added operation to queue (${operationQueue.length} total)\n`;
+        }
+
+        async function processQueue() {
+            if (operationQueue.length === 0) return;
+            
+            const output = document.getElementById('queue-output');
+            output.textContent += `Processing ${operationQueue.length} queued operations...\n`;
+            
+            const results = await asyncOps.queue(operationQueue);
+            output.textContent += `✅ Processed ${results.length} operations\n\n`;
+            
+            operationQueue = [];
+        }
+
+        function clearQueue() {
+            operationQueue = [];
+            document.getElementById('queue-output').textContent = '';
+        }
+    </script>
+</body>
+</html>
