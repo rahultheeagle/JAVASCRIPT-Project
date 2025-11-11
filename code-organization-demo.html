@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Organization Demo - CodeQuest</title>
+    <link rel="stylesheet" href="design-system.css">
+    <link rel="stylesheet" href="css/features/auth.css">
+    <link rel="stylesheet" href="css/features/notifications.css">
+    <link rel="stylesheet" href="css/components/modal.css">
+    <style>
+        .demo-section { margin: 2rem 0; padding: 1.5rem; border: 1px solid var(--border-color); border-radius: 8px; }
+        .demo-controls { margin-bottom: 1rem; display: flex; gap: 0.5rem; flex-wrap: wrap; }
+        .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; }
+        .feature-card { padding: 1rem; border: 1px solid #ddd; border-radius: 8px; background: #f9f9f9; }
+        .feature-card h4 { margin: 0 0 0.5rem 0; color: var(--primary-color); }
+        .file-structure { background: #f8f9fa; padding: 1rem; border-radius: 4px; font-family: monospace; }
+        .file-structure ul { list-style: none; padding-left: 1rem; }
+        .file-structure li { margin: 0.25rem 0; }
+        .folder { color: #007bff; font-weight: bold; }
+        .file { color: #28a745; }
+        .challenge-card { padding: 1rem; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 1rem; }
+        .challenge-card.completed { background: #d4edda; border-color: #c3e6cb; }
+        .progress-display { display: flex; align-items: center; gap: 1rem; margin: 1rem 0; }
+        .xp-bar-container { flex: 1; background: #eee; height: 20px; border-radius: 10px; overflow: hidden; }
+        .xp-bar { height: 100%; background: var(--primary-color); transition: width 0.3s; width: 0%; }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <h1>Code Organization Demo</h1>
+            <nav>
+                <a href="index.html">← Back to Dashboard</a>
+                <div data-user-display>Guest</div>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- File Structure -->
+        <section class="demo-section">
+            <h2>Organized File Structure</h2>
+            <div class="file-structure">
+                <ul>
+                    <li class="folder">📁 js/</li>
+                    <ul>
+                        <li class="file">📄 app.js (main entry point)</li>
+                        <li class="folder">📁 features/</li>
+                        <ul>
+                            <li class="file">📄 auth.js</li>
+                            <li class="file">📄 challenges.js</li>
+                            <li class="file">📄 progress.js</li>
+                            <li class="file">📄 notifications.js</li>
+                        </ul>
+                        <li class="folder">📁 services/</li>
+                        <ul>
+                            <li class="file">📄 storage.js</li>
+                            <li class="file">📄 api.js</li>
+                        </ul>
+                        <li class="folder">📁 utils/</li>
+                        <ul>
+                            <li class="file">📄 helpers.js</li>
+                        </ul>
+                        <li class="folder">📁 components/</li>
+                        <ul>
+                            <li class="file">📄 modal.js</li>
+                        </ul>
+                    </ul>
+                    <li class="folder">📁 css/</li>
+                    <ul>
+                        <li class="folder">📁 features/</li>
+                        <ul>
+                            <li class="file">📄 auth.css</li>
+                            <li class="file">📄 notifications.css</li>
+                        </ul>
+                        <li class="folder">📁 components/</li>
+                        <ul>
+                            <li class="file">📄 modal.css</li>
+                        </ul>
+                    </ul>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Feature Modules -->
+        <section class="demo-section">
+            <h2>Feature Modules</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h4>Authentication</h4>
+                    <p>User login/logout functionality</p>
+                    <button data-auth="login">Login</button>
+                    <button data-auth="logout">Logout</button>
+                </div>
+                
+                <div class="feature-card">
+                    <h4>Notifications</h4>
+                    <p>Toast notification system</p>
+                    <button data-notify="success" data-message="Success message!">Success</button>
+                    <button data-notify="error" data-message="Error occurred!">Error</button>
+                    <button data-notify="warning" data-message="Warning message!">Warning</button>
+                    <button data-notify="info" data-message="Info message!">Info</button>
+                </div>
+                
+                <div class="feature-card">
+                    <h4>Progress Tracking</h4>
+                    <p>XP, levels, and achievements</p>
+                    <div class="progress-display">
+                        <span data-level-display>Level 1</span>
+                        <div class="xp-bar-container">
+                            <div class="xp-bar" data-xp-bar></div>
+                        </div>
+                        <span data-xp-text>0 / 1000 XP</span>
+                    </div>
+                    <button data-add-xp="100">Add 100 XP</button>
+                    <button data-add-xp="250">Add 250 XP</button>
+                </div>
+                
+                <div class="feature-card">
+                    <h4>Storage Service</h4>
+                    <p>Data persistence utilities</p>
+                    <button onclick="testStorage()">Test Storage</button>
+                    <button onclick="clearStorage()">Clear Storage</button>
+                    <div id="storage-status"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Challenges Feature -->
+        <section class="demo-section">
+            <h2>Challenges Feature</h2>
+            <div class="demo-controls">
+                <button onclick="loadChallenges()">Load Challenges</button>
+                <button onclick="showStats()">Show Stats</button>
+            </div>
+            <div data-challenges-container></div>
+            <div id="challenge-stats"></div>
+        </section>
+
+        <!-- Module Communication -->
+        <section class="demo-section">
+            <h2>Module Communication</h2>
+            <div class="demo-controls">
+                <button onclick="testModuleCommunication()">Test Communication</button>
+                <button onclick="showLoadedModules()">Show Loaded Modules</button>
+            </div>
+            <div id="communication-output" style="background: #f8f9fa; padding: 1rem; border-radius: 4px; font-family: monospace; white-space: pre-wrap;"></div>
+        </section>
+    </main>
+
+    <div id="app"></div>
+
+    <script type="module" src="js/app.js"></script>
+    <script type="module">
+        import storage from './js/services/storage.js';
+        import auth from './js/features/auth.js';
+        import challenges from './js/features/challenges.js';
+        import progress from './js/features/progress.js';
+        import notifications from './js/features/notifications.js';
+        import Modal from './js/components/modal.js';
+
+        // Initialize features
+        auth.init();
+        challenges.init();
+        progress.init();
+        notifications.init();
+
+        // Global functions for demo
+        window.testStorage = function() {
+            const status = document.getElementById('storage-status');
+            storage.set('test', { message: 'Hello World', timestamp: Date.now() });
+            const data = storage.get('test');
+            status.innerHTML = `<small>Stored and retrieved: ${JSON.stringify(data)}</small>`;
+        };
+
+        window.clearStorage = function() {
+            storage.clear();
+            document.getElementById('storage-status').innerHTML = '<small>Storage cleared</small>';
+        };
+
+        window.loadChallenges = function() {
+            challenges.loadChallenges();
+        };
+
+        window.showStats = function() {
+            const stats = challenges.getStats();
+            const progressStats = progress.getStats();
+            document.getElementById('challenge-stats').innerHTML = `
+                <h4>Statistics</h4>
+                <p>Challenges: ${stats.completed}/${stats.total} completed</p>
+                <p>Progress: Level ${progressStats.level}, ${progressStats.xp} XP</p>
+                <p>Achievements: ${progressStats.achievements}</p>
+            `;
+        };
+
+        window.testModuleCommunication = function() {
+            const output = document.getElementById('communication-output');
+            output.textContent = 'Testing module communication...\n';
+            
+            // Test event communication
+            document.dispatchEvent(new CustomEvent('challengeCompleted', {
+                detail: { challengeId: 1 }
+            }));
+            
+            output.textContent += 'Challenge completion event dispatched\n';
+            output.textContent += 'Progress module should have received XP\n';
+            
+            // Test notification
+            notifications.success('Module communication test successful!');
+            
+            output.textContent += 'Notification sent\n';
+        };
+
+        window.showLoadedModules = function() {
+            const output = document.getElementById('communication-output');
+            const modules = Array.from(window.app.modules.keys());
+            output.textContent = `Loaded modules: ${modules.join(', ')}\n`;
+            output.textContent += `Total modules: ${modules.length}\n`;
+        };
+
+        // Demo modal
+        window.showModal = function() {
+            const modal = new Modal({
+                title: 'Demo Modal',
+                content: '<p>This is a reusable modal component!</p>'
+            });
+            modal.open();
+        };
+    </script>
+</body>
+</html>
