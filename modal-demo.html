@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modal System Demo - CodeQuest</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="modal-system.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <h2>CodeQuest</h2>
+            </div>
+            <div class="nav-links">
+                <a href="index.html">Dashboard</a>
+                <button id="theme-toggle" class="theme-toggle">🌙</button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="page-header">
+            <h1>Modal System Demo</h1>
+            <p>Test all modal dialog types</p>
+        </div>
+
+        <div class="demo-container">
+            <div class="demo-section">
+                <h3>Instructions Modal</h3>
+                <button class="btn-primary" onclick="showInstructionsDemo()">Show Instructions</button>
+                <button class="btn-primary" onclick="showStepsDemo()">Show Steps Instructions</button>
+            </div>
+
+            <div class="demo-section">
+                <h3>Achievement Modal</h3>
+                <button class="btn-primary" onclick="showAchievementDemo()">Show Achievement</button>
+                <button class="btn-primary" onclick="showXPAchievement()">Show XP Achievement</button>
+            </div>
+
+            <div class="demo-section">
+                <h3>Settings Modal</h3>
+                <button class="btn-primary" onclick="showSettingsDemo()">Show Settings</button>
+            </div>
+
+            <div class="demo-section">
+                <h3>Quick Tests</h3>
+                <button class="btn-secondary" onclick="testNotification()">Test Notification</button>
+                <button class="btn-secondary" onclick="testErrorNotification()">Test Error</button>
+            </div>
+        </div>
+    </main>
+
+    <script src="storage-manager.js"></script>
+    <script src="theme-system.js"></script>
+    <script src="modal-system.js"></script>
+    
+    <script>
+        function showInstructionsDemo() {
+            window.modalSystem.showInstructions(
+                'How to Use Code Editor',
+                'The code editor allows you to write and test HTML, CSS, and JavaScript code in real-time.'
+            );
+        }
+
+        function showStepsDemo() {
+            window.modalSystem.showInstructions(
+                'Complete Your First Challenge',
+                'Follow these steps to complete your first coding challenge:',
+                [
+                    'Read the challenge description carefully',
+                    'Write your code in the editor',
+                    'Test your solution using the preview',
+                    'Submit when you\'re confident it works',
+                    'Review the feedback and improve if needed'
+                ]
+            );
+        }
+
+        function showAchievementDemo() {
+            window.modalSystem.showAchievement(
+                'First Steps',
+                'You completed your first lesson!',
+                '🎯'
+            );
+        }
+
+        function showXPAchievement() {
+            window.modalSystem.showAchievement(
+                'Speed Demon',
+                'You completed a challenge in under 5 minutes!',
+                '⚡',
+                250
+            );
+        }
+
+        function showSettingsDemo() {
+            window.modalSystem.showSettings();
+        }
+
+        function testNotification() {
+            window.modalSystem.showNotification('This is a success notification!');
+        }
+
+        function testErrorNotification() {
+            window.modalSystem.showNotification('This is an error notification!', 'error');
+        }
+    </script>
+
+    <style>
+        .demo-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+        }
+
+        .demo-section {
+            background: var(--card-bg);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+        }
+
+        .demo-section h3 {
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+
+        .demo-section button {
+            margin-right: 1rem;
+            margin-bottom: 0.5rem;
+        }
+    </style>
+</body>
+</html>
