@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Setup - CodeQuest</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="multi-step-forms.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <h2>CodeQuest</h2>
+            </div>
+            <div class="nav-links">
+                <a href="index.html">Dashboard</a>
+                <button id="theme-toggle" class="theme-toggle">🌙</button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="page-header">
+            <h1>Complete Your Profile</h1>
+            <p>Help us personalize your learning experience</p>
+        </div>
+
+        <div id="profile-setup-container" class="multi-step-container">
+            <!-- Profile setup form will be generated here -->
+        </div>
+    </main>
+
+    <script src="storage-manager.js"></script>
+    <script src="theme-system.js"></script>
+    <script>
+        class ProfileSetup extends MultiStepForms {
+            constructor() {
+                super();
+                this.totalSteps = 3;
+                this.loadExistingProfile();
+            }
+
+            createFormHTML() {
+                const container = document.getElementById('profile-setup-container');
+                if (!container) return;
+
+                container.innerHTML = `
+                    <div class="form-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill"></div>
+                        </div>
+                        <div class="step-indicators">
+                            ${Array.from({length: this.totalSteps}, (_, i) => 
+                                `<div class="step-indicator" data-step="${i + 1}">
+                                    <span>${i + 1}</span>
+                                    <label>${this.getStepLabel(i + 1)}</label>
+                                </div>`
+                            ).join('')}
+                        </div>
+                    </div>
+
+                    <form class="multi-step-form">
+                        <div class="form-step active" data-step="1">
+                            <h3>Learning Goals</h3>
+                            <label>What do you want to achieve?</label>
+                            <div class="checkbox-group">
+                                <label><input type="checkbox" name="goals" value="career"> Career Change</label>
+                                <label><input type="checkbox" name="goals" value="skills"> Skill Enhancement</label>
+                                <label><input type="checkbox" name="goals" value="hobby"> Personal Interest</label>
+                                <label><input type="checkbox" name="goals" value="certification"> Certification</label>
+                            </div>
+                            <input type="text" name="customGoal" placeholder="Other goal (optional)">
+                        </div>
+
+                        <div class="form-step" data-step="2">
+                            <h3>Learning Style</h3>
+                            <label>Preferred learning method:</label>
+                            <div class="radio-group">
+                                <label><input type="radio" name="learningStyle" value="visual"> Visual (diagrams, videos)</label>
+                                <label><input type="radio" name="learningStyle" value="hands-on"> Hands-on (coding exercises)</label>
+                                <label><input type="radio" name="learningStyle" value="reading"> Reading (documentation, articles)</label>
+                                <label><input type="radio" name="learningStyle" value="mixed"> Mixed approach</label>
+                            </div>
+                            <label>Time commitment per week:</label>
+                            <select name="timeCommitment" required>
+                                <option value="">Select time commitment</option>
+                                <option value="1-3">1-3 hours</option>
+                                <option value="4-7">4-7 hours</option>
+                                <option value="8-15">8-15 hours</option>
+                                <option value="15+">15+ hours</option>
+                            </select>
+                        </div>
+
+                        <div class="form-step" data-step="3">
+                            <h3>Notifications & Privacy</h3>
+                            <label>Email notifications:</label>
+                            <div class="checkbox-group">
+                                <label><input type="checkbox" name="notifications" value="progress"> Progress updates</label>
+                                <label><input type="checkbox" name="notifications" value="reminders"> Study reminders</label>
+                                <label><input type="checkbox" name="notifications" value="news"> Platform news</label>
+                            </div>
+                            <label>Profile visibility:</label>
+                            <div class="radio-group">
+                                <label><input type="radio" name="privacy" value="public"> Public (visible to all users)</label>
+                                <label><input type="radio" name="privacy" value="friends"> Friends only</label>
+                                <label><input type="radio" name="privacy" value="private"> Private</label>
+                            </div>
+                        </div>
+
+                        <div class="form-navigation">
+                            <button type="button" class="btn-prev" disabled>Previous</button>
+                            <button type="button" class="btn-next">Next</button>
+                            <button type="submit" class="btn-submit" style="display: none;">Save Profile</button>
+                        </div>
+                    </form>
+                `;
+            }
+
+            getStepLabel(step) {
+                const labels = ['Goals', 'Style', 'Privacy'];
+                return labels[step - 1];
+            }
+
+            loadExistingProfile() {
+                if (window.storageManager) {
+                    const profile = window.storageManager.getItem('userProfile');
+                    if (profile) {
+                        this.formData = { ...this.formData, ...profile };
+                    }
+                }
+            }
+
+            handleSubmit(e) {
+                e.preventDefault();
+                this.saveCurrentStepData();
+                
+                // Merge with existing profile data
+                const existingProfile = window.storageManager?.getItem('userProfile') || {};
+                const updatedProfile = { ...existingProfile, ...this.formData };
+                
+                if (window.storageManager) {
+                    window.storageManager.setItem('userProfile', updatedProfile);
+                }
+                
+                this.showSuccess();
+            }
+
+            showSuccess() {
+                const container = document.getElementById('profile-setup-container');
+                container.innerHTML = `
+                    <div class="success-message">
+                        <div class="success-icon">✓</div>
+                        <h3>Profile Setup Complete!</h3>
+                        <p>Your learning preferences have been saved.</p>
+                        <button class="btn-primary" onclick="window.location.href='index.html'">Start Learning</button>
+                    </div>
+                `;
+            }
+        }
+
+        // Initialize profile setup
+        document.addEventListener('DOMContentLoaded', () => {
+            if (document.getElementById('profile-setup-container')) {
+                window.profileSetup = new ProfileSetup();
+            }
+        });
+    </script>
+    <script src="multi-step-forms.js"></script>
+</body>
+</html>
