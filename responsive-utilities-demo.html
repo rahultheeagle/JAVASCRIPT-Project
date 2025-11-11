@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Utilities Demo - CodeQuest</title>
+    <link rel="stylesheet" href="design-system.css">
+    <link rel="stylesheet" href="css/responsive-utilities.css">
+    <style>
+        .demo-section {
+            margin: 2rem 0;
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+        }
+        
+        .demo-box {
+            background: var(--primary-light);
+            color: var(--primary-color);
+            padding: 1rem;
+            border-radius: 4px;
+            text-align: center;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        
+        .breakpoint-indicator {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: var(--primary-color);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-weight: bold;
+            z-index: 1000;
+        }
+        
+        .device-info {
+            background: var(--background-secondary);
+            padding: 1rem;
+            border-radius: 4px;
+            margin: 1rem 0;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+        
+        .info-card {
+            background: var(--background-primary);
+            padding: 1rem;
+            border-radius: 4px;
+            border: 1px solid var(--border-color);
+        }
+        
+        .responsive-demo {
+            background: var(--background-secondary);
+            padding: 2rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+        
+        .grid-demo .col {
+            background: var(--primary-light);
+            color: var(--primary-color);
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 4px;
+            text-align: center;
+            font-weight: 600;
+        }
+        
+        .visibility-demo {
+            padding: 1rem;
+            margin: 0.5rem 0;
+            border-radius: 4px;
+            text-align: center;
+            font-weight: 600;
+        }
+        
+        .mobile-demo {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+        
+        .tablet-demo {
+            background: #f3e5f5;
+            color: #7b1fa2;
+        }
+        
+        .desktop-demo {
+            background: #e8f5e8;
+            color: #388e3c;
+        }
+        
+        .code-example {
+            background: var(--background-dark);
+            color: var(--text-light);
+            padding: 1rem;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 0.9rem;
+            margin: 1rem 0;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="breakpoint-indicator" id="breakpoint-indicator">
+        XS
+    </div>
+
+    <header role="banner">
+        <nav aria-label="Main navigation">
+            <div class="nav-brand">
+                <h1>CodeQuest</h1>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html">Dashboard</a></li>
+                <li><a href="#" class="active">Responsive Utilities</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <main role="main">
+            <section class="hero">
+                <h1>Responsive Utilities Demo</h1>
+                <p>Mobile-first approach</p>
+            </section>
+
+            <section class="demo-section">
+                <h2>Device Information</h2>
+                <div class="device-info" id="device-info">
+                    <!-- Device info will be populated by JavaScript -->
+                </div>
+            </section>
+
+            <section class="demo-section">
+                <h2>Responsive Grid System</h2>
+                <p>Resize your browser to see the grid adapt to different screen sizes.</p>
+                
+                <div class="responsive-demo">
+                    <div class="row grid-demo">
+                        <div class="col-12 col-md-6 col-lg-4">
+                            <div class="col">Full → Half → Third</div>
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-4">
+                            <div class="col">Full → Half → Third</div>
+                        </div>
+                        <div class="col-12 col-md-12 col-lg-4">
+                            <div class="col">Full → Full → Third</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="code-example">
+&lt;div class="row"&gt;
+  &lt;div class="col-12 col-md-6 col-lg-4"&gt;Content&lt;/div&gt;
+  &lt;div class="col-12 col-md-6 col-lg-4"&gt;Content&lt;/div&gt;
+  &lt;div class="col-12 col-md-12 col-lg-4"&gt;Content&lt;/div&gt;
+&lt;/div&gt;
+                </div>
+            </section>
+
+            <section class="demo-section">
+                <h2>Responsive Visibility</h2>
+                <p>Different content shown based on screen size:</p>
+                
+                <div class="responsive-demo">
+                    <div class="visibility-demo mobile-demo d-block d-md-none">
+                        📱 Mobile Only Content (< 768px)
+                    </div>
+                    <div class="visibility-demo tablet-demo d-none d-md-block d-lg-none">
+                        📱 Tablet Only Content (768px - 991px)
+                    </div>
+                    <div class="visibility-demo desktop-demo d-none d-lg-block">
+                        🖥️ Desktop Only Content (≥ 992px)
+                    </div>
+                </div>
+                
+                <div class="code-example">
+&lt;div class="d-block d-md-none"&gt;Mobile Only&lt;/div&gt;
+&lt;div class="d-none d-md-block d-lg-none"&gt;Tablet Only&lt;/div&gt;
+&lt;div class="d-none d-lg-block"&gt;Desktop Only&lt;/div&gt;
+                </div>
+            </section>
+
+            <section class="demo-section">
+                <h2>Responsive Text Alignment</h2>
+                <div class="responsive-demo">
+                    <div class="demo-box text-center text-md-left">
+                        Center on mobile, left on desktop
+                    </div>
+                    <div class="demo-box text-left text-md-center">
+                        Left on mobile, center on desktop
+                    </div>
+                </div>
+                
+                <div class="code-example">
+&lt;div class="text-center text-md-left"&gt;Center → Left&lt;/div&gt;
+&lt;div class="text-left text-md-center"&gt;Left → Center&lt;/div&gt;
+                </div>
+            </section>
+
+            <section class="demo-section">
+                <h2>Responsive Spacing</h2>
+                <div class="responsive-demo">
+                    <div class="demo-box p-2 p-md-4">
+                        Small padding on mobile, large on desktop
+                    </div>
+                    <div class="demo-box m-1 m-md-3">
+                        Small margin on mobile, large on desktop
+                    </div>
+                </div>
+                
+                <div class="code-example">
+&lt;div class="p-2 p-md-4"&gt;Responsive padding&lt;/div&gt;
+&lt;div class="m-1 m-md-3"&gt;Responsive margin&lt;/div&gt;
+                </div>
+            </section>
+
+            <section class="demo-section">
+                <h2>Responsive Flexbox</h2>
+                <div class="responsive-demo">
+                    <div class="d-flex flex-column flex-md-row justify-between align-center">
+                        <div class="demo-box">Item 1</div>
+                        <div class="demo-box">Item 2</div>
+                        <div class="demo-box">Item 3</div>
+                    </div>
+                </div>
+                
+                <div class="code-example">
+&lt;div class="d-flex flex-column flex-md-row justify-between"&gt;
+  &lt;div&gt;Item 1&lt;/div&gt;
+  &lt;div&gt;Item 2&lt;/div&gt;
+  &lt;div&gt;Item 3&lt;/div&gt;
+&lt;/div&gt;
+                </div>
+            </section>
+
+            <section class="demo-section">
+                <h2>Container Behavior</h2>
+                <div class="responsive-demo">
+                    <div style="background: var(--primary-light); padding: 1rem; border-radius: 4px;">
+                        <p><strong>Container width adapts to screen size:</strong></p>
+                        <ul>
+                            <li>Mobile (< 576px): 100% width with padding</li>
+                            <li>Small (≥ 576px): Max 540px</li>
+                            <li>Medium (≥ 768px): Max 720px</li>
+                            <li>Large (≥ 992px): Max 960px</li>
+                            <li>Extra Large (≥ 1200px): Max 1140px</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section class="demo-section">
+                <h2>Breakpoint Detection</h2>
+                <div class="info-grid" id="breakpoint-info">
+                    <!-- Breakpoint info will be populated by JavaScript -->
+                </div>
+            </section>
+
+            <section class="demo-section">
+                <h2>Touch Device Detection</h2>
+                <div class="responsive-demo">
+                    <div class="demo-box touch-target" id="touch-demo">
+                        This element has touch-friendly sizing on touch devices
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="js/responsive-helper.js"></script>
+    <script>
+        // Update device info
+        function updateDeviceInfo() {
+            const info = responsiveHelper.getDeviceInfo();
+            const viewport = info.viewport;
+            
+            document.getElementById('device-info').innerHTML = `
+                <div class="info-grid">
+                    <div class="info-card">
+                        <h4>Screen Size</h4>
+                        <p>${viewport.width} × ${viewport.height}px</p>
+                    </div>
+                    <div class="info-card">
+                        <h4>Breakpoint</h4>
+                        <p>${info.breakpoint.toUpperCase()}</p>
+                    </div>
+                    <div class="info-card">
+                        <h4>Device Type</h4>
+                        <p>${info.isMobile ? 'Mobile' : info.isTablet ? 'Tablet' : 'Desktop'}</p>
+                    </div>
+                    <div class="info-card">
+                        <h4>Touch Device</h4>
+                        <p>${info.isTouchDevice ? 'Yes' : 'No'}</p>
+                    </div>
+                    <div class="info-card">
+                        <h4>Orientation</h4>
+                        <p>${info.orientation}</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Update breakpoint indicator
+        function updateBreakpointIndicator() {
+            const breakpoint = responsiveHelper.getCurrentBreakpoint().toUpperCase();
+            document.getElementById('breakpoint-indicator').textContent = breakpoint;
+        }
+
+        // Update breakpoint info
+        function updateBreakpointInfo() {
+            const breakpoints = ['xs', 'sm', 'md', 'lg', 'xl', '2xl'];
+            const html = breakpoints.map(bp => {
+                const matches = responsiveHelper.matches(bp);
+                return `
+                    <div class="info-card">
+                        <h4>${bp.toUpperCase()}</h4>
+                        <p>${matches ? '✅ Active' : '❌ Inactive'}</p>
+                    </div>
+                `;
+            }).join('');
+            
+            document.getElementById('breakpoint-info').innerHTML = html;
+        }
+
+        // Listen for breakpoint changes
+        responsiveHelper.onBreakpointChange((oldBp, newBp) => {
+            console.log(`Breakpoint changed: ${oldBp} → ${newBp}`);
+            updateDeviceInfo();
+            updateBreakpointIndicator();
+            updateBreakpointInfo();
+        });
+
+        // Listen for resize events
+        responsiveHelper.onResize((viewport) => {
+            updateDeviceInfo();
+        });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            updateDeviceInfo();
+            updateBreakpointIndicator();
+            updateBreakpointInfo();
+            
+            // Add touch-friendly class if touch device
+            if (responsiveHelper.isTouchDevice()) {
+                document.getElementById('touch-demo').classList.add('touch-padding');
+            }
+        });
+
+        // Listen for custom breakpoint change events
+        document.addEventListener('breakpointchange', function(e) {
+            console.log('Breakpoint change event:', e.detail);
+        });
+    </script>
+</body>
+</html>
