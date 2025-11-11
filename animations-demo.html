@@ -1,1 +1,402 @@
-<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Animations - CodeQuest Design System</title>\n    <link rel=\"stylesheet\" href=\"design-system.css\">\n    <style>\n        body {\n            background: var(--bg-primary);\n            margin: 0;\n            padding: 2rem;\n        }\n        .demo-section {\n            margin-bottom: 3rem;\n        }\n        .demo-grid {\n            display: grid;\n            gap: 1rem;\n            margin-top: 1rem;\n        }\n        .animation-grid {\n            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));\n        }\n        .demo-item {\n            padding: 1.5rem;\n            border: 1px solid var(--border-color);\n            border-radius: 0.5rem;\n            background: var(--card-bg);\n            text-align: center;\n        }\n        .demo-label {\n            font-size: var(--text-xs);\n            color: var(--text-muted);\n            margin-bottom: 1rem;\n            font-weight: var(--font-medium);\n        }\n        .animation-showcase {\n            display: flex;\n            align-items: center;\n            justify-content: center;\n            gap: 1rem;\n            margin: 1rem 0;\n            min-height: 60px;\n        }\n        .demo-element {\n            width: 40px;\n            height: 40px;\n            background: var(--primary-500);\n            border-radius: 0.5rem;\n            display: flex;\n            align-items: center;\n            justify-content: center;\n            color: white;\n            font-weight: bold;\n        }\n        .trigger-btn {\n            margin-top: 1rem;\n        }\n        .skeleton-demo {\n            width: 100%;\n            height: 20px;\n            border-radius: 0.25rem;\n            margin: 0.5rem 0;\n        }\n    </style>\n</head>\n<body>\n    <h1>Animation System</h1>\n    <p class=\"text-secondary\">Smooth transitions and micro-interactions for enhanced user experience</p>\n\n    <!-- Hover Effects -->\n    <div class=\"demo-section\">\n        <h2>Hover Effects</h2>\n        <div class=\"demo-grid animation-grid\">\n            <div class=\"demo-item\">\n                <div class=\"demo-label\">Lift Effect</div>\n                <div class=\"animation-showcase\">\n                    <div class=\"demo-element hover-lift\">Hover</div>\n                </div>\n                <div class=\"code-example\">.hover-lift</div>\n            </div>\n\n            <div class=\"demo-item\">\n                <div class=\"demo-label\">Scale Effect</div>\n                <div class=\"animation-showcase\">\n                    <div class=\"demo-element hover-scale\">Hover</div>\n                </div>\n                <div class=\"code-example\">.hover-scale</div>\n            </div>\n\n            <div class=\"demo-item\">\n                <div class=\"demo-label\">Rotate Effect</div>\n                <div class=\"animation-showcase\">\n                    <div class=\"demo-element hover-rotate\">Hover</div>\n                </div>\n                <div class=\"code-example\">.hover-rotate</div>\n            </div>\n\n            <div class=\"demo-item\">\n                <div class=\"demo-label\">Glow Effect</div>\n                <div class=\"animation-showcase\">\n                    <div class=\"demo-element hover-glow\">Hover</div>\n                </div>\n                <div class=\"code-example\">.hover-glow</div>\n            </div>\n        </div>\n    </div>\n\n    <!-- Loading Animations -->\n    <div class=\"demo-section\">\n        <h2>Loading Animations</h2>\n        <div class=\"demo-grid animation-grid\">\n            <div class=\"demo-item\">\n                <div class=\"demo-label\">Spin</div>\n                <div class=\"animation-showcase\">\n                    <div class=\"demo-element animate-spin\">⚙️</div>\n                </div>\n                <div class=\"code-example\">.animate-spin</div>\n            </div>\n\n            <div class=\"demo-item\">\n                <div class=\"demo-label\">Pulse</div>\n                <div class=\"animation-showcase\">\n                    <div class=\"demo-element animate-pulse\">💓</div>\n                </div>\n                <div class=\"code-example\">.animate-pulse</div>\n            </div>\n\n            <div class=\"demo-item\">\n                <div class=\"demo-label\">Bounce</div>\n                <div class=\"animation-showcase\">\n                    <div class=\"demo-element animate-bounce\">⚡</div>\n                </div>\n                <div class=\"code-example\">.animate-bounce</div>\n            </div>\n\n            <div class=\"demo-item\">\n                <div class=\"demo-label\">Skeleton Loading</div>\n                <div class=\"animation-showcase\" style=\"flex-direction: column; align-items: stretch;\">\n                    <div class=\"skeleton skeleton-demo\"></div>\n                    <div class=\"skeleton skeleton-demo\" style=\"width: 80%;\"></div>\n                    <div class=\"skeleton skeleton-demo\" style=\"width: 60%;\"></div>\n                </div>\n                <div class=\"code-example\">.skeleton</div>\n            </div>\n        </div>\n    </div>\n\n    <!-- Interactive Animations -->\n    <div class=\"demo-section\">\n        <h2>Interactive Animations</h2>\n        <div class=\"demo-grid animation-grid\">\n            <div class=\"demo-item\">\n                <div class=\"demo-label\">Shake (Click to trigger)</div>\n                <div class=\"animation-showcase\">\n                    <div class=\"demo-element\" id=\"shake-demo\">Click</div>\n                </div>\n                <div class=\"code-example\">.animate-shake</div>\n            </div>\n\n            <div class=\"demo-item\">\n                <div class=\"demo-label\">Fade In (Click to trigger)</div>\n                <div class=\"animation-showcase\">\n                    <div class=\"demo-element\" id=\"fade-demo\" style=\"opacity: 0;\">Fade</div>\n                </div>\n                <button class=\"btn btn-sm btn-primary trigger-btn\" onclick=\"triggerFade()\">Trigger</button>\n                <div class=\"code-example\">.animate-fadeIn</div>\n            </div>\n\n            <div class=\"demo-item\">\n                <div class=\"demo-label\">Slide In Up (Click to trigger)</div>\n                <div class=\"animation-showcase\">\n                    <div class=\"demo-element\" id=\"slide-up-demo\" style=\"opacity: 0; transform: translateY(20px);\">Slide</div>\n                </div>\n                <button class=\"btn btn-sm btn-primary trigger-btn\" onclick=\"triggerSlideUp()\">Trigger</button>\n                <div class=\"code-example\">.animate-slideInUp</div>\n            </div>\n\n            <div class=\"demo-item\">\n                <div class=\"demo-label\">Click Effect</div>\n                <div class=\"animation-showcase\">\n                    <div class=\"demo-element click-effect\">Click</div>\n                </div>\n                <div class=\"code-example\">.click-effect</div>\n            </div>\n        </div>\n    </div>\n\n    <!-- Button Animations -->\n    <div class=\"demo-section\">\n        <h2>Button Animations</h2>\n        <div class=\"demo-grid animation-grid\">\n            <div class=\"demo-item\">\n                <div class=\"demo-label\">Ripple Effect</div>\n                <div class=\"animation-showcase\">\n                    <button class=\"btn btn-primary\">Click Me</button>\n                </div>\n                <div class=\"code-example\">Built into .btn</div>\n            </div>\n\n            <div class=\"demo-item\">\n                <div class=\"demo-label\">Interactive Button</div>\n                <div class=\"animation-showcase\">\n                    <button class=\"btn btn-secondary interactive\">Hover & Click</button>\n                </div>\n                <div class=\"code-example\">.btn.interactive</div>\n            </div>\n\n            <div class=\"demo-item\">\n                <div class=\"demo-label\">Loading Button</div>\n                <div class=\"animation-showcase\">\n                    <button class=\"btn btn-outline loading\" id=\"loading-btn\">Loading...</button>\n                </div>\n                <button class=\"btn btn-sm btn-primary trigger-btn\" onclick=\"toggleLoading()\">Toggle</button>\n                <div class=\"code-example\">.btn.loading</div>\n            </div>\n        </div>\n    </div>\n\n    <!-- Card Animations -->\n    <div class=\"demo-section\">\n        <h2>Card Animations</h2>\n        <div class=\"demo-grid animation-grid\">\n            <div class=\"card\">\n                <div class=\"card-header\">\n                    <h3 class=\"card-title\">Animated Card</h3>\n                    <p class=\"card-subtitle\">Hover for lift effect</p>\n                </div>\n                <div class=\"card-body\">\n                    <p class=\"card-text\">Cards automatically have hover animations built-in for better user experience.</p>\n                </div>\n            </div>\n\n            <div class=\"card hover-glow\">\n                <div class=\"card-header\">\n                    <h3 class=\"card-title\">Glow Card</h3>\n                    <p class=\"card-subtitle\">With glow effect</p>\n                </div>\n                <div class=\"card-body\">\n                    <p class=\"card-text\">This card has an additional glow effect on hover.</p>\n                </div>\n            </div>\n        </div>\n    </div>\n\n    <!-- Stagger Animation -->\n    <div class=\"demo-section\">\n        <h2>Stagger Animation</h2>\n        <div class=\"demo-item\">\n            <div class=\"demo-label\">Staggered List (Click to trigger)</div>\n            <div id=\"stagger-container\" style=\"display: none;\">\n                <div class=\"card stagger-item\" style=\"margin-bottom: 1rem;\">\n                    <div class=\"card-body\">\n                        <h4 class=\"card-title\">Item 1</h4>\n                        <p class=\"card-text\">First item in staggered animation</p>\n                    </div>\n                </div>\n                <div class=\"card stagger-item\" style=\"margin-bottom: 1rem;\">\n                    <div class=\"card-body\">\n                        <h4 class=\"card-title\">Item 2</h4>\n                        <p class=\"card-text\">Second item in staggered animation</p>\n                    </div>\n                </div>\n                <div class=\"card stagger-item\" style=\"margin-bottom: 1rem;\">\n                    <div class=\"card-body\">\n                        <h4 class=\"card-title\">Item 3</h4>\n                        <p class=\"card-text\">Third item in staggered animation</p>\n                    </div>\n                </div>\n            </div>\n            <button class=\"btn btn-primary trigger-btn\" onclick=\"triggerStagger()\">Show Staggered Items</button>\n            <div class=\"code-example\">.stagger-item</div>\n        </div>\n    </div>\n\n    <!-- Form Animations -->\n    <div class=\"demo-section\">\n        <h2>Form Animations</h2>\n        <div class=\"card\">\n            <div class=\"card-header\">\n                <h3 class=\"card-title\">Animated Form</h3>\n                <p class=\"card-subtitle\">Focus inputs and trigger error state</p>\n            </div>\n            <div class=\"card-body\">\n                <div class=\"form-group\">\n                    <label class=\"form-label\">Email (focus for scale effect)</label>\n                    <input type=\"email\" class=\"form-input\" placeholder=\"Enter your email\">\n                </div>\n                <div class=\"form-group\" id=\"error-demo\">\n                    <label class=\"form-label\">Password (click button for error animation)</label>\n                    <input type=\"password\" class=\"form-input\" placeholder=\"Enter your password\">\n                </div>\n                <button class=\"btn btn-primary\" onclick=\"triggerFormError()\">Trigger Error Animation</button>\n            </div>\n        </div>\n    </div>\n\n    <script>\n        // Shake animation\n        document.getElementById('shake-demo').addEventListener('click', function() {\n            this.classList.add('animate-shake');\n            setTimeout(() => {\n                this.classList.remove('animate-shake');\n            }, 500);\n        });\n\n        // Fade animation\n        function triggerFade() {\n            const element = document.getElementById('fade-demo');\n            element.style.opacity = '0';\n            setTimeout(() => {\n                element.classList.add('animate-fadeIn');\n                element.style.opacity = '1';\n            }, 100);\n        }\n\n        // Slide up animation\n        function triggerSlideUp() {\n            const element = document.getElementById('slide-up-demo');\n            element.style.opacity = '0';\n            element.style.transform = 'translateY(20px)';\n            setTimeout(() => {\n                element.classList.add('animate-slideInUp');\n                element.style.opacity = '1';\n                element.style.transform = 'translateY(0)';\n            }, 100);\n        }\n\n        // Loading button\n        function toggleLoading() {\n            const btn = document.getElementById('loading-btn');\n            btn.classList.toggle('loading');\n            btn.textContent = btn.classList.contains('loading') ? 'Loading...' : 'Click Me';\n        }\n\n        // Stagger animation\n        function triggerStagger() {\n            const container = document.getElementById('stagger-container');\n            const items = container.querySelectorAll('.stagger-item');\n            \n            // Reset items\n            items.forEach(item => {\n                item.style.opacity = '0';\n                item.style.transform = 'translateY(20px)';\n                item.classList.remove('stagger-item');\n            });\n            \n            container.style.display = 'block';\n            \n            // Trigger stagger\n            setTimeout(() => {\n                items.forEach(item => {\n                    item.classList.add('stagger-item');\n                });\n            }, 100);\n        }\n\n        // Form error animation\n        function triggerFormError() {\n            const formGroup = document.getElementById('error-demo');\n            const input = formGroup.querySelector('.form-input');\n            \n            formGroup.classList.add('error');\n            input.classList.add('error');\n            \n            setTimeout(() => {\n                formGroup.classList.remove('error');\n                input.classList.remove('error');\n            }, 2000);\n        }\n    </script>\n</body>\n</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animations Demo - CodeQuest</title>
+    <link rel="stylesheet" href="design-system.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <style>
+        .demo-section {
+            margin: 2rem 0;
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+        }
+        
+        .animation-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 1rem 0;
+        }
+        
+        .animation-card {
+            background: var(--background-secondary);
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid var(--border-color);
+        }
+        
+        .animation-preview {
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 1rem 0;
+            background: var(--background-primary);
+            border-radius: 4px;
+            border: 1px dashed var(--border-color);
+        }
+        
+        .controls {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 1rem 0;
+        }
+        
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 4px;
+            background: var(--primary-color);
+            color: white;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+        }
+        
+        .btn:hover {
+            background: var(--primary-dark);
+        }
+        
+        .btn-secondary {
+            background: var(--background-secondary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+        
+        .btn-success {
+            background: var(--success-color);
+        }
+        
+        .btn-error {
+            background: var(--error-color);
+        }
+        
+        .demo-element {
+            width: 60px;
+            height: 60px;
+            background: var(--primary-color);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .loading-message,
+        .success-message,
+        .error-message {
+            margin-top: 1rem;
+            font-weight: 600;
+        }
+        
+        .success-message {
+            color: var(--success-color);
+        }
+        
+        .error-message {
+            color: var(--error-color);
+        }
+        
+        .code-display {
+            background: var(--background-dark);
+            color: var(--text-light);
+            padding: 1rem;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 0.9rem;
+            margin: 1rem 0;
+            overflow-x: auto;
+        }
+        
+        .skeleton-demo {
+            width: 100%;
+            height: 20px;
+            border-radius: 4px;
+            margin: 0.5rem 0;
+        }
+        
+        .operation-demo {
+            background: var(--background-primary);
+            padding: 2rem;
+            border-radius: 8px;
+            text-align: center;
+            min-height: 150px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <header role="banner">
+        <nav aria-label="Main navigation">
+            <div class="nav-brand">
+                <h1>CodeQuest</h1>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html">Dashboard</a></li>
+                <li><a href="#" class="active">Animations</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main role="main">
+        <section class="hero">
+            <h1>Animations Demo</h1>
+            <p>Keyframes for loading, success, errors</p>
+        </section>
+
+        <section class="demo-section">
+            <h2>Loading Animations</h2>
+            <div class="animation-grid">
+                <div class="animation-card">
+                    <h4>Spinner</h4>
+                    <div class="animation-preview" id="spinner-demo">
+                        <div class="loading-spinner"></div>
+                    </div>
+                    <div class="controls">
+                        <button class="btn" onclick="animationController.showLoading('#spinner-demo', 'spinner')">Start</button>
+                        <button class="btn btn-secondary" onclick="animationController.clearAnimations('#spinner-demo')">Stop</button>
+                    </div>
+                </div>
+
+                <div class="animation-card">
+                    <h4>Dots</h4>
+                    <div class="animation-preview" id="dots-demo">
+                        <span class="loading-dots">Loading</span>
+                    </div>
+                    <div class="controls">
+                        <button class="btn" onclick="animationController.showLoading('#dots-demo', 'dots')">Start</button>
+                        <button class="btn btn-secondary" onclick="animationController.clearAnimations('#dots-demo')">Stop</button>
+                    </div>
+                </div>
+
+                <div class="animation-card">
+                    <h4>Pulse</h4>
+                    <div class="animation-preview" id="pulse-demo">
+                        <div class="demo-element">Pulse</div>
+                    </div>
+                    <div class="controls">
+                        <button class="btn" onclick="animationController.showLoading('#pulse-demo', 'pulse')">Start</button>
+                        <button class="btn btn-secondary" onclick="animationController.clearAnimations('#pulse-demo')">Stop</button>
+                    </div>
+                </div>
+
+                <div class="animation-card">
+                    <h4>Bounce</h4>
+                    <div class="animation-preview" id="bounce-demo">
+                        <div class="demo-element">Bounce</div>
+                    </div>
+                    <div class="controls">
+                        <button class="btn" onclick="animationController.showLoading('#bounce-demo', 'bounce')">Start</button>
+                        <button class="btn btn-secondary" onclick="animationController.clearAnimations('#bounce-demo')">Stop</button>
+                    </div>
+                </div>
+
+                <div class="animation-card">
+                    <h4>Progress Bar</h4>
+                    <div class="animation-preview" id="progress-demo">
+                        <div class="loading-progress"></div>
+                    </div>
+                    <div class="controls">
+                        <button class="btn" onclick="animationController.showLoading('#progress-demo', 'progress')">Start</button>
+                        <button class="btn btn-secondary" onclick="animationController.clearAnimations('#progress-demo')">Stop</button>
+                    </div>
+                </div>
+
+                <div class="animation-card">
+                    <h4>Skeleton</h4>
+                    <div class="animation-preview" id="skeleton-demo">
+                        <div class="skeleton-demo loading-skeleton"></div>
+                        <div class="skeleton-demo loading-skeleton"></div>
+                        <div class="skeleton-demo loading-skeleton"></div>
+                    </div>
+                    <div class="controls">
+                        <button class="btn" onclick="animationController.showLoading('#skeleton-demo', 'skeleton')">Start</button>
+                        <button class="btn btn-secondary" onclick="animationController.clearAnimations('#skeleton-demo')">Stop</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="demo-section">
+            <h2>Success Animations</h2>
+            <div class="animation-grid">
+                <div class="animation-card">
+                    <h4>Checkmark</h4>
+                    <div class="animation-preview" id="success-demo">
+                        <div class="demo-element">✓</div>
+                    </div>
+                    <div class="controls">
+                        <button class="btn btn-success" onclick="animationController.showSuccess('#success-demo', 'Operation completed!')">Show Success</button>
+                        <button class="btn btn-secondary" onclick="animationController.clearAnimations('#success-demo')">Clear</button>
+                    </div>
+                </div>
+
+                <div class="animation-card">
+                    <h4>Fade In Up</h4>
+                    <div class="animation-preview" id="fadein-demo">
+                        <div class="demo-element">Success</div>
+                    </div>
+                    <div class="controls">
+                        <button class="btn btn-success" onclick="animationController.animate('#fadein-demo', 'fade-in')">Fade In</button>
+                        <button class="btn" onclick="animationController.animate('#fadein-demo', 'zoom-in')">Zoom In</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="demo-section">
+            <h2>Error Animations</h2>
+            <div class="animation-grid">
+                <div class="animation-card">
+                    <h4>Shake</h4>
+                    <div class="animation-preview" id="shake-demo">
+                        <div class="demo-element">Error</div>
+                    </div>
+                    <div class="controls">
+                        <button class="btn btn-error" onclick="animationController.showError('#shake-demo', 'Something went wrong!', 'shake')">Shake</button>
+                        <button class="btn btn-secondary" onclick="animationController.clearAnimations('#shake-demo')">Clear</button>
+                    </div>
+                </div>
+
+                <div class="animation-card">
+                    <h4>Pulse Error</h4>
+                    <div class="animation-preview" id="pulse-error-demo">
+                        <div class="demo-element">Error</div>
+                    </div>
+                    <div class="controls">
+                        <button class="btn btn-error" onclick="animationController.showError('#pulse-error-demo', 'Validation failed!', 'pulse')">Pulse</button>
+                        <button class="btn btn-secondary" onclick="animationController.clearAnimations('#pulse-error-demo')">Clear</button>
+                    </div>
+                </div>
+
+                <div class="animation-card">
+                    <h4>Wobble</h4>
+                    <div class="animation-preview" id="wobble-demo">
+                        <div class="demo-element">Error</div>
+                    </div>
+                    <div class="controls">
+                        <button class="btn btn-error" onclick="animationController.showError('#wobble-demo', 'Invalid input!', 'wobble')">Wobble</button>
+                        <button class="btn btn-secondary" onclick="animationController.clearAnimations('#wobble-demo')">Clear</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="demo-section">
+            <h2>Simulated Operations</h2>
+            <div class="animation-grid">
+                <div class="animation-card">
+                    <h4>Successful Operation</h4>
+                    <div class="operation-demo" id="success-operation">
+                        <p>Click to simulate a successful operation</p>
+                    </div>
+                    <div class="controls">
+                        <button class="btn" onclick="simulateSuccess()">Start Operation</button>
+                    </div>
+                </div>
+
+                <div class="animation-card">
+                    <h4>Failed Operation</h4>
+                    <div class="operation-demo" id="error-operation">
+                        <p>Click to simulate a failed operation</p>
+                    </div>
+                    <div class="controls">
+                        <button class="btn" onclick="simulateError()">Start Operation</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="demo-section">
+            <h2>Animation Chaining</h2>
+            <div class="animation-card">
+                <h4>Sequential Animations</h4>
+                <div class="animation-preview" id="chain-demo">
+                    <div class="demo-element">Chain</div>
+                </div>
+                <div class="controls">
+                    <button class="btn" onclick="chainAnimations()">Start Chain</button>
+                    <button class="btn btn-secondary" onclick="animationController.clearAnimations('#chain-demo')">Reset</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="demo-section">
+            <h2>Code Examples</h2>
+            <div class="code-display">
+// Show loading spinner
+animationController.showLoading('#element', 'spinner');
+
+// Show success message
+animationController.showSuccess('#element', 'Success!');
+
+// Show error with shake animation
+animationController.showError('#element', 'Error!', 'shake');
+
+// Simulate async operation
+animationController.simulateOperation('#element', async () => {
+    // Your async operation here
+}, {
+    loadingType: 'spinner',
+    successMessage: 'Done!',
+    errorMessage: 'Failed!'
+});
+            </div>
+        </section>
+    </main>
+
+    <script src="js/animation-controller.js"></script>
+    <script>
+        // Simulate successful operation
+        async function simulateSuccess() {
+            await animationController.simulateOperation('#success-operation', 
+                () => Promise.resolve(), 
+                {
+                    loadingType: 'spinner',
+                    successMessage: 'Operation completed successfully!',
+                    duration: 1500
+                }
+            );
+        }
+
+        // Simulate failed operation
+        async function simulateError() {
+            await animationController.simulateOperation('#error-operation',
+                () => Promise.reject(new Error('Simulated error')),
+                {
+                    loadingType: 'pulse',
+                    errorMessage: 'Operation failed! Please try again.',
+                    duration: 1500
+                }
+            );
+        }
+
+        // Chain multiple animations
+        async function chainAnimations() {
+            await animationController.chainAnimations('#chain-demo', [
+                { type: 'fade-in', duration: 300 },
+                { type: 'zoom-in', duration: 300, delay: 100 },
+                { type: 'bounce', duration: 600, delay: 100 },
+                { type: 'fade-out', duration: 300, delay: 200 }
+            ]);
+        }
+
+        // Add hover animations to demo elements
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.demo-element').forEach(element => {
+                animationController.addHoverAnimation(element, 'pulse');
+            });
+        });
+    </script>
+</body>
+</html>
