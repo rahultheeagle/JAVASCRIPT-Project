@@ -6,9 +6,10 @@
 
 body {
     font-family: 'Arial', sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: var(--color-background, linear-gradient(135deg, #667eea 0%, #764ba2 100%));
     min-height: 100vh;
-    color: #333;
+    color: var(--color-text, #333);
+    transition: all 0.3s ease;
 }
 
 .container {
@@ -180,20 +181,21 @@ header h1 {
 }
 
 .dashboard {
-    background: rgba(255, 255, 255, 0.9);
+    background: var(--color-surface, rgba(255, 255, 255, 0.9));
     padding: 30px;
     border-radius: 10px;
     text-align: center;
+    color: var(--color-text, #333);
 }
 
 .dashboard h2 {
-    color: #333;
+    color: var(--color-text, #333);
     margin-bottom: 15px;
     font-size: 2rem;
 }
 
 .dashboard p {
-    color: #666;
+    color: var(--color-textSecondary, #666);
     font-size: 1.2rem;
 }
 
@@ -209,20 +211,20 @@ header h1 {
     display: flex;
     align-items: center;
     gap: 15px;
-    background: white;
+    background: var(--color-surface, white);
     padding: 20px 30px;
     border-radius: 12px;
     text-decoration: none;
-    color: #333;
+    color: var(--color-text, #333);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease;
-    border: 2px solid transparent;
+    border: 2px solid var(--color-border, transparent);
 }
 
 .action-btn:hover {
     transform: translateY(-3px);
     box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
-    border-color: #667eea;
+    border-color: var(--color-primary, #667eea);
 }
 
 .editor-btn:hover {
