@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Statistics Dashboard - CodeQuest</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="toast-system.css">
+    <link rel="stylesheet" href="statistics-dashboard.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <h2>CodeQuest</h2>
+            </div>
+            <div class="nav-links">
+                <a href="index.html">Dashboard</a>
+                <button id="theme-toggle" class="theme-toggle">🌙</button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="page-header">
+            <h1>Learning Analytics</h1>
+            <p>Track your progress with detailed statistics and charts</p>
+        </div>
+
+        <div class="dashboard-controls">
+            <button class="btn-primary" onclick="updateCharts()">🔄 Refresh Charts</button>
+            <button class="btn-secondary" onclick="generateSampleData()">🎲 Generate Sample Data</button>
+            <button class="btn-secondary" onclick="exportAnalytics()">📥 Export Analytics</button>
+            <button class="btn-secondary" onclick="clearData()">🗑️ Clear Data</button>
+        </div>
+
+        <div class="statistics-dashboard">
+            <div class="chart-container">
+                <div id="progress-chart" class="chart-loading"></div>
+            </div>
+
+            <div class="chart-container">
+                <div id="activity-chart" class="chart-loading"></div>
+            </div>
+
+            <div class="chart-container">
+                <div id="category-chart" class="chart-loading"></div>
+            </div>
+
+            <div class="chart-container">
+                <div id="time-chart" class="chart-loading"></div>
+            </div>
+
+            <div class="chart-container">
+                <div id="streak-chart" class="chart-loading"></div>
+            </div>
+
+            <div class="chart-container">
+                <div id="achievement-chart" class="chart-loading"></div>
+            </div>
+        </div>
+
+        <div class="analytics-summary">
+            <div class="summary-section">
+                <h3>📊 Analytics Summary</h3>
+                <div id="summary-content" class="summary-grid">
+                    <!-- Summary will be populated here -->
+                </div>
+            </div>
+
+            <div class="summary-section">
+                <h3>🎯 Learning Insights</h3>
+                <div id="insights-content" class="insights-list">
+                    <!-- Insights will be populated here -->
+                </div>
+            </div>
+
+            <div class="summary-section">
+                <h3>🏆 Recent Achievements</h3>
+                <div id="recent-achievements" class="achievements-list">
+                    <!-- Recent achievements will be populated here -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="storage-manager.js"></script>
+    <script src="theme-system.js"></script>
+    <script src="toast-system.js"></script>
+    <script src="statistics-dashboard.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialize charts after a short delay to show loading state
+            setTimeout(() => {
+                window.statisticsDashboard.createCharts();
+                loadSummary();
+                loadInsights();
+                loadRecentAchievements();
+            }, 500);
+        });
+
+        function updateCharts() {
+            // Show loading state
+            document.querySelectorAll('.chart-container > div').forEach(chart => {
+                chart.className = 'chart-loading';
+            });
+            
+            setTimeout(() => {
+                window.statisticsDashboard.updateCharts();
+                loadSummary();
+                loadInsights();
+                loadRecentAchievements();
+            }, 300);
+        }
+
+        function generateSampleData() {
+            window.statisticsDashboard.generateSampleData();
+            loadSummary();
+            loadInsights();
+            loadRecentAchievements();
+        }
+
+        function exportAnalytics() {
+            window.statisticsDashboard.exportData();
+        }
+
+        function clearData() {
+            if (confirm('Clear all learning data? This will reset your statistics.')) {
+                const keys = [
+                    'totalXP', 'currentLevel', 'currentStreak', 'streakRecord',
+                    'completedLessons', 'completedChallenges', 'challengesCompleted',
+                    'lessonsCompleted', 'totalTimeSpent', 'bestTimes',
+                    'unlockedAchievements', 'dailyActivity', 'categoryProgress'
+                ];
+                
+                keys.forEach(key => {
+                    window.storageManager?.removeItem(key);
+                });
+                
+                updateCharts();
+                window.toastSystem?.success('Data cleared!');
+            }
+        }
+
+        function loadSummary() {
+            const data = window.statisticsDashboard.loadData();
+            const container = document.getElementById('summary-content');
+            
+            const completionRate = Math.round(((data.lessonsCompleted + data.challengesCompleted) / 70) * 100);
+            const avgSessionTime = data.challengesCompleted > 0 ? 
+                Math.round(data.totalTimeSpent / data.challengesCompleted) : 0;
+            
+            container.innerHTML = `
+                <div class="summary-card">
+                    <div class="summary-icon">⭐</div>
+                    <div class="summary-info">
+                        <div class="summary-value">${data.totalXP}</div>
+                        <div class="summary-label">Total XP</div>
+                    </div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-icon">🎯</div>
+                    <div class="summary-info">
+                        <div class="summary-value">Level ${data.currentLevel}</div>
+                        <div class="summary-label">Current Level</div>
+                    </div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-icon">📈</div>
+                    <div class="summary-info">
+                        <div class="summary-value">${completionRate}%</div>
+                        <div class="summary-label">Completion Rate</div>
+                    </div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-icon">⏱️</div>
+                    <div class="summary-info">
+                        <div class="summary-value">${window.statisticsDashboard.formatTime(avgSessionTime)}</div>
+                        <div class="summary-label">Avg Session</div>
+                    </div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-icon">🔥</div>
+                    <div class="summary-info">
+                        <div class="summary-value">${data.currentStreak}</div>
+                        <div class="summary-label">Day Streak</div>
+                    </div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-icon">🏆</div>
+                    <div class="summary-info">
+                        <div class="summary-value">${data.unlockedAchievements.length}</div>
+                        <div class="summary-label">Achievements</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function loadInsights() {
+            const data = window.statisticsDashboard.loadData();
+            const container = document.getElementById('insights-content');
+            
+            const insights = [];
+            
+            // Generate insights based on data
+            if (data.currentStreak >= 7) {
+                insights.push({
+                    icon: '🔥',
+                    text: `Amazing! You're on a ${data.currentStreak}-day learning streak!`,
+                    type: 'positive'
+                });
+            }
+            
+            if (data.challengesCompleted >= 10) {
+                insights.push({
+                    icon: '💪',
+                    text: `You've completed ${data.challengesCompleted} challenges. Keep it up!`,
+                    type: 'positive'
+                });
+            }
+            
+            if (data.totalTimeSpent > 3600) {
+                insights.push({
+                    icon: '⏰',
+                    text: `You've spent ${window.statisticsDashboard.formatTime(data.totalTimeSpent)} learning. Dedication pays off!`,
+                    type: 'info'
+                });
+            }
+            
+            const categoryProgress = data.categoryProgress || {};
+            const strongestCategory = Object.entries(categoryProgress).reduce((a, b) => 
+                categoryProgress[a[0]] > categoryProgress[b[0]] ? a : b, ['none', 0]);
+            
+            if (strongestCategory[1] > 0) {
+                insights.push({
+                    icon: '🎯',
+                    text: `Your strongest area is ${strongestCategory[0].toUpperCase()} with ${strongestCategory[1]}% progress.`,
+                    type: 'info'
+                });
+            }
+            
+            if (insights.length === 0) {
+                insights.push({
+                    icon: '🚀',
+                    text: 'Start your learning journey to unlock insights!',
+                    type: 'neutral'
+                });
+            }
+            
+            container.innerHTML = insights.map(insight => `
+                <div class="insight-item ${insight.type}">
+                    <div class="insight-icon">${insight.icon}</div>
+                    <div class="insight-text">${insight.text}</div>
+                </div>
+            `).join('');
+        }
+
+        function loadRecentAchievements() {
+            const data = window.statisticsDashboard.loadData();
+            const container = document.getElementById('recent-achievements');
+            
+            const recentAchievements = data.unlockedAchievements
+                .sort((a, b) => new Date(b.unlockedAt) - new Date(a.unlockedAt))
+                .slice(0, 3);
+            
+            if (recentAchievements.length === 0) {
+                container.innerHTML = `
+                    <div class="no-achievements">
+                        <div class="no-achievements-icon">🏆</div>
+                        <p>No achievements unlocked yet. Complete lessons and challenges to earn your first badge!</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            const achievementNames = {
+                'first-steps': { name: 'First Steps', icon: '🎯' },
+                'challenge-master': { name: 'Challenge Master', icon: '🏆' },
+                'speed-demon': { name: 'Speed Demon', icon: '⚡' }
+            };
+            
+            container.innerHTML = recentAchievements.map(achievement => {
+                const info = achievementNames[achievement.id] || { name: achievement.id, icon: '🏅' };
+                const date = new Date(achievement.unlockedAt).toLocaleDateString();
+                
+                return `
+                    <div class="achievement-item">
+                        <div class="achievement-icon">${info.icon}</div>
+                        <div class="achievement-info">
+                            <div class="achievement-name">${info.name}</div>
+                            <div class="achievement-date">Unlocked on ${date}</div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+    </script>
+
+    <style>
+        .analytics-summary {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .summary-section {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+        }
+
+        .summary-section h3 {
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1rem;
+        }
+
+        .summary-card {
+            background: var(--bg-secondary);
+            padding: 1rem;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .summary-icon {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .summary-value {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 0.25rem;
+        }
+
+        .summary-label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .insights-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .insight-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            border-radius: 8px;
+            background: var(--bg-secondary);
+        }
+
+        .insight-item.positive {
+            border-left: 4px solid var(--success-color);
+        }
+
+        .insight-item.info {
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .insight-item.neutral {
+            border-left: 4px solid var(--text-secondary);
+        }
+
+        .insight-icon {
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+
+        .insight-text {
+            color: var(--text-primary);
+            font-size: 0.875rem;
+        }
+
+        .achievements-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .achievement-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+        }
+
+        .achievement-item .achievement-icon {
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .achievement-name {
+            color: var(--text-primary);
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .achievement-date {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        .no-achievements {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-secondary);
+        }
+
+        .no-achievements-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .analytics-summary {
+                grid-template-columns: 1fr;
+                padding: 0 1rem;
+            }
+
+            .summary-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</body>
+</html>

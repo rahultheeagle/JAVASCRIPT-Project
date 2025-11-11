@@ -1,0 +1,464 @@
+.statistics-dashboard {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    padding: 2rem;
+}
+
+.chart-container {
+    background: var(--card-bg);
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: var(--shadow);
+    transition: transform 0.3s ease;
+}
+
+.chart-container:hover {
+    transform: translateY(-2px);
+}
+
+.chart-header {
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.chart-header h3 {
+    margin: 0;
+    color: var(--text-primary);
+    font-size: 1.125rem;
+}
+
+/* Progress Chart */
+.progress-bars-chart {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.progress-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.progress-label {
+    min-width: 100px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.875rem;
+    color: var(--text-primary);
+}
+
+.progress-bar-chart {
+    flex: 1;
+    height: 8px;
+    background: var(--bg-secondary);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.progress-fill-chart {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.8s ease;
+}
+
+.progress-percentage {
+    min-width: 40px;
+    text-align: right;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    font-weight: 600;
+}
+
+/* Activity Chart */
+.activity-chart {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    height: 120px;
+    gap: 0.5rem;
+}
+
+.activity-bar {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+}
+
+.activity-fill {
+    width: 100%;
+    background: linear-gradient(to top, var(--primary-color), var(--primary-hover));
+    border-radius: 4px 4px 0 0;
+    min-height: 4px;
+    transition: height 0.6s ease;
+    margin-bottom: auto;
+}
+
+.activity-label {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    margin-top: 0.5rem;
+}
+
+.activity-value {
+    font-size: 0.75rem;
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+/* Category Chart */
+.category-chart {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+}
+
+.pie-chart {
+    width: 120px;
+    height: 120px;
+    position: relative;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.pie-segments {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.pie-segment {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: conic-gradient(
+        from var(--start-angle),
+        var(--color) 0deg,
+        var(--color) calc(var(--end-angle) - var(--start-angle)),
+        transparent calc(var(--end-angle) - var(--start-angle))
+    );
+}
+
+.empty-chart {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    background: var(--bg-secondary);
+    border-radius: 50%;
+}
+
+.category-legend {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.legend-color {
+    width: 16px;
+    height: 16px;
+    border-radius: 3px;
+}
+
+.legend-label {
+    flex: 1;
+    color: var(--text-primary);
+    font-size: 0.875rem;
+}
+
+.legend-value {
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+/* Time Chart */
+.time-stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+}
+
+.time-stat {
+    background: var(--bg-secondary);
+    padding: 1rem;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.time-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin-bottom: 0.25rem;
+}
+
+.time-label {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
+/* Streak Chart */
+.streak-visual {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+}
+
+.streak-circle {
+    position: relative;
+    width: 120px;
+    height: 120px;
+}
+
+.streak-circle svg {
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+}
+
+.streak-bg {
+    fill: none;
+    stroke: var(--bg-secondary);
+    stroke-width: 8;
+}
+
+.streak-progress {
+    fill: none;
+    stroke: var(--primary-color);
+    stroke-width: 8;
+    stroke-linecap: round;
+    transition: stroke-dasharray 0.8s ease;
+}
+
+.streak-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+.streak-number {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+.streak-label {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
+.streak-stats {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.streak-stat {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.75rem;
+    background: var(--bg-secondary);
+    border-radius: 6px;
+}
+
+.streak-stat-label {
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+}
+
+.streak-stat-value {
+    color: var(--text-primary);
+    font-weight: 600;
+    font-size: 0.875rem;
+}
+
+/* Achievement Chart */
+.achievement-overview {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+}
+
+.achievement-progress {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.achievement-circle {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: conic-gradient(var(--primary-color) 0deg, var(--primary-color) var(--percentage, 0deg), var(--bg-secondary) var(--percentage, 0deg));
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.achievement-circle::before {
+    content: '';
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    background: var(--card-bg);
+    border-radius: 50%;
+}
+
+.achievement-percentage {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    z-index: 1;
+}
+
+.achievement-count {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    z-index: 1;
+}
+
+.monthly-achievements {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.monthly-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.75rem;
+    background: var(--bg-secondary);
+    border-radius: 6px;
+}
+
+.month-label {
+    color: var(--text-primary);
+    font-size: 0.875rem;
+}
+
+.month-count {
+    color: var(--primary-color);
+    font-weight: 600;
+    font-size: 0.875rem;
+}
+
+/* Dashboard Controls */
+.dashboard-controls {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+}
+
+.dashboard-controls button {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background: var(--primary-color);
+    color: white;
+}
+
+.btn-secondary {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+}
+
+.btn-primary:hover,
+.btn-secondary:hover {
+    transform: translateY(-1px);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .statistics-dashboard {
+        grid-template-columns: 1fr;
+        padding: 1rem;
+        gap: 1rem;
+    }
+
+    .category-chart,
+    .streak-visual,
+    .achievement-overview {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+    }
+
+    .time-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .activity-chart {
+        height: 80px;
+    }
+
+    .dashboard-controls {
+        flex-direction: column;
+    }
+}
+
+/* Dark theme adjustments */
+[data-theme="dark"] .streak-bg {
+    stroke: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .pie-chart {
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Animation */
+@keyframes chartLoad {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.chart-container {
+    animation: chartLoad 0.5s ease;
+}
+
+/* Loading state */
+.chart-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 120px;
+    color: var(--text-secondary);
+}
+
+.chart-loading::after {
+    content: '📊 Loading charts...';
+}
