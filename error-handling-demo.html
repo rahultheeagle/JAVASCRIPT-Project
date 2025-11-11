@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error Handling Demo - CodeQuest</title>
+    <link rel="stylesheet" href="design-system.css">
+    <style>
+        .demo-section { margin: 2rem 0; padding: 1.5rem; border: 1px solid var(--border-color); border-radius: 8px; }
+        .demo-controls { margin-bottom: 1rem; display: flex; gap: 0.5rem; flex-wrap: wrap; }
+        .demo-output { min-height: 150px; border: 1px solid #ddd; padding: 1rem; border-radius: 4px; background: #f9f9f9; font-family: monospace; white-space: pre-wrap; overflow-y: auto; }
+        
+        .error-toast { position: fixed; top: 20px; right: 20px; max-width: 400px; background: white; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); z-index: 1000; animation: slideIn 0.3s ease; }
+        .error-toast.error-error { border-left: 4px solid #dc3545; }
+        .error-toast.error-warning { border-left: 4px solid #ffc107; }
+        .error-toast.error-info { border-left: 4px solid #17a2b8; }
+        .error-toast.error-success { border-left: 4px solid #28a745; }
+        
+        .error-content { display: flex; align-items: flex-start; padding: 1rem; }
+        .error-icon { font-size: 1.2rem; margin-right: 0.75rem; }
+        .error-text { flex: 1; }
+        .error-message { font-weight: 600; margin-bottom: 0.25rem; }
+        .error-details { font-size: 0.875rem; color: #666; }
+        .error-close { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #999; padding: 0; margin-left: 0.5rem; }
+        .error-close:hover { color: #333; }
+        
+        @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
+        
+        .form-demo { max-width: 400px; }
+        .form-demo input, .form-demo textarea { width: 100%; padding: 0.5rem; margin-bottom: 0.5rem; border: 1px solid #ddd; border-radius: 4px; }
+        .form-demo input.error { border-color: #dc3545; }
+        .field-error { color: #dc3545; font-size: 0.875rem; margin-bottom: 0.5rem; }
+        
+        .error-stats { background: #f8f9fa; padding: 1rem; border-radius: 4px; margin-top: 1rem; }
+        .error-stats h4 { margin: 0 0 0.5rem 0; }
+        .error-stats ul { margin: 0; padding-left: 1.5rem; }
+        
+        .api-demo { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
+        .api-demo button { width: 100%; }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <h1>Error Handling Demo</h1>
+            <nav>
+                <a href="index.html">← Back to Dashboard</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- Basic Error Handling -->
+        <section class="demo-section">
+            <h2>Basic Error Handling</h2>
+            <div class="demo-controls">
+                <button onclick="throwError()">Throw Error</button>
+                <button onclick="throwCustomError()">Custom Error</button>
+                <button onclick="throwAsyncError()">Async Error</button>
+                <button onclick="safeOperation()">Safe Operation</button>
+                <button onclick="clearErrorOutput()">Clear</button>
+            </div>
+            <div id="error-output" class="demo-output"></div>
+        </section>
+
+        <!-- API Error Handling -->
+        <section class="demo-section">
+            <h2>API Error Handling</h2>
+            <div class="demo-controls api-demo">
+                <button onclick="simulateApiError(400)">400 Bad Request</button>
+                <button onclick="simulateApiError(401)">401 Unauthorized</button>
+                <button onclick="simulateApiError(403)">403 Forbidden</button>
+                <button onclick="simulateApiError(404)">404 Not Found</button>
+                <button onclick="simulateApiError(429)">429 Rate Limit</button>
+                <button onclick="simulateApiError(500)">500 Server Error</button>
+                <button onclick="simulateNetworkError()">Network Error</button>
+                <button onclick="simulateTimeout()">Timeout Error</button>
+            </div>
+            <div id="api-output" class="demo-output"></div>
+        </section>
+
+        <!-- Form Validation -->
+        <section class="demo-section">
+            <h2>Form Validation with Error Handling</h2>
+            <div class="form-demo">
+                <form id="demo-form">
+                    <input type="text" name="name" placeholder="Name (required)">
+                    <input type="email" name="email" placeholder="Email (required)">
+                    <input type="password" name="password" placeholder="Password (min 6 chars)">
+                    <input type="tel" name="phone" placeholder="Phone (optional)">
+                    <textarea name="message" placeholder="Message (max 200 chars)"></textarea>
+                    <button type="submit" class="btn btn-primary">Submit Form</button>
+                </form>
+            </div>
+            <div id="form-output" class="demo-output"></div>
+        </section>
+
+        <!-- Storage Error Handling -->
+        <section class="demo-section">
+            <h2>Storage Error Handling</h2>
+            <div class="demo-controls">
+                <button onclick="testLocalStorage()">Test localStorage</button>
+                <button onclick="simulateQuotaError()">Quota Exceeded</button>
+                <button onclick="testInvalidJson()">Invalid JSON</button>
+                <button onclick="clearStorageOutput()">Clear</button>
+            </div>
+            <div id="storage-output" class="demo-output"></div>
+        </section>
+
+        <!-- Retry Mechanisms -->
+        <section class="demo-section">
+            <h2>Retry Mechanisms</h2>
+            <div class="demo-controls">
+                <button onclick="retryOperation()">Retry Operation</button>
+                <button onclick="retryWithFallback()">Retry with Fallback</button>
+                <button onclick="asyncRetryDemo()">Async Retry</button>
+            </div>
+            <div id="retry-output" class="demo-output"></div>
+        </section>
+
+        <!-- Error Statistics -->
+        <section class="demo-section">
+            <h2>Error Statistics</h2>
+            <div class="demo-controls">
+                <button onclick="showErrorStats()">Show Statistics</button>
+                <button onclick="clearErrorLog()">Clear Error Log</button>
+            </div>
+            <div id="stats-output" class="error-stats"></div>
+        </section>
+
+        <!-- Global Error Testing -->
+        <section class="demo-section">
+            <h2>Global Error Handling</h2>
+            <div class="demo-controls">
+                <button onclick="triggerGlobalError()">Global Error</button>
+                <button onclick="triggerUnhandledPromise()">Unhandled Promise</button>
+                <button onclick="triggerTypeError()">Type Error</button>
+                <button onclick="triggerReferenceError()">Reference Error</button>
+            </div>
+            <p><em>These errors will be caught by global handlers and display toast notifications.</em></p>
+        </section>
+    </main>
+
+    <script src="js/error-handler.js"></script>
+    <script>
+        // Basic error handling demos
+        function throwError() {
+            const output = document.getElementById('error-output');
+            
+            try {
+                throw new Error('This is a test error');
+            } catch (error) {
+                const errorInfo = errorHandler.handleError(error, 'Basic Error Demo');
+                output.textContent += `Caught: ${errorInfo.userMessage}\n`;
+                output.textContent += `Technical: ${errorInfo.message}\n\n`;
+            }
+        }
+
+        function throwCustomError() {
+            const output = document.getElementById('error-output');
+            
+            try {
+                const error = new Error('Invalid user input provided');
+                error.name = 'ValidationError';
+                throw error;
+            } catch (error) {
+                const errorInfo = errorHandler.handleError(error, 'Custom Error Demo');
+                output.textContent += `Caught: ${errorInfo.userMessage}\n`;
+                output.textContent += `Type: ${errorInfo.type}\n\n`;
+            }
+        }
+
+        async function throwAsyncError() {
+            const output = document.getElementById('error-output');
+            
+            try {
+                await errorHandler.safeAsync(async () => {
+                    throw new Error('Async operation failed');
+                }, {
+                    context: 'Async Demo',
+                    showError: false
+                });
+            } catch (error) {
+                output.textContent += `Async error handled: ${error.message}\n\n`;
+            }
+        }
+
+        function safeOperation() {
+            const output = document.getElementById('error-output');
+            
+            const result = errorHandler.safe(() => {
+                // Simulate risky operation
+                if (Math.random() > 0.5) {
+                    throw new Error('Random failure occurred');
+                }
+                return 'Operation successful!';
+            }, {
+                context: 'Safe Operation',
+                fallback: 'Fallback result used',
+                showError: false
+            });
+            
+            output.textContent += `Result: ${result}\n\n`;
+        }
+
+        function clearErrorOutput() {
+            document.getElementById('error-output').textContent = '';
+        }
+
+        // API error handling demos
+        async function simulateApiError(status) {
+            const output = document.getElementById('api-output');
+            
+            try {
+                const mockResponse = { status };
+                errorHandler.handleApiError(mockResponse, 'API Demo');
+                output.textContent += `Simulated ${status} error handled\n\n`;
+            } catch (error) {
+                output.textContent += `Error: ${error.message}\n\n`;
+            }
+        }
+
+        async function simulateNetworkError() {
+            const output = document.getElementById('api-output');
+            
+            await errorHandler.safeAsync(async () => {
+                const error = new Error('Failed to fetch');
+                error.name = 'NetworkError';
+                throw error;
+            }, {
+                context: 'Network Request',
+                showError: false
+            }).catch(error => {
+                output.textContent += `Network error: ${error.message}\n\n`;
+            });
+        }
+
+        async function simulateTimeout() {
+            const output = document.getElementById('api-output');
+            
+            await errorHandler.safeAsync(async () => {
+                const error = new Error('Request timeout');
+                error.name = 'TimeoutError';
+                throw error;
+            }, {
+                context: 'Timeout Demo',
+                showError: false
+            }).catch(error => {
+                output.textContent += `Timeout error: ${error.message}\n\n`;
+            });
+        }
+
+        // Form validation demo
+        document.getElementById('demo-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const form = e.target;
+            const output = document.getElementById('form-output');
+            
+            const rules = {
+                name: { required: true, label: 'Name' },
+                email: { 
+                    required: true, 
+                    pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, 
+                    message: 'Please enter a valid email address',
+                    label: 'Email'
+                },
+                password: { 
+                    required: true, 
+                    minLength: 6, 
+                    label: 'Password'
+                },
+                phone: { 
+                    pattern: /^\d{10}$/, 
+                    message: 'Phone must be 10 digits',
+                    label: 'Phone'
+                },
+                message: { 
+                    maxLength: 200, 
+                    label: 'Message'
+                }
+            };
+            
+            const errors = errorHandler.validateForm(form, rules);
+            
+            if (errors.length > 0) {
+                errorHandler.displayFormErrors(form, errors);
+                output.textContent += `Validation failed: ${errors.length} errors\n`;
+                errors.forEach(error => {
+                    output.textContent += `- ${error.message}\n`;
+                });
+                output.textContent += '\n';
+            } else {
+                // Clear any existing errors
+                errorHandler.displayFormErrors(form, []);
+                output.textContent += 'Form validation passed!\n\n';
+            }
+        });
+
+        // Storage error handling demos
+        function testLocalStorage() {
+            const output = document.getElementById('storage-output');
+            
+            try {
+                localStorage.setItem('test-key', 'test-value');
+                const value = localStorage.getItem('test-key');
+                output.textContent += `localStorage test: ${value}\n\n`;
+            } catch (error) {
+                errorHandler.handleStorageError(error, 'localStorage test');
+                output.textContent += `Storage error: ${error.message}\n\n`;
+            }
+        }
+
+        function simulateQuotaError() {
+            const output = document.getElementById('storage-output');
+            
+            try {
+                const error = new Error('Storage quota exceeded');
+                error.name = 'QuotaExceededError';
+                throw error;
+            } catch (error) {
+                errorHandler.handleStorageError(error, 'quota test');
+                output.textContent += `Quota error handled\n\n`;
+            }
+        }
+
+        function testInvalidJson() {
+            const output = document.getElementById('storage-output');
+            
+            try {
+                JSON.parse('invalid json string');
+            } catch (error) {
+                const errorInfo = errorHandler.handleError(error, 'JSON Parse');
+                output.textContent += `JSON error: ${errorInfo.userMessage}\n\n`;
+            }
+        }
+
+        function clearStorageOutput() {
+            document.getElementById('storage-output').textContent = '';
+        }
+
+        // Retry mechanism demos
+        async function retryOperation() {
+            const output = document.getElementById('retry-output');
+            
+            let attempts = 0;
+            const result = await errorHandler.safeAsync(async () => {
+                attempts++;
+                if (attempts < 3) {
+                    throw new Error(`Attempt ${attempts} failed`);
+                }
+                return `Success after ${attempts} attempts`;
+            }, {
+                context: 'Retry Demo',
+                retries: 3,
+                retryDelay: 500,
+                showError: false
+            });
+            
+            output.textContent += `${result}\n\n`;
+        }
+
+        async function retryWithFallback() {
+            const output = document.getElementById('retry-output');
+            
+            const result = await errorHandler.safeAsync(async () => {
+                throw new Error('Operation always fails');
+            }, {
+                context: 'Fallback Demo',
+                retries: 2,
+                fallback: 'Fallback value used',
+                showError: false
+            });
+            
+            output.textContent += `Result: ${result}\n\n`;
+        }
+
+        async function asyncRetryDemo() {
+            const output = document.getElementById('retry-output');
+            
+            try {
+                await errorHandler.safeAsync(async () => {
+                    throw new Error('Persistent failure');
+                }, {
+                    context: 'Async Retry',
+                    retries: 2,
+                    showError: false
+                });
+            } catch (error) {
+                output.textContent += `Final failure: ${error.message}\n\n`;
+            }
+        }
+
+        // Error statistics
+        function showErrorStats() {
+            const stats = errorHandler.getErrorStats();
+            const output = document.getElementById('stats-output');
+            
+            output.innerHTML = `
+                <h4>Error Statistics</h4>
+                <p><strong>Total Errors:</strong> ${stats.total}</p>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div>
+                        <strong>By Type:</strong>
+                        <ul>
+                            ${Object.entries(stats.byType).map(([type, count]) => 
+                                `<li>${type}: ${count}</li>`
+                            ).join('')}
+                        </ul>
+                    </div>
+                    <div>
+                        <strong>By Context:</strong>
+                        <ul>
+                            ${Object.entries(stats.byContext).map(([context, count]) => 
+                                `<li>${context}: ${count}</li>`
+                            ).join('')}
+                        </ul>
+                    </div>
+                </div>
+            `;
+        }
+
+        function clearErrorLog() {
+            errorHandler.clearErrors();
+            document.getElementById('stats-output').innerHTML = '<p>Error log cleared</p>';
+        }
+
+        // Global error demos
+        function triggerGlobalError() {
+            setTimeout(() => {
+                throw new Error('Global error triggered');
+            }, 100);
+        }
+
+        function triggerUnhandledPromise() {
+            Promise.reject(new Error('Unhandled promise rejection'));
+        }
+
+        function triggerTypeError() {
+            setTimeout(() => {
+                null.someMethod();
+            }, 100);
+        }
+
+        function triggerReferenceError() {
+            setTimeout(() => {
+                undefinedVariable.property;
+            }, 100);
+        }
+    </script>
+</body>
+</html>
