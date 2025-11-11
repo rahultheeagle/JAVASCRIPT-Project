@@ -2395,3 +2395,195 @@ a:focus {
   outline: 2px solid var(--primary-500);
   outline-offset: 2px;
 }
+
+/* =============================================================================
+   SCREEN READER SUPPORT & ARIA
+   ============================================================================= */
+
+/* ARIA Live Regions */
+[aria-live] {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+/* Screen Reader Only Content */
+.sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+/* ARIA States */
+[aria-hidden="true"] {
+  display: none !important;
+}
+
+[aria-disabled="true"] {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+[aria-expanded="false"] + * {
+  display: none;
+}
+
+[aria-expanded="true"] + * {
+  display: block;
+}
+
+/* Button Roles */
+[role="button"] {
+  cursor: pointer;
+  user-select: none;
+}
+
+/* Menu Roles */
+[role="menubar"],
+[role="menu"] {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+[role="menuitem"] {
+  display: block;
+  padding: 0.5rem 1rem;
+  text-decoration: none;
+  color: var(--text-primary);
+  cursor: pointer;
+}
+
+[role="menuitem"]:focus {
+  background: var(--primary-50);
+  outline: 2px solid var(--primary-500);
+  outline-offset: -2px;
+}
+
+/* Tab Roles */
+[role="tablist"] {
+  display: flex;
+  border-bottom: 1px solid var(--border-color);
+}
+
+[role="tab"] {
+  padding: 0.75rem 1rem;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+}
+
+[role="tab"][aria-selected="true"] {
+  background: var(--primary-50);
+  border-bottom-color: var(--primary-500);
+  color: var(--primary-700);
+}
+
+[role="tabpanel"] {
+  padding: 1rem;
+}
+
+/* Dialog Roles */
+[role="dialog"],
+[role="alertdialog"] {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  box-shadow: var(--shadow);
+  z-index: 1000;
+}
+
+/* Alert Roles */
+[role="alert"] {
+  padding: 1rem;
+  border-radius: 0.25rem;
+  background: var(--error-color);
+  color: white;
+  margin: 1rem 0;
+}
+
+[role="status"] {
+  padding: 1rem;
+  border-radius: 0.25rem;
+  background: var(--success-color);
+  color: white;
+  margin: 1rem 0;
+}
+
+/* Progress Roles */
+[role="progressbar"] {
+  background: var(--bg-secondary);
+  border-radius: 0.25rem;
+  overflow: hidden;
+  height: 0.5rem;
+}
+
+/* Grid Roles */
+[role="grid"] {
+  display: table;
+  width: 100%;
+  border-collapse: collapse;
+}
+
+[role="row"] {
+  display: table-row;
+}
+
+[role="gridcell"],
+[role="columnheader"] {
+  display: table-cell;
+  padding: 0.75rem;
+  border: 1px solid var(--border-color);
+}
+
+[role="gridcell"]:focus {
+  outline: 2px solid var(--primary-500);
+  outline-offset: -2px;
+  background: var(--primary-50);
+}
+
+/* List Roles */
+[role="list"] {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+[role="listitem"] {
+  padding: 0.5rem 0;
+}
+
+[role="option"] {
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+
+[role="option"]:focus,
+[role="option"][aria-selected="true"] {
+  background: var(--primary-50);
+  color: var(--primary-700);
+}
+
+/* ARIA Invalid */
+[aria-invalid="true"] {
+  border-color: var(--error-color);
+}
+
+[aria-invalid="true"]:focus {
+  outline-color: var(--error-color);
+  box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.1);
+}
