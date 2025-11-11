@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Template System Demo - CodeQuest</title>
+    <link rel="stylesheet" href="design-system.css">
+    <style>
+        .demo-section {
+            margin: 2rem 0;
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+        }
+        .demo-output {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: var(--background-secondary);
+            border-radius: 4px;
+        }
+        .code-example {
+            background: var(--background-dark);
+            color: var(--text-light);
+            padding: 1rem;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            margin: 1rem 0;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <header role="banner">
+        <nav aria-label="Main navigation">
+            <div class="nav-brand">
+                <h1>CodeQuest</h1>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html">Dashboard</a></li>
+                <li><a href="#" class="active">Template System</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main role="main">
+        <section class="hero">
+            <h1>Template System Demo</h1>
+            <p>Reusable HTML structures in JavaScript</p>
+        </section>
+
+        <section class="demo-section">
+            <h2>Card Template</h2>
+            <div class="code-example">
+templates.render('card', {
+    title: 'Sample Card',
+    content: 'This is card content',
+    class: 'highlight'
+});
+            </div>
+            <div class="demo-output" id="card-demo"></div>
+        </section>
+
+        <section class="demo-section">
+            <h2>Button Template</h2>
+            <div class="code-example">
+templates.render('button', {
+    text: 'Click Me',
+    type: 'btn-primary',
+    attributes: 'onclick="alert(\'Button clicked!\')"'
+});
+            </div>
+            <div class="demo-output" id="button-demo"></div>
+        </section>
+
+        <section class="demo-section">
+            <h2>Progress Bar Template</h2>
+            <div class="code-example">
+templates.render('progress', {
+    label: 'Learning Progress',
+    percent: 75
+});
+            </div>
+            <div class="demo-output" id="progress-demo"></div>
+        </section>
+
+        <section class="demo-section">
+            <h2>Alert Template</h2>
+            <div class="code-example">
+templates.render('alert', {
+    type: 'success',
+    icon: '✓',
+    message: 'Template system loaded successfully!'
+});
+            </div>
+            <div class="demo-output" id="alert-demo"></div>
+        </section>
+
+        <section class="demo-section">
+            <h2>Form Field Template</h2>
+            <div class="code-example">
+templates.render('field', {
+    type: 'input',
+    id: 'username',
+    name: 'username',
+    label: 'Username',
+    attributes: 'type="text" placeholder="Enter username"'
+});
+            </div>
+            <div class="demo-output" id="field-demo"></div>
+        </section>
+
+        <section class="demo-section">
+            <h2>Dynamic Template Creation</h2>
+            <button class="btn btn-primary" onclick="createDynamicCard()">Create Dynamic Card</button>
+            <div class="demo-output" id="dynamic-demo"></div>
+        </section>
+    </main>
+
+    <script src="js/template-system.js"></script>
+    <script>
+        // Demo implementations
+        document.addEventListener('DOMContentLoaded', function() {
+            // Card demo
+            document.getElementById('card-demo').innerHTML = templates.render('card', {
+                title: 'Sample Card',
+                content: 'This is card content generated from template',
+                class: 'highlight'
+            });
+
+            // Button demo
+            document.getElementById('button-demo').innerHTML = templates.render('button', {
+                text: 'Click Me',
+                type: 'btn-primary',
+                attributes: 'onclick="alert(\'Button clicked!\')"'
+            });
+
+            // Progress demo
+            document.getElementById('progress-demo').innerHTML = templates.render('progress', {
+                label: 'Learning Progress',
+                percent: 75
+            });
+
+            // Alert demo
+            document.getElementById('alert-demo').innerHTML = templates.render('alert', {
+                type: 'success',
+                icon: '✓',
+                message: 'Template system loaded successfully!'
+            });
+
+            // Field demo
+            document.getElementById('field-demo').innerHTML = templates.render('field', {
+                type: 'input',
+                id: 'username',
+                name: 'username',
+                label: 'Username',
+                attributes: 'type="text" placeholder="Enter username"'
+            });
+        });
+
+        // Dynamic card creation
+        function createDynamicCard() {
+            const container = document.getElementById('dynamic-demo');
+            const cardData = {
+                title: 'Dynamic Card #' + (container.children.length + 1),
+                content: 'Created at ' + new Date().toLocaleTimeString(),
+                class: 'animated'
+            };
+            
+            const cardElement = templates.createElement('card', cardData);
+            container.appendChild(cardElement);
+        }
+    </script>
+</body>
+</html>
