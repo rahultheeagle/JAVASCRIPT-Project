@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS Variables Demo - CodeQuest</title>
+    <link rel="stylesheet" href="design-system.css">
+    <link rel="stylesheet" href="css/css-variables.css">
+    <style>
+        .demo-section {
+            margin: var(--space-lg) 0;
+            padding: var(--space-lg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            background: var(--surface);
+        }
+        
+        .controls-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--space-md);
+            margin: var(--space-lg) 0;
+        }
+        
+        .control-group {
+            background: var(--background);
+            padding: var(--space-md);
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border);
+        }
+        
+        .control-group h4 {
+            margin: 0 0 var(--space-sm) 0;
+            color: var(--text-primary);
+        }
+        
+        .theme-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-sm);
+            margin: var(--space-md) 0;
+        }
+        
+        .theme-btn {
+            padding: var(--space-sm) var(--space-md);
+            border: 1px solid var(--border);
+            background: var(--background);
+            color: var(--text-primary);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+        
+        .theme-btn:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        .theme-btn.active {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        .slider-control {
+            margin: var(--space-sm) 0;
+        }
+        
+        .slider-control label {
+            display: block;
+            margin-bottom: var(--space-xs);
+            color: var(--text-secondary);
+            font-size: var(--font-size-sm);
+        }
+        
+        .slider {
+            width: 100%;
+            height: 6px;
+            border-radius: var(--radius-sm);
+            background: var(--border);
+            outline: none;
+            -webkit-appearance: none;
+        }
+        
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            cursor: pointer;
+        }
+        
+        .preview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--space-md);
+            margin: var(--space-lg) 0;
+        }
+        
+        .variable-display {
+            background: var(--background);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: var(--space-md);
+            font-family: monospace;
+            font-size: var(--font-size-sm);
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .variable-item {
+            display: flex;
+            justify-content: space-between;
+            padding: var(--space-xs) 0;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .variable-name {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+        
+        .variable-value {
+            color: var(--text-secondary);
+        }
+        
+        .export-import {
+            display: flex;
+            gap: var(--space-sm);
+            margin: var(--space-md) 0;
+        }
+        
+        .btn {
+            padding: var(--space-sm) var(--space-md);
+            border: none;
+            border-radius: var(--radius-sm);
+            background: var(--primary-color);
+            color: white;
+            cursor: pointer;
+            font-size: var(--font-size-sm);
+            transition: all var(--transition-fast);
+        }
+        
+        .btn:hover {
+            background: var(--primary-dark);
+        }
+        
+        .btn-secondary {
+            background: var(--surface);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+        
+        .btn-secondary:hover {
+            background: var(--border);
+        }
+    </style>
+</head>
+<body>
+    <header role="banner">
+        <nav aria-label="Main navigation">
+            <div class="nav-brand">
+                <h1>CodeQuest</h1>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html">Dashboard</a></li>
+                <li><a href="#" class="active">CSS Variables</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main role="main">
+        <section class="hero">
+            <h1>CSS Variables Demo</h1>
+            <p>Dynamic theming system</p>
+        </section>
+
+        <section class="demo-section">
+            <h2>Theme Selection</h2>
+            <div class="theme-buttons" id="theme-buttons">
+                <button class="theme-btn active" onclick="changeTheme('default')">Default</button>
+                <button class="theme-btn" onclick="changeTheme('dark')">Dark</button>
+                <button class="theme-btn" onclick="changeTheme('blue')">Blue</button>
+                <button class="theme-btn" onclick="changeTheme('green')">Green</button>
+                <button class="theme-btn" onclick="changeTheme('purple')">Purple</button>
+                <button class="theme-btn" onclick="changeTheme('orange')">Orange</button>
+                <button class="theme-btn" onclick="changeTheme('red')">Red</button>
+                <button class="theme-btn" onclick="changeTheme('high-contrast')">High Contrast</button>
+            </div>
+        </section>
+
+        <section class="demo-section">
+            <h2>Dynamic Controls</h2>
+            <div class="controls-grid">
+                <div class="control-group">
+                    <h4>Primary Color</h4>
+                    <div class="slider-control">
+                        <label for="hue-slider">Hue: <span id="hue-value">220</span></label>
+                        <input type="range" id="hue-slider" class="slider" min="0" max="360" value="220" oninput="updatePrimaryColor()">
+                    </div>
+                    <div class="slider-control">
+                        <label for="sat-slider">Saturation: <span id="sat-value">70</span>%</label>
+                        <input type="range" id="sat-slider" class="slider" min="0" max="100" value="70" oninput="updatePrimaryColor()">
+                    </div>
+                    <div class="slider-control">
+                        <label for="light-slider">Lightness: <span id="light-value">50</span>%</label>
+                        <input type="range" id="light-slider" class="slider" min="10" max="90" value="50" oninput="updatePrimaryColor()">
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <h4>Spacing Scale</h4>
+                    <div class="slider-control">
+                        <label for="spacing-slider">Scale: <span id="spacing-value">1.0</span>x</label>
+                        <input type="range" id="spacing-slider" class="slider" min="0.5" max="2" step="0.1" value="1" oninput="updateSpacing()">
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <h4>Font Scale</h4>
+                    <div class="slider-control">
+                        <label for="font-slider">Scale: <span id="font-value">1.0</span>x</label>
+                        <input type="range" id="font-slider" class="slider" min="0.8" max="1.5" step="0.1" value="1" oninput="updateFontScale()">
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <h4>Theme Actions</h4>
+                    <div class="export-import">
+                        <button class="btn" onclick="exportTheme()">Export</button>
+                        <button class="btn btn-secondary" onclick="importTheme()">Import</button>
+                        <button class="btn btn-secondary" onclick="resetTheme()">Reset</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="demo-section">
+            <h2>Component Preview</h2>
+            <div class="preview-grid">
+                <div class="themed-card">
+                    <h3>Themed Card</h3>
+                    <p>This card uses CSS variables for theming.</p>
+                    <button class="themed-button">Themed Button</button>
+                </div>
+                
+                <div class="themed-card">
+                    <h3>Form Elements</h3>
+                    <input type="text" class="themed-input" placeholder="Themed input">
+                    <br><br>
+                    <button class="themed-button">Submit</button>
+                </div>
+                
+                <div class="themed-card">
+                    <h3>Typography</h3>
+                    <p style="font-size: var(--font-size-xs)">Extra small text</p>
+                    <p style="font-size: var(--font-size-sm)">Small text</p>
+                    <p style="font-size: var(--font-size-base)">Base text</p>
+                    <p style="font-size: var(--font-size-lg)">Large text</p>
+                    <p style="font-size: var(--font-size-xl)">Extra large text</p>
+                </div>
+                
+                <div class="themed-card">
+                    <h3>Spacing & Borders</h3>
+                    <div class="p-xs bg-primary" style="color: white; margin-bottom: var(--space-xs);">XS Padding</div>
+                    <div class="p-sm bg-primary" style="color: white; margin-bottom: var(--space-sm);">SM Padding</div>
+                    <div class="p-md bg-primary" style="color: white;">MD Padding</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="demo-section">
+            <h2>Current CSS Variables</h2>
+            <div class="variable-display" id="variables-display">
+                <!-- Variables will be populated by JavaScript -->
+            </div>
+        </section>
+    </main>
+
+    <script src="js/theme-controller.js"></script>
+    <script>
+        // Change theme
+        function changeTheme(theme) {
+            themeController.applyTheme(theme);
+            themeController.animateThemeChange();
+            
+            // Update active button
+            document.querySelectorAll('.theme-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            updateVariablesDisplay();
+        }
+
+        // Update primary color
+        function updatePrimaryColor() {
+            const hue = document.getElementById('hue-slider').value;
+            const sat = document.getElementById('sat-slider').value;
+            const light = document.getElementById('light-slider').value;
+            
+            document.getElementById('hue-value').textContent = hue;
+            document.getElementById('sat-value').textContent = sat;
+            document.getElementById('light-value').textContent = light;
+            
+            themeController.setPrimaryColor(hue, sat, light);
+            updateVariablesDisplay();
+        }
+
+        // Update spacing
+        function updateSpacing() {
+            const scale = document.getElementById('spacing-slider').value;
+            document.getElementById('spacing-value').textContent = scale;
+            themeController.setSpacing(parseFloat(scale));
+            updateVariablesDisplay();
+        }
+
+        // Update font scale
+        function updateFontScale() {
+            const scale = document.getElementById('font-slider').value;
+            document.getElementById('font-value').textContent = scale;
+            themeController.setFontScale(parseFloat(scale));
+            updateVariablesDisplay();
+        }
+
+        // Export theme
+        function exportTheme() {
+            const themeData = themeController.exportTheme();
+            const blob = new Blob([themeData], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'theme.json';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // Import theme
+        function importTheme() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.json';
+            input.onchange = (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        if (themeController.importTheme(e.target.result)) {
+                            alert('Theme imported successfully!');
+                            updateVariablesDisplay();
+                        } else {
+                            alert('Invalid theme file!');
+                        }
+                    };
+                    reader.readAsText(file);
+                }
+            };
+            input.click();
+        }
+
+        // Reset theme
+        function resetTheme() {
+            themeController.resetTheme();
+            
+            // Reset sliders
+            document.getElementById('hue-slider').value = 220;
+            document.getElementById('sat-slider').value = 70;
+            document.getElementById('light-slider').value = 50;
+            document.getElementById('spacing-slider').value = 1;
+            document.getElementById('font-slider').value = 1;
+            
+            // Update displays
+            document.getElementById('hue-value').textContent = '220';
+            document.getElementById('sat-value').textContent = '70';
+            document.getElementById('light-value').textContent = '50';
+            document.getElementById('spacing-value').textContent = '1.0';
+            document.getElementById('font-value').textContent = '1.0';
+            
+            updateVariablesDisplay();
+        }
+
+        // Update variables display
+        function updateVariablesDisplay() {
+            const variables = [
+                'primary-color', 'background', 'surface', 'text-primary', 'text-secondary',
+                'border', 'space-md', 'space-lg', 'font-size-base', 'radius-md'
+            ];
+            
+            const display = document.getElementById('variables-display');
+            display.innerHTML = variables.map(variable => {
+                const value = themeController.getVariable(variable);
+                return `
+                    <div class="variable-item">
+                        <span class="variable-name">--${variable}</span>
+                        <span class="variable-value">${value}</span>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            updateVariablesDisplay();
+            
+            // Listen for theme changes
+            document.addEventListener('themechange', function(e) {
+                console.log('Theme changed to:', e.detail.theme);
+            });
+        });
+    </script>
+</body>
+</html>
