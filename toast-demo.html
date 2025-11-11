@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Toast Notifications Demo - CodeQuest</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="toast-system.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <h2>CodeQuest</h2>
+            </div>
+            <div class="nav-links">
+                <a href="index.html">Dashboard</a>
+                <button id="theme-toggle" class="theme-toggle">🌙</button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="page-header">
+            <h1>Toast Notifications Demo</h1>
+            <p>Test all toast notification types</p>
+        </div>
+
+        <div class="demo-container">
+            <div class="demo-section">
+                <h3>Basic Notifications</h3>
+                <button class="btn-success" onclick="showSuccess()">Success Toast</button>
+                <button class="btn-error" onclick="showError()">Error Toast</button>
+                <button class="btn-warning" onclick="showWarning()">Warning Toast</button>
+                <button class="btn-info" onclick="showInfo()">Info Toast</button>
+            </div>
+
+            <div class="demo-section">
+                <h3>Achievement Notifications</h3>
+                <button class="btn-achievement" onclick="showAchievement()">Basic Achievement</button>
+                <button class="btn-achievement" onclick="showXPAchievement()">Achievement with XP</button>
+                <button class="btn-achievement" onclick="showCustomAchievement()">Custom Achievement</button>
+            </div>
+
+            <div class="demo-section">
+                <h3>Advanced Features</h3>
+                <button class="btn-secondary" onclick="showWithTitle()">Toast with Title</button>
+                <button class="btn-secondary" onclick="showWithAction()">Toast with Action</button>
+                <button class="btn-secondary" onclick="showPersistent()">Persistent Toast</button>
+                <button class="btn-secondary" onclick="showMultiple()">Multiple Toasts</button>
+            </div>
+
+            <div class="demo-section">
+                <h3>Controls</h3>
+                <button class="btn-danger" onclick="clearAll()">Clear All Toasts</button>
+                <button class="btn-secondary" onclick="testSpam()">Spam Test (10 toasts)</button>
+            </div>
+        </div>
+    </main>
+
+    <script src="storage-manager.js"></script>
+    <script src="theme-system.js"></script>
+    <script src="toast-system.js"></script>
+    
+    <script>
+        function showSuccess() {
+            window.toastSystem.success('Profile updated successfully!');
+        }
+
+        function showError() {
+            window.toastSystem.error('Failed to save changes. Please try again.');
+        }
+
+        function showWarning() {
+            window.toastSystem.warning('Your session will expire in 5 minutes.');
+        }
+
+        function showInfo() {
+            window.toastSystem.info('New features are available in the latest update.');
+        }
+
+        function showAchievement() {
+            window.toastSystem.achievement('First Steps', 'You completed your first lesson!');
+        }
+
+        function showXPAchievement() {
+            window.toastSystem.achievement('Speed Demon', 'Completed challenge in under 5 minutes!', 250, '⚡');
+        }
+
+        function showCustomAchievement() {
+            window.toastSystem.achievement('Code Master', 'You\'ve written 1000 lines of code!', 500, '👨‍💻');
+        }
+
+        function showWithTitle() {
+            window.toastSystem.success('Changes saved to cloud storage.', {
+                title: 'Sync Complete'
+            });
+        }
+
+        function showWithAction() {
+            window.toastSystem.info('A new version is available.', {
+                title: 'Update Available',
+                action: {
+                    text: 'Update Now',
+                    callback: 'alert("Updating...")'
+                }
+            });
+        }
+
+        function showPersistent() {
+            window.toastSystem.error('Connection lost. Please check your internet.', {
+                title: 'Network Error'
+            }, 0); // 0 duration = persistent
+        }
+
+        function showMultiple() {
+            window.toastSystem.success('File uploaded successfully');
+            setTimeout(() => window.toastSystem.info('Processing file...'), 500);
+            setTimeout(() => window.toastSystem.success('File processed successfully'), 2000);
+            setTimeout(() => window.toastSystem.achievement('File Master', 'Uploaded 10 files!', 100, '📁'), 3000);
+        }
+
+        function clearAll() {
+            window.toastSystem.clear();
+        }
+
+        function testSpam() {
+            for (let i = 1; i <= 10; i++) {
+                setTimeout(() => {
+                    window.toastSystem.info(`Toast number ${i}`);
+                }, i * 200);
+            }
+        }
+    </script>
+
+    <style>
+        .demo-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+        }
+
+        .demo-section {
+            background: var(--card-bg);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+        }
+
+        .demo-section h3 {
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+
+        .demo-section button {
+            margin-right: 1rem;
+            margin-bottom: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-success {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .btn-error {
+            background: var(--error-color);
+            color: white;
+        }
+
+        .btn-warning {
+            background: #f59e0b;
+            color: white;
+        }
+
+        .btn-info {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-achievement {
+            background: #8b5cf6;
+            color: white;
+        }
+
+        .btn-secondary {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-danger {
+            background: var(--error-color);
+            color: white;
+        }
+
+        button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</body>
+</html>
