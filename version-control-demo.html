@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Version Control Demo - CodeQuest</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="toast-system.css">
+    <link rel="stylesheet" href="modal-system.css">
+    <link rel="stylesheet" href="version-control.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <h2>CodeQuest</h2>
+            </div>
+            <div class="nav-links">
+                <a href="index.html">Dashboard</a>
+                <button id="theme-toggle" class="theme-toggle">🌙</button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="page-header">
+            <h1>Version Control Demo</h1>
+            <p>Track code history for each challenge with automatic versioning</p>
+        </div>
+
+        <div class="demo-container">
+            <div class="demo-section">
+                <h3>Code Editor with Version Control</h3>
+                <div class="version-control-toolbar">
+                    <button class="btn-primary" onclick="saveManualVersion()">💾 Save Version</button>
+                    <button class="btn-secondary" onclick="showHistory()">📜 View History</button>
+                    <button class="btn-secondary" onclick="exportHistory()">📥 Export History</button>
+                    <button class="btn-secondary" onclick="clearHistory()">🗑️ Clear History</button>
+                    <span class="version-info">Auto-save: <span id="auto-save-status">Enabled</span></span>
+                </div>
+                
+                <div class="editor-container">
+                    <textarea 
+                        id="code-editor" 
+                        class="code-editor" 
+                        data-challenge="demo-challenge"
+                        placeholder="Start typing your code here... Auto-save will create versions automatically."
+                        rows="15"
+                    ></textarea>
+                </div>
+                
+                <div class="editor-info">
+                    <span>Challenge: <strong>demo-challenge</strong></span>
+                    <span id="char-count">0 characters</span>
+                    <span id="version-count">0 versions</span>
+                </div>
+            </div>
+
+            <div class="demo-section">
+                <h3>Version Statistics</h3>
+                <div id="version-stats" class="stats-grid">
+                    <!-- Stats will be populated here -->
+                </div>
+            </div>
+
+            <div class="demo-section">
+                <h3>Recent Versions</h3>
+                <div id="recent-versions" class="recent-versions-list">
+                    <!-- Recent versions will be populated here -->
+                </div>
+            </div>
+
+            <div class="demo-section">
+                <h3>Sample Code Templates</h3>
+                <p>Load sample code to test the version control system:</p>
+                <div class="template-grid">
+                    <div class="template-card" onclick="loadTemplate('html')">
+                        <h4>HTML Template</h4>
+                        <p>Basic HTML structure</p>
+                    </div>
+                    <div class="template-card" onclick="loadTemplate('css')">
+                        <h4>CSS Template</h4>
+                        <p>CSS styling example</p>
+                    </div>
+                    <div class="template-card" onclick="loadTemplate('javascript')">
+                        <h4>JavaScript Template</h4>
+                        <p>JavaScript function example</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="demo-section">
+                <h3>Version Control Features</h3>
+                <div class="features-grid">
+                    <div class="feature-item">
+                        <div class="feature-icon">🔄</div>
+                        <h4>Auto-Save</h4>
+                        <p>Automatically saves versions every 2 seconds when code changes</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">💾</div>
+                        <h4>Manual Versions</h4>
+                        <p>Save important milestones with custom descriptions</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">📜</div>
+                        <h4>History Tracking</h4>
+                        <p>View complete history with timestamps and metadata</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">🔍</div>
+                        <h4>Diff Comparison</h4>
+                        <p>Compare versions to see exactly what changed</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">↩️</div>
+                        <h4>Version Restore</h4>
+                        <p>Restore any previous version with one click</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">📊</div>
+                        <h4>Statistics</h4>
+                        <p>Track coding progress and version metrics</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div class="version-indicator" id="version-indicator">Ready</div>
+
+    <script src="storage-manager.js"></script>
+    <script src="theme-system.js"></script>
+    <script src="toast-system.js"></script>
+    <script src="modal-system.js"></script>
+    <script src="version-control.js"></script>
+    
+    <script>
+        const challengeId = 'demo-challenge';
+        let editor;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            editor = document.getElementById('code-editor');
+            
+            // Bind events
+            editor.addEventListener('input', updateCharCount);
+            
+            // Load initial data
+            updateStats();
+            updateRecentVersions();
+            
+            // Load last version if exists
+            const lastVersion = window.versionControl.getLatestVersion(challengeId);
+            if (lastVersion) {
+                editor.value = lastVersion.code;
+                updateCharCount();
+            }
+        });
+
+        function updateCharCount() {
+            const count = editor.value.length;
+            document.getElementById('char-count').textContent = `${count} characters`;
+        }
+
+        function updateStats() {
+            const stats = window.versionControl.getStatistics(challengeId);
+            const versions = window.versionControl.getVersions(challengeId);
+            
+            document.getElementById('version-count').textContent = `${versions.length} versions`;
+            
+            const statsContainer = document.getElementById('version-stats');
+            
+            if (stats) {
+                statsContainer.innerHTML = `
+                    <div class="stat-card">
+                        <div class="stat-number">${stats.totalVersions}</div>
+                        <div class="stat-label">Total Versions</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">${stats.avgSize}</div>
+                        <div class="stat-label">Avg Size (chars)</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">${Math.round(stats.timeSpan / 60000)}</div>
+                        <div class="stat-label">Time Span (min)</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">${stats.sizeGrowth > 0 ? '+' : ''}${stats.sizeGrowth}</div>
+                        <div class="stat-label">Size Growth</div>
+                    </div>
+                `;
+            } else {
+                statsContainer.innerHTML = `
+                    <div class="stat-card">
+                        <div class="stat-number">0</div>
+                        <div class="stat-label">No versions yet</div>
+                    </div>
+                `;
+            }
+        }
+
+        function updateRecentVersions() {
+            const versions = window.versionControl.getVersions(challengeId);
+            const recentVersions = versions.slice(-5).reverse();
+            const container = document.getElementById('recent-versions');
+            
+            if (recentVersions.length === 0) {
+                container.innerHTML = '<p class="no-versions">No versions saved yet. Start typing to create your first auto-save version.</p>';
+                return;
+            }
+            
+            container.innerHTML = recentVersions.map(version => `
+                <div class="version-item-compact">
+                    <div class="version-info">
+                        <span class="version-type ${version.type}">${version.type}</span>
+                        <span class="version-time">${window.versionControl.formatDate(version.timestamp)}</span>
+                        <span class="version-size">${version.size} chars</span>
+                        ${version.description ? `<span class="version-desc">"${version.description}"</span>` : ''}
+                    </div>
+                    <div class="version-actions">
+                        <button class="btn-small" onclick="restoreVersion('${version.id}')">Restore</button>
+                        <button class="btn-small btn-danger" onclick="deleteVersion('${version.id}')">Delete</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function saveManualVersion() {
+            const description = prompt('Enter a description for this version:');
+            if (description !== null) {
+                const versionId = window.versionControl.saveVersion(challengeId, editor.value, 'manual', description);
+                if (versionId) {
+                    showVersionIndicator('Version saved!', 'saved');
+                    updateStats();
+                    updateRecentVersions();
+                } else {
+                    window.toastSystem?.info('No changes to save');
+                }
+            }
+        }
+
+        function showHistory() {
+            window.versionControl.showHistoryModal(challengeId);
+        }
+
+        function exportHistory() {
+            window.versionControl.exportHistory(challengeId);
+        }
+
+        function clearHistory() {
+            if (confirm('Clear all version history for this challenge? This cannot be undone.')) {
+                window.versionControl.clearHistory(challengeId);
+                updateStats();
+                updateRecentVersions();
+            }
+        }
+
+        function restoreVersion(versionId) {
+            if (window.versionControl.restoreVersion(challengeId, versionId)) {
+                updateCharCount();
+                showVersionIndicator('Version restored!', 'saved');
+            }
+        }
+
+        function deleteVersion(versionId) {
+            if (confirm('Delete this version? This cannot be undone.')) {
+                window.versionControl.deleteVersion(challengeId, versionId);
+                updateStats();
+                updateRecentVersions();
+            }
+        }
+
+        function loadTemplate(type) {
+            const templates = {
+                html: `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Web Page</title>
+</head>
+<body>
+    <h1>Hello World!</h1>
+    <p>This is my first web page.</p>
+</body>
+</html>`,
+                css: `/* CSS Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #f0f0f0;
+}
+
+h1 {
+    color: #333;
+    text-align: center;
+}
+
+p {
+    color: #666;
+    line-height: 1.6;
+}`,
+                javascript: `// JavaScript Function
+function greetUser(name) {
+    if (!name) {
+        name = 'World';
+    }
+    
+    return \`Hello, \${name}!\`;
+}
+
+// Example usage
+console.log(greetUser('CodeQuest'));
+console.log(greetUser());`
+            };
+            
+            editor.value = templates[type];
+            updateCharCount();
+            
+            // Save as checkpoint
+            window.versionControl.saveVersion(challengeId, editor.value, 'checkpoint', `Loaded ${type} template`);
+            updateStats();
+            updateRecentVersions();
+        }
+
+        function showVersionIndicator(message, type) {
+            const indicator = document.getElementById('version-indicator');
+            indicator.textContent = message;
+            indicator.className = `version-indicator ${type}`;
+            
+            setTimeout(() => {
+                indicator.textContent = 'Ready';
+                indicator.className = 'version-indicator';
+            }, 2000);
+        }
+
+        // Override version control auto-save to show indicator
+        const originalSaveVersion = window.versionControl.saveVersion;
+        window.versionControl.saveVersion = function(challengeId, code, type, description) {
+            const result = originalSaveVersion.call(this, challengeId, code, type, description);
+            
+            if (result && type === 'auto-save') {
+                showVersionIndicator('Auto-saved', 'saving');
+                updateStats();
+                updateRecentVersions();
+            }
+            
+            return result;
+        };
+    </script>
+
+    <style>
+        .demo-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 2rem;
+        }
+
+        .demo-section {
+            background: var(--card-bg);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+        }
+
+        .demo-section h3 {
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+
+        .editor-container {
+            margin: 1rem 0;
+        }
+
+        .code-editor {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--input-bg);
+            color: var(--text-primary);
+            font-family: 'Courier New', monospace;
+            font-size: 0.875rem;
+            line-height: 1.4;
+            resize: vertical;
+            transition: border-color 0.3s ease;
+        }
+
+        .code-editor:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .editor-info {
+            display: flex;
+            gap: 1rem;
+            margin-top: 0.5rem;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+        }
+
+        .stat-card {
+            background: var(--bg-secondary);
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        .recent-versions-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .version-item-compact {
+            background: var(--bg-secondary);
+            padding: 1rem;
+            border-radius: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .version-item-compact .version-info {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .no-versions {
+            text-align: center;
+            color: var(--text-secondary);
+            font-style: italic;
+            padding: 2rem;
+        }
+
+        .template-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .template-card {
+            background: var(--bg-secondary);
+            padding: 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .template-card:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        .template-card h4 {
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .template-card p {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            margin: 0;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .feature-item {
+            background: var(--bg-secondary);
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .feature-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-item h4 {
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-item p {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            margin: 0;
+        }
+
+        @media (max-width: 768px) {
+            .version-item-compact {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: stretch;
+            }
+
+            .version-item-compact .version-info {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+
+            .template-grid,
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</body>
+</html>
