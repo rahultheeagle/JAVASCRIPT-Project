@@ -235,6 +235,11 @@ class ChallengeSystem {
                 }
             });
         });
+        
+        // Add search highlighting if search is active
+        if (window.searchFilterSystem && window.searchFilterSystem.currentFilters.search) {
+            this.highlightSearchTerms(window.searchFilterSystem.currentFilters.search);
+        }
     }
     
     // Start a challenge
@@ -442,6 +447,57 @@ class ChallengeSystem {
             
             elements[index].textContent = completed;
             progressBars[index].style.width = `${percentage}%`;
+        });
+    }
+    
+    // Update categories view with search results
+    updateCategoriesWithSearchResults(filteredChallenges) {
+        const categoryCards = document.querySelectorAll('.category-card');
+        
+        categoryCards.forEach(card => {
+            const category = card.dataset.category;
+            const hasResults = filteredChallenges[category] && filteredChallenges[category].length > 0;
+            
+            if (Object.keys(filteredChallenges).length === 0) {
+                card.style.display = 'block';
+                card.classList.remove('search-dimmed');
+            } else if (hasResults) {
+                card.style.display = 'block';
+                card.classList.remove('search-dimmed');
+                card.classList.add('search-highlighted');
+                
+                const challengeCount = card.querySelector('.challenge-count');
+                if (challengeCount) {
+                    const originalText = challengeCount.textContent;
+                    const resultCount = filteredChallenges[category].length;
+                    challengeCount.innerHTML = `${resultCount} of ${originalText} <small>(filtered)</small>`;
+                }
+            } else {
+                card.style.display = 'block';
+                card.classList.add('search-dimmed');
+                card.classList.remove('search-highlighted');
+            }
+        });
+    }
+    
+    // Highlight search terms in challenge items
+    highlightSearchTerms(searchTerm) {
+        if (!searchTerm.trim()) return;
+        
+        const challengeItems = this.challengesGrid.querySelectorAll('.challenge-item');
+        const regex = new RegExp(`(${searchTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+        
+        challengeItems.forEach(item => {
+            const title = item.querySelector('.challenge-title');
+            const description = item.querySelector('.challenge-description');
+            
+            if (title) {
+                title.innerHTML = title.textContent.replace(regex, '<span class="search-match">$1</span>');
+            }
+            
+            if (description) {
+                description.innerHTML = description.textContent.replace(regex, '<span class="search-match">$1</span>');
+            }
         });
     }
 }

@@ -400,6 +400,35 @@ body {
     box-shadow: 0 4px 15px rgba(102, 126, 234, 0.2);
 }
 
+/* Search Integration Styles */
+.category-card.search-highlighted {
+    border-color: #667eea;
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+    transform: translateY(-3px);
+}
+
+.category-card.search-dimmed {
+    opacity: 0.5;
+    transform: none;
+}
+
+.category-card.search-dimmed:hover {
+    opacity: 0.7;
+}
+
+.challenge-count small {
+    font-size: 0.7rem;
+    color: #667eea;
+    font-weight: normal;
+}
+
+.search-match {
+    background: rgba(255, 235, 59, 0.4);
+    padding: 1px 2px;
+    border-radius: 2px;
+    font-weight: 600;
+}
+
 @keyframes slideIn {
     from {
         opacity: 0;
