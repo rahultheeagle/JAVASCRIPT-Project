@@ -1,0 +1,488 @@
+/* Timer System Styles */
+
+/* Timer Widget */
+.timer-widget {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 20px;
+    border-radius: 15px;
+    margin: 15px 0;
+    box-shadow: 0 8px 32px rgba(102, 126, 234, 0.3);
+    transition: all 0.3s ease;
+}
+
+.timer-widget:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px rgba(102, 126, 234, 0.4);
+}
+
+.timer-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+.timer-icon {
+    font-size: 1.2rem;
+    margin-right: 8px;
+}
+
+.timer-label {
+    font-size: 1rem;
+    opacity: 0.9;
+}
+
+.timer-display {
+    font-size: 2.5rem;
+    font-weight: bold;
+    text-align: center;
+    margin: 15px 0;
+    font-family: 'Courier New', monospace;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.timer-controls {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+}
+
+.timer-btn {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    padding: 8px 16px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.9rem;
+}
+
+.timer-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    border-color: rgba(255, 255, 255, 0.5);
+    transform: translateY(-1px);
+}
+
+.timer-btn:active {
+    transform: translateY(0);
+}
+
+.btn-icon {
+    font-size: 0.8rem;
+}
+
+.timer-stats {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.stat-item {
+    text-align: center;
+    flex: 1;
+}
+
+.stat-label {
+    display: block;
+    font-size: 0.8rem;
+    opacity: 0.8;
+    margin-bottom: 3px;
+}
+
+.stat-value {
+    display: block;
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+/* Compact Timer */
+.compact-timer {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(102, 126, 234, 0.1);
+    padding: 8px 12px;
+    border-radius: 20px;
+    border: 1px solid rgba(102, 126, 234, 0.2);
+    color: #667eea;
+    font-weight: 600;
+}
+
+.compact-timer .timer-display {
+    font-size: 1rem;
+    margin: 0;
+    font-family: 'Courier New', monospace;
+    color: #667eea;
+    text-shadow: none;
+}
+
+.timer-controls-compact {
+    display: flex;
+    gap: 5px;
+}
+
+.timer-btn-compact {
+    background: #667eea;
+    color: white;
+    border: none;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    transition: all 0.3s ease;
+}
+
+.timer-btn-compact:hover {
+    background: #5a67d8;
+    transform: scale(1.1);
+}
+
+/* Timer Statistics Panel */
+.timer-stats-panel {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    margin: 20px 0;
+}
+
+.timer-stats-panel h3 {
+    color: #4a5568;
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+    text-align: center;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.stat-card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 20px;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    transition: transform 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-3px);
+}
+
+.stat-number {
+    display: block;
+    font-size: 1.8rem;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.stat-card .stat-label {
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
+
+/* Best Times Section */
+.best-times-section, .recent-activity-section {
+    margin-top: 25px;
+}
+
+.best-times-section h4, .recent-activity-section h4 {
+    color: #4a5568;
+    margin-bottom: 15px;
+    font-size: 1.2rem;
+}
+
+.best-times-list, .activity-list {
+    background: #f7fafc;
+    border-radius: 10px;
+    padding: 15px;
+    border: 1px solid #e2e8f0;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.best-time-item, .activity-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.best-time-item:last-child, .activity-item:last-child {
+    border-bottom: none;
+}
+
+.challenge-name, .challenge-id {
+    font-weight: 600;
+    color: #4a5568;
+}
+
+.time-value, .duration {
+    font-family: 'Courier New', monospace;
+    color: #667eea;
+    font-weight: bold;
+}
+
+.activity-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.activity-status.completed {
+    color: #48bb78;
+}
+
+.activity-status:not(.completed) {
+    color: #ed8936;
+}
+
+.activity-details {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 2px;
+}
+
+.time-ago {
+    font-size: 0.8rem;
+    color: #718096;
+}
+
+/* Timer Dashboard */
+.timer-dashboard {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 15px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    margin: 20px 0;
+}
+
+.timer-dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 25px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.timer-dashboard-header h2 {
+    color: #4a5568;
+    margin: 0;
+}
+
+.dashboard-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.dashboard-btn {
+    background: #667eea;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.dashboard-btn:hover {
+    background: #5a67d8;
+    transform: translateY(-1px);
+}
+
+.timer-dashboard-content {
+    padding: 25px;
+}
+
+/* Timer Notifications */
+.timer-notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: white;
+    padding: 15px 20px;
+    border-radius: 10px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    z-index: 1000;
+    transform: translateX(400px);
+    opacity: 0;
+    transition: all 0.3s ease;
+    max-width: 350px;
+}
+
+.timer-notification.show {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+.timer-notification.success {
+    border-left: 4px solid #48bb78;
+}
+
+.timer-notification.info {
+    border-left: 4px solid #4299e1;
+}
+
+.timer-notification.warning {
+    border-left: 4px solid #ed8936;
+}
+
+.timer-notification.error {
+    border-left: 4px solid #f56565;
+}
+
+.notification-icon {
+    font-size: 1.2rem;
+}
+
+.notification-message {
+    color: #4a5568;
+    font-weight: 500;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .timer-widget {
+        padding: 15px;
+        margin: 10px 0;
+    }
+    
+    .timer-display {
+        font-size: 2rem;
+    }
+    
+    .timer-controls {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .timer-btn {
+        width: 100%;
+        justify-content: center;
+        margin-bottom: 8px;
+    }
+    
+    .timer-stats {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+    
+    .stat-card {
+        padding: 15px;
+    }
+    
+    .stat-number {
+        font-size: 1.4rem;
+    }
+    
+    .compact-timer {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    .timer-dashboard-header {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+    }
+    
+    .dashboard-actions {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .best-time-item, .activity-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+    
+    .activity-details {
+        align-items: flex-start;
+    }
+    
+    .timer-notification {
+        right: 10px;
+        left: 10px;
+        max-width: none;
+        transform: translateY(-100px);
+    }
+    
+    .timer-notification.show {
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 480px) {
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .timer-display {
+        font-size: 1.8rem;
+    }
+    
+    .timer-stats-panel {
+        padding: 15px;
+    }
+    
+    .timer-dashboard-content {
+        padding: 15px;
+    }
+}
+
+/* Animation for timer display updates */
+.timer-display {
+    animation: timerPulse 1s ease-in-out infinite alternate;
+}
+
+@keyframes timerPulse {
+    0% { opacity: 1; }
+    100% { opacity: 0.8; }
+}
+
+/* Pause animation when timer is paused */
+.timer-widget.paused .timer-display {
+    animation: none;
+    opacity: 0.7;
+}
+
+/* Success animation when challenge is completed */
+.timer-widget.completed {
+    animation: completionGlow 0.5s ease-in-out;
+}
+
+@keyframes completionGlow {
+    0% { box-shadow: 0 8px 32px rgba(102, 126, 234, 0.3); }
+    50% { box-shadow: 0 8px 32px rgba(72, 187, 120, 0.6); }
+    100% { box-shadow: 0 8px 32px rgba(102, 126, 234, 0.3); }
+}

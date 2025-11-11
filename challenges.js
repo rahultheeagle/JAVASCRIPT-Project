@@ -197,6 +197,12 @@ class ChallengeSystem {
                 statusText = this.getLockReason(challenge, category, completedChallenges);
             }
             
+            // Get timer data for this challenge
+            const challengeKey = `${category}-${challenge.id}`;
+            const timerData = window.TimerSystem ? window.TimerSystem.getTimerData(challengeKey) : null;
+            const bestTime = timerData && timerData.bestTime ? window.TimerSystem.formatTime(timerData.bestTime) : null;
+            const attempts = timerData ? timerData.attempts : 0;
+            
             return `
                 <div class="challenge-item ${isCompleted ? 'completed' : ''} ${isLocked ? 'locked' : ''}" 
                      data-challenge-id="${challenge.id}" data-category="${category}" data-difficulty="${challenge.difficulty}">
@@ -205,6 +211,10 @@ class ChallengeSystem {
                         <span class="challenge-difficulty difficulty-${challenge.difficulty}">${challenge.difficulty}</span>
                     </div>
                     <div class="challenge-description">${challenge.description}</div>
+                    <div class="challenge-timer-info">
+                        ${bestTime ? `<span class="timer-stat">⏱️ Best: ${bestTime}</span>` : ''}
+                        ${attempts > 0 ? `<span class="timer-stat">🎯 Attempts: ${attempts}</span>` : ''}
+                    </div>
                     <div class="challenge-status">
                         <span class="status-badge ${statusClass}">${statusText}</span>
                         <span class="challenge-xp">+${challenge.xp} XP</span>
@@ -229,19 +239,31 @@ class ChallengeSystem {
     
     // Start a challenge
     startChallenge(category, challengeId) {
+        // Start timer for this challenge
+        const challengeKey = `${category}-${challengeId}`;
+        const challenge = this.challenges[category].find(c => c.id === challengeId);
+        const challengeName = challenge ? challenge.title : `Challenge ${challengeId}`;
+        
+        if (window.TimerSystem) {
+            window.TimerSystem.startTimer(challengeKey, challengeName);
+        }
+        
         // Navigate to challenge detail page
         window.location.href = `challenge-detail.html?category=${category}&id=${challengeId}`;
     }
     
     // Show challenge completion message
-    showCompletionMessage(challenge) {
+    showCompletionMessage(challenge, completionTime = null) {
         const notification = document.createElement('div');
+        const timeText = completionTime ? `<br><span>⏱️ Time: ${window.TimerSystem.formatTime(completionTime)}</span>` : '';
+        
         notification.innerHTML = `
             <div style="display: flex; align-items: center; gap: 15px;">
                 <span style="font-size: 2rem;">🎉</span>
                 <div>
                     <strong>Challenge Completed!</strong><br>
                     <span>${challenge.title} - +${challenge.xp} XP</span>
+                    ${timeText}
                 </div>
             </div>
         `;
@@ -427,4 +449,17 @@ class ChallengeSystem {
 // Initialize challenge system when DOM loads
 document.addEventListener('DOMContentLoaded', () => {
     new ChallengeSystem();
+    
+    // Add timer statistics panel to the page
+    if (window.timerUI) {
+        const timerStatsContainer = document.createElement('div');
+        timerStatsContainer.className = 'timer-stats-container';
+        timerStatsContainer.innerHTML = window.timerUI.createStatsPanel();
+        
+        // Insert after the categories grid
+        const categoriesGrid = document.querySelector('.categories-grid');
+        if (categoriesGrid && categoriesGrid.parentElement) {
+            categoriesGrid.parentElement.appendChild(timerStatsContainer);
+        }
+    }
 });
