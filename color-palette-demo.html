@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Color Palette - Design System</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="design-system.css">
+    <link rel="stylesheet" href="toast-system.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <h2>CodeQuest Design System</h2>
+            </div>
+            <div class="nav-links">
+                <a href="index.html">Dashboard</a>
+                <button id="theme-toggle" class="theme-toggle">🌙</button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="page-header">
+            <h1>Color Palette</h1>
+            <p>Cohesive color system with primary, secondary, and accent colors</p>
+        </div>
+
+        <div class="demo-container">
+            <div class="color-section">
+                <h3>Primary Colors</h3>
+                <div class="color-palette">
+                    <div class="color-swatch" data-color="primary-50" style="background: var(--primary-50)">
+                        <span class="color-name">Primary 50</span>
+                        <span class="color-value">#eff6ff</span>
+                    </div>
+                    <div class="color-swatch" data-color="primary-100" style="background: var(--primary-100)">
+                        <span class="color-name">Primary 100</span>
+                        <span class="color-value">#dbeafe</span>
+                    </div>
+                    <div class="color-swatch" data-color="primary-200" style="background: var(--primary-200)">
+                        <span class="color-name">Primary 200</span>
+                        <span class="color-value">#bfdbfe</span>
+                    </div>
+                    <div class="color-swatch" data-color="primary-300" style="background: var(--primary-300)">
+                        <span class="color-name">Primary 300</span>
+                        <span class="color-value">#93c5fd</span>
+                    </div>
+                    <div class="color-swatch" data-color="primary-400" style="background: var(--primary-400)">
+                        <span class="color-name">Primary 400</span>
+                        <span class="color-value">#60a5fa</span>
+                    </div>
+                    <div class="color-swatch primary" data-color="primary-500" style="background: var(--primary-500)">
+                        <span class="color-name">Primary 500</span>
+                        <span class="color-value">#3b82f6</span>
+                    </div>
+                    <div class="color-swatch" data-color="primary-600" style="background: var(--primary-600)">
+                        <span class="color-name">Primary 600</span>
+                        <span class="color-value">#2563eb</span>
+                    </div>
+                    <div class="color-swatch" data-color="primary-700" style="background: var(--primary-700)">
+                        <span class="color-name">Primary 700</span>
+                        <span class="color-value">#1d4ed8</span>
+                    </div>
+                    <div class="color-swatch" data-color="primary-800" style="background: var(--primary-800)">
+                        <span class="color-name">Primary 800</span>
+                        <span class="color-value">#1e40af</span>
+                    </div>
+                    <div class="color-swatch" data-color="primary-900" style="background: var(--primary-900)">
+                        <span class="color-name">Primary 900</span>
+                        <span class="color-value">#1e3a8a</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="color-section">
+                <h3>Secondary Colors</h3>
+                <div class="color-palette">
+                    <div class="color-swatch" data-color="secondary-50" style="background: var(--secondary-50)">
+                        <span class="color-name">Secondary 50</span>
+                        <span class="color-value">#f8fafc</span>
+                    </div>
+                    <div class="color-swatch" data-color="secondary-100" style="background: var(--secondary-100)">
+                        <span class="color-name">Secondary 100</span>
+                        <span class="color-value">#f1f5f9</span>
+                    </div>
+                    <div class="color-swatch" data-color="secondary-200" style="background: var(--secondary-200)">
+                        <span class="color-name">Secondary 200</span>
+                        <span class="color-value">#e2e8f0</span>
+                    </div>
+                    <div class="color-swatch" data-color="secondary-300" style="background: var(--secondary-300)">
+                        <span class="color-name">Secondary 300</span>
+                        <span class="color-value">#cbd5e1</span>
+                    </div>
+                    <div class="color-swatch" data-color="secondary-400" style="background: var(--secondary-400)">
+                        <span class="color-name">Secondary 400</span>
+                        <span class="color-value">#94a3b8</span>
+                    </div>
+                    <div class="color-swatch secondary" data-color="secondary-500" style="background: var(--secondary-500)">
+                        <span class="color-name">Secondary 500</span>
+                        <span class="color-value">#64748b</span>
+                    </div>
+                    <div class="color-swatch" data-color="secondary-600" style="background: var(--secondary-600)">
+                        <span class="color-name">Secondary 600</span>
+                        <span class="color-value">#475569</span>
+                    </div>
+                    <div class="color-swatch" data-color="secondary-700" style="background: var(--secondary-700)">
+                        <span class="color-name">Secondary 700</span>
+                        <span class="color-value">#334155</span>
+                    </div>
+                    <div class="color-swatch" data-color="secondary-800" style="background: var(--secondary-800)">
+                        <span class="color-name">Secondary 800</span>
+                        <span class="color-value">#1e293b</span>
+                    </div>
+                    <div class="color-swatch" data-color="secondary-900" style="background: var(--secondary-900)">
+                        <span class="color-name">Secondary 900</span>
+                        <span class="color-value">#0f172a</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="color-section">
+                <h3>Accent Colors</h3>
+                <div class="accent-colors">
+                    <div class="accent-group">
+                        <h4>Purple</h4>
+                        <div class="color-swatch accent" data-color="accent-purple-500" style="background: var(--accent-purple-500)">
+                            <span class="color-name">Purple 500</span>
+                            <span class="color-value">#8b5cf6</span>
+                        </div>
+                        <div class="color-swatch" data-color="accent-purple-600" style="background: var(--accent-purple-600)">
+                            <span class="color-name">Purple 600</span>
+                            <span class="color-value">#7c3aed</span>
+                        </div>
+                    </div>
+                    <div class="accent-group">
+                        <h4>Green</h4>
+                        <div class="color-swatch" data-color="accent-green-500" style="background: var(--accent-green-500)">
+                            <span class="color-name">Green 500</span>
+                            <span class="color-value">#10b981</span>
+                        </div>
+                        <div class="color-swatch" data-color="accent-green-600" style="background: var(--accent-green-600)">
+                            <span class="color-name">Green 600</span>
+                            <span class="color-value">#059669</span>
+                        </div>
+                    </div>
+                    <div class="accent-group">
+                        <h4>Orange</h4>
+                        <div class="color-swatch" data-color="accent-orange-500" style="background: var(--accent-orange-500)">
+                            <span class="color-name">Orange 500</span>
+                            <span class="color-value">#f59e0b</span>
+                        </div>
+                        <div class="color-swatch" data-color="accent-orange-600" style="background: var(--accent-orange-600)">
+                            <span class="color-name">Orange 600</span>
+                            <span class="color-value">#d97706</span>
+                        </div>
+                    </div>
+                    <div class="accent-group">
+                        <h4>Red</h4>
+                        <div class="color-swatch" data-color="accent-red-500" style="background: var(--accent-red-500)">
+                            <span class="color-name">Red 500</span>
+                            <span class="color-value">#ef4444</span>
+                        </div>
+                        <div class="color-swatch" data-color="accent-red-600" style="background: var(--accent-red-600)">
+                            <span class="color-name">Red 600</span>
+                            <span class="color-value">#dc2626</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="color-section">
+                <h3>Semantic Colors</h3>
+                <div class="semantic-colors">
+                    <div class="semantic-item">
+                        <div class="color-swatch" style="background: var(--success-color)">
+                            <span class="color-name">Success</span>
+                            <span class="color-value">Green 500</span>
+                        </div>
+                    </div>
+                    <div class="semantic-item">
+                        <div class="color-swatch" style="background: var(--warning-color)">
+                            <span class="color-name">Warning</span>
+                            <span class="color-value">Orange 500</span>
+                        </div>
+                    </div>
+                    <div class="semantic-item">
+                        <div class="color-swatch" style="background: var(--error-color)">
+                            <span class="color-name">Error</span>
+                            <span class="color-value">Red 500</span>
+                        </div>
+                    </div>
+                    <div class="semantic-item">
+                        <div class="color-swatch" style="background: var(--info-color)">
+                            <span class="color-name">Info</span>
+                            <span class="color-value">Primary 500</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="color-section">
+                <h3>Usage Examples</h3>
+                <div class="usage-examples">
+                    <button class="btn-primary">Primary Button</button>
+                    <button class="btn-secondary">Secondary Button</button>
+                    <button class="btn-accent">Accent Button</button>
+                    <button class="btn-success">Success Button</button>
+                    <button class="btn-warning">Warning Button</button>
+                    <button class="btn-error">Error Button</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="theme-system.js"></script>
+    <script src="toast-system.js"></script>
+    
+    <script>
+        // Copy color value to clipboard
+        document.querySelectorAll('.color-swatch').forEach(swatch => {
+            swatch.addEventListener('click', () => {
+                const colorValue = swatch.querySelector('.color-value').textContent;
+                navigator.clipboard.writeText(colorValue).then(() => {
+                    if (window.toastSystem) {
+                        window.toastSystem.success(`Copied ${colorValue} to clipboard!`);
+                    }
+                });
+            });
+        });
+    </script>
+
+    <style>
+        .demo-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 2rem;
+        }
+
+        .color-section {
+            margin-bottom: 3rem;
+        }
+
+        .color-section h3 {
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+
+        .color-palette {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1rem;
+        }
+
+        .color-swatch {
+            height: 100px;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 1rem;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .color-swatch:hover {
+            transform: translateY(-2px);
+        }
+
+        .color-swatch.primary::before,
+        .color-swatch.secondary::before,
+        .color-swatch.accent::before {
+            content: '★';
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1rem;
+        }
+
+        .color-name {
+            font-weight: 600;
+            font-size: 0.875rem;
+            color: white;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .color-value {
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.9);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+            font-family: monospace;
+        }
+
+        .accent-colors {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+        }
+
+        .accent-group h4 {
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+
+        .accent-group .color-palette {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .accent-group .color-swatch {
+            height: 60px;
+        }
+
+        .semantic-colors {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+        }
+
+        .semantic-item .color-swatch {
+            height: 80px;
+        }
+
+        .usage-examples {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .usage-examples button {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-hover);
+        }
+
+        .btn-secondary {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        .btn-accent {
+            background: var(--accent-color);
+            color: white;
+        }
+
+        .btn-accent:hover {
+            background: var(--accent-hover);
+        }
+
+        .btn-success {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: var(--success-hover);
+        }
+
+        .btn-warning {
+            background: var(--warning-color);
+            color: white;
+        }
+
+        .btn-warning:hover {
+            background: var(--warning-hover);
+        }
+
+        .btn-error {
+            background: var(--error-color);
+            color: white;
+        }
+
+        .btn-error:hover {
+            background: var(--error-hover);
+        }
+
+        @media (max-width: 768px) {
+            .color-palette {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .accent-colors {
+                grid-template-columns: 1fr;
+            }
+            
+            .usage-examples {
+                flex-direction: column;
+            }
+        }
+    </style>
+</body>
+</html>
