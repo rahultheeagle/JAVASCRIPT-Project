@@ -1195,3 +1195,283 @@ img {
     color: black !important;
   }
 }
+
+/* =============================================================================
+   TOUCH INTERACTIONS
+   ============================================================================= */
+
+/* Touch-Friendly Base Styles */
+.touch-target {
+  min-height: 44px;
+  min-width: 44px;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Enhanced Touch Areas */
+.touch-large {
+  min-height: 56px;
+  min-width: 56px;
+}
+
+.touch-small {
+  min-height: 32px;
+  min-width: 32px;
+}
+
+/* Touch Feedback */
+.touch-feedback {
+  position: relative;
+  overflow: hidden;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.touch-feedback::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.3s ease, height 0.3s ease;
+  pointer-events: none;
+}
+
+.touch-feedback:active::after {
+  width: 200px;
+  height: 200px;
+}
+
+/* Swipe Gestures */
+.swipeable {
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.swipe-horizontal {
+  touch-action: pan-y;
+}
+
+.swipe-vertical {
+  touch-action: pan-x;
+}
+
+/* Pull to Refresh */
+.pull-to-refresh {
+  position: relative;
+  overflow: hidden;
+}
+
+.pull-indicator {
+  position: absolute;
+  top: -60px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--primary-600);
+  color: white;
+  border-radius: 50%;
+  transition: top 0.3s ease;
+}
+
+.pull-indicator.active {
+  top: 20px;
+}
+
+/* Touch Scrolling */
+.touch-scroll {
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+}
+
+/* Long Press */
+.long-press {
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+/* Touch Slider */
+.touch-slider {
+  position: relative;
+  overflow: hidden;
+  touch-action: pan-y;
+}
+
+.slider-track {
+  display: flex;
+  transition: transform 0.3s ease;
+}
+
+.slider-item {
+  flex: 0 0 100%;
+  touch-action: manipulation;
+}
+
+/* Touch Navigation */
+.touch-nav {
+  display: flex;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.touch-nav::-webkit-scrollbar {
+  display: none;
+}
+
+.touch-nav-item {
+  flex: 0 0 auto;
+  scroll-snap-align: start;
+  padding: 0.75rem 1rem;
+  white-space: nowrap;
+}
+
+/* Drag and Drop */
+.draggable {
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: grab;
+}
+
+.draggable:active {
+  cursor: grabbing;
+}
+
+.dragging {
+  opacity: 0.8;
+  transform: scale(1.05);
+  z-index: 1000;
+  pointer-events: none;
+}
+
+.drop-zone {
+  transition: background-color 0.2s ease;
+}
+
+.drop-zone.drag-over {
+  background-color: var(--primary-100);
+  border: 2px dashed var(--primary-500);
+}
+
+/* Touch-Optimized Components */
+.btn {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.form-input {
+  touch-action: manipulation;
+}
+
+.card.touch-card {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Pinch to Zoom */
+.pinch-zoom {
+  touch-action: pinch-zoom;
+  overflow: hidden;
+}
+
+.zoomable {
+  transition: transform 0.3s ease;
+  transform-origin: center;
+}
+
+/* Touch Indicators */
+.touch-indicator {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: rgba(59, 130, 246, 0.5);
+  border-radius: 50%;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  animation: touch-ripple 0.6s ease-out;
+}
+
+@keyframes touch-ripple {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(4);
+    opacity: 0;
+  }
+}
+
+/* Haptic Feedback Simulation */
+.haptic-light {
+  animation: haptic-pulse 0.1s ease;
+}
+
+.haptic-medium {
+  animation: haptic-pulse 0.15s ease;
+}
+
+.haptic-heavy {
+  animation: haptic-pulse 0.2s ease;
+}
+
+@keyframes haptic-pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(0.98); }
+  100% { transform: scale(1); }
+}
+
+/* Touch-Specific Media Queries */
+@media (hover: none) and (pointer: coarse) {
+  /* Touch device specific styles */
+  .btn {
+    padding: 0.75rem 1.5rem;
+  }
+  
+  .form-input {
+    padding: 0.75rem;
+    font-size: 16px; /* Prevents zoom on iOS */
+  }
+  
+  .card {
+    margin-bottom: 0.5rem;
+  }
+  
+  /* Disable hover effects on touch */
+  .hover-lift:hover,
+  .hover-scale:hover,
+  .hover-rotate:hover,
+  .hover-glow:hover {
+    transform: none;
+    box-shadow: none;
+  }
+}
+
+/* iOS Safari Specific */
+@supports (-webkit-touch-callout: none) {
+  .ios-safe-area {
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+}
+
+/* Android Chrome Specific */
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+  .android-optimized {
+    -webkit-font-smoothing: antialiased;
+  }
+}
