@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confetti Animation Demo - CodeQuest</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="toast-system.css">
+    <link rel="stylesheet" href="progress-bars.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <h2>CodeQuest</h2>
+            </div>
+            <div class="nav-links">
+                <a href="index.html">Dashboard</a>
+                <button id="theme-toggle" class="theme-toggle">🌙</button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="page-header">
+            <h1>Confetti Animation Demo</h1>
+            <p>Celebrate achievements with colorful confetti animations</p>
+        </div>
+
+        <div class="demo-container">
+            <div class="demo-section">
+                <h3>Basic Confetti</h3>
+                <p>Click anywhere on the screen to create confetti at that location!</p>
+                <div class="demo-controls">
+                    <button class="btn-primary" onclick="triggerDefault()">Default Celebration</button>
+                    <button class="btn-success" onclick="triggerChallenge()">Challenge Complete</button>
+                    <button class="btn-achievement" onclick="triggerAchievement()">Achievement Unlocked</button>
+                    <button class="btn-levelup" onclick="triggerLevelUp()">Level Up!</button>
+                </div>
+            </div>
+
+            <div class="demo-section">
+                <h3>Progress Bar Integration</h3>
+                <p>Complete these progress bars to see automatic confetti celebrations!</p>
+                <div id="challenge-progress-demo"></div>
+                <div id="lesson-progress-demo"></div>
+                <div class="demo-controls">
+                    <button class="btn-primary" onclick="completeChallenge()">Complete Challenge</button>
+                    <button class="btn-primary" onclick="completeLesson()">Complete Lesson</button>
+                    <button class="btn-secondary" onclick="resetProgress()">Reset Progress</button>
+                </div>
+            </div>
+
+            <div class="demo-section">
+                <h3>Achievement Simulation</h3>
+                <p>Simulate different types of achievements with confetti and notifications!</p>
+                <div class="achievement-grid">
+                    <div class="achievement-card" onclick="simulateAchievement('first-lesson')">
+                        <div class="achievement-icon">🎯</div>
+                        <h4>First Steps</h4>
+                        <p>Complete your first lesson</p>
+                    </div>
+                    <div class="achievement-card" onclick="simulateAchievement('speed-demon')">
+                        <div class="achievement-icon">⚡</div>
+                        <h4>Speed Demon</h4>
+                        <p>Complete challenge in under 5 minutes</p>
+                    </div>
+                    <div class="achievement-card" onclick="simulateAchievement('perfectionist')">
+                        <div class="achievement-icon">💎</div>
+                        <h4>Perfectionist</h4>
+                        <p>Complete challenge without hints</p>
+                    </div>
+                    <div class="achievement-card" onclick="simulateAchievement('streak-master')">
+                        <div class="achievement-icon">🔥</div>
+                        <h4>Streak Master</h4>
+                        <p>Maintain a 10-day streak</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="demo-section">
+                <h3>Level Up Simulation</h3>
+                <div class="level-display">
+                    <div class="current-level">Level <span id="current-level">1</span></div>
+                    <div id="xp-progress-demo"></div>
+                </div>
+                <div class="demo-controls">
+                    <button class="btn-primary" onclick="addXP(50)">+50 XP</button>
+                    <button class="btn-primary" onclick="addXP(100)">+100 XP</button>
+                    <button class="btn-primary" onclick="addXP(200)">+200 XP</button>
+                    <button class="btn-secondary" onclick="resetLevel()">Reset Level</button>
+                </div>
+            </div>
+
+            <div class="demo-section">
+                <h3>Controls</h3>
+                <div class="demo-controls">
+                    <button class="btn-secondary" onclick="stopConfetti()">Stop All Confetti</button>
+                    <button class="btn-secondary" onclick="randomBurst()">Random Burst</button>
+                    <button class="btn-secondary" onclick="multiplebursts()">Multiple Bursts</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="storage-manager.js"></script>
+    <script src="theme-system.js"></script>
+    <script src="toast-system.js"></script>
+    <script src="progress-bars.js"></script>
+    <script src="confetti-system.js"></script>
+    
+    <script>
+        let challengeProgressId, lessonProgressId, xpProgressId;
+        let currentLevel = 1;
+        let currentXP = 0;
+        let xpToNextLevel = 500;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Create progress bars
+            challengeProgressId = window.progressBars.createChallengeProgress('#challenge-progress-demo', 'Challenge Progress');
+            lessonProgressId = window.progressBars.createLessonProgress('#lesson-progress-demo', 'Lesson Progress');
+            xpProgressId = window.progressBars.createXPProgress('#xp-progress-demo', currentXP, xpToNextLevel, 'XP Progress');
+
+            // Click anywhere for confetti
+            document.addEventListener('click', (e) => {
+                if (e.target.tagName === 'BUTTON' || e.target.closest('.demo-controls')) return;
+                window.confettiSystem.burst(e.clientX, e.clientY, 30);
+            });
+        });
+
+        function triggerDefault() {
+            window.confettiSystem.celebrate('default');
+        }
+
+        function triggerChallenge() {
+            window.confettiSystem.celebrate('challenge');
+        }
+
+        function triggerAchievement() {
+            window.confettiSystem.celebrate('achievement');
+        }
+
+        function triggerLevelUp() {
+            window.confettiSystem.celebrate('levelup');
+        }
+
+        function completeChallenge() {
+            window.progressBars.simulate(challengeProgressId, 2000);
+        }
+
+        function completeLesson() {
+            window.progressBars.simulate(lessonProgressId, 2500);
+        }
+
+        function resetProgress() {
+            window.progressBars.reset(challengeProgressId);
+            window.progressBars.reset(lessonProgressId);
+        }
+
+        function simulateAchievement(type) {
+            const achievements = {
+                'first-lesson': {
+                    title: 'First Steps',
+                    description: 'You completed your first lesson!',
+                    icon: '🎯',
+                    xp: 100
+                },
+                'speed-demon': {
+                    title: 'Speed Demon',
+                    description: 'Completed challenge in under 5 minutes!',
+                    icon: '⚡',
+                    xp: 250
+                },
+                'perfectionist': {
+                    title: 'Perfectionist',
+                    description: 'Completed challenge without hints!',
+                    icon: '💎',
+                    xp: 300
+                },
+                'streak-master': {
+                    title: 'Streak Master',
+                    description: 'Maintained a 10-day learning streak!',
+                    icon: '🔥',
+                    xp: 500
+                }
+            };
+
+            const achievement = achievements[type];
+            if (achievement) {
+                window.confettiSystem.onAchievementUnlocked(achievement);
+            }
+        }
+
+        function addXP(amount) {
+            currentXP += amount;
+            
+            if (currentXP >= xpToNextLevel) {
+                // Level up!
+                currentLevel++;
+                currentXP = currentXP - xpToNextLevel;
+                xpToNextLevel = Math.floor(xpToNextLevel * 1.5);
+                
+                document.getElementById('current-level').textContent = currentLevel;
+                window.progressBars.setMax(xpProgressId, xpToNextLevel);
+                window.progressBars.update(xpProgressId, currentXP);
+                
+                window.confettiSystem.onLevelUp(currentLevel);
+            } else {
+                window.progressBars.update(xpProgressId, currentXP);
+            }
+        }
+
+        function resetLevel() {
+            currentLevel = 1;
+            currentXP = 0;
+            xpToNextLevel = 500;
+            
+            document.getElementById('current-level').textContent = currentLevel;
+            window.progressBars.setMax(xpProgressId, xpToNextLevel);
+            window.progressBars.update(xpProgressId, currentXP);
+        }
+
+        function stopConfetti() {
+            window.confettiSystem.stop();
+        }
+
+        function randomBurst() {
+            const x = Math.random() * window.innerWidth;
+            const y = Math.random() * window.innerHeight * 0.5;
+            window.confettiSystem.burst(x, y, 40);
+        }
+
+        function multiplebursts() {
+            for (let i = 0; i < 5; i++) {
+                setTimeout(() => {
+                    const x = Math.random() * window.innerWidth;
+                    const y = Math.random() * window.innerHeight * 0.6;
+                    window.confettiSystem.burst(x, y, 25);
+                }, i * 200);
+            }
+        }
+    </script>
+
+    <style>
+        .demo-container {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 2rem;
+        }
+
+        .demo-section {
+            background: var(--card-bg);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+        }
+
+        .demo-section h3 {
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+
+        .demo-section p {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+        }
+
+        .demo-controls {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+        }
+
+        .demo-controls button {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-success {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .btn-achievement {
+            background: #8b5cf6;
+            color: white;
+        }
+
+        .btn-levelup {
+            background: #f59e0b;
+            color: white;
+        }
+
+        .btn-secondary {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .achievement-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .achievement-card {
+            background: var(--bg-secondary);
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .achievement-card:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        .achievement-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .achievement-card h4 {
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .achievement-card p {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            margin: 0;
+        }
+
+        .level-display {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .current-level {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        @media (max-width: 768px) {
+            .achievement-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .demo-controls {
+                flex-direction: column;
+            }
+        }
+    </style>
+</body>
+</html>
