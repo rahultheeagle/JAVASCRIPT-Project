@@ -1475,3 +1475,305 @@ img {
     -webkit-font-smoothing: antialiased;
   }
 }
+
+/* =============================================================================
+   COLLAPSIBLE PANELS
+   ============================================================================= */
+
+/* Accordion Base */
+.accordion {
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.accordion-item {
+  border-bottom: 1px solid var(--border-color);
+}
+
+.accordion-item:last-child {
+  border-bottom: none;
+}
+
+.accordion-header {
+  background: var(--bg-secondary);
+  padding: 1rem;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: background-color var(--transition-base);
+  user-select: none;
+  touch-action: manipulation;
+  min-height: 44px;
+}
+
+.accordion-header:hover {
+  background: var(--bg-tertiary);
+}
+
+.accordion-header.active {
+  background: var(--primary-50);
+  color: var(--primary-700);
+}
+
+.accordion-title {
+  margin: 0;
+  font-size: var(--text-base);
+  font-weight: var(--font-medium);
+}
+
+.accordion-icon {
+  transition: transform var(--transition-base);
+  font-size: 1.2rem;
+}
+
+.accordion-header.active .accordion-icon {
+  transform: rotate(180deg);
+}
+
+.accordion-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height var(--transition-smooth), padding var(--transition-base);
+  background: var(--card-bg);
+}
+
+.accordion-content.open {
+  max-height: 1000px;
+  padding: 1rem;
+}
+
+/* Collapsible Card */
+.collapsible-card {
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+
+.collapsible-header {
+  background: var(--card-bg);
+  padding: 1rem;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all var(--transition-base);
+  touch-action: manipulation;
+  min-height: 44px;
+}
+
+.collapsible-header:hover {
+  background: var(--bg-secondary);
+}
+
+.collapsible-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height var(--transition-smooth);
+  background: var(--card-bg);
+}
+
+.collapsible-body.expanded {
+  max-height: 2000px;
+}
+
+.collapsible-content {
+  padding: 0 1rem 1rem 1rem;
+}
+
+/* Mobile Drawer */
+.mobile-drawer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--card-bg);
+  border-top: 1px solid var(--border-color);
+  border-radius: 1rem 1rem 0 0;
+  transform: translateY(calc(100% - 60px));
+  transition: transform var(--transition-smooth);
+  z-index: 1000;
+  max-height: 80vh;
+}
+
+.mobile-drawer.open {
+  transform: translateY(0);
+}
+
+.drawer-handle {
+  width: 40px;
+  height: 4px;
+  background: var(--border-color);
+  border-radius: 2px;
+  margin: 0.5rem auto;
+}
+
+.drawer-header {
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  touch-action: manipulation;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.drawer-content {
+  padding: 0 1rem 1rem 1rem;
+  max-height: calc(80vh - 60px);
+  overflow-y: auto;
+}
+
+/* Expandable Section */
+.expandable {
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.expandable-trigger {
+  width: 100%;
+  background: var(--bg-secondary);
+  border: none;
+  padding: 1rem;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all var(--transition-base);
+  touch-action: manipulation;
+  min-height: 44px;
+}
+
+.expandable-trigger:hover {
+  background: var(--bg-tertiary);
+}
+
+.expandable-content {
+  padding: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height var(--transition-smooth), padding var(--transition-base);
+}
+
+.expandable.expanded .expandable-content {
+  padding: 1rem;
+  max-height: 1500px;
+}
+
+.expandable.expanded .expandable-trigger {
+  background: var(--primary-50);
+}
+
+/* Sidebar Toggle */
+.sidebar-toggle {
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  z-index: 1001;
+  background: var(--primary-600);
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+  cursor: pointer;
+  touch-action: manipulation;
+  min-height: 44px;
+  min-width: 44px;
+}
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: -300px;
+  width: 280px;
+  height: 100vh;
+  background: var(--card-bg);
+  border-right: 1px solid var(--border-color);
+  transition: left var(--transition-smooth);
+  z-index: 1000;
+  overflow-y: auto;
+}
+
+.sidebar.open {
+  left: 0;
+}
+
+.sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  opacity: 0;
+  visibility: hidden;
+  transition: all var(--transition-base);
+}
+
+.sidebar-overlay.open {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Mobile Optimizations */
+@media (max-width: 767px) {
+  .accordion-header,
+  .collapsible-header,
+  .expandable-trigger {
+    padding: 0.75rem;
+  }
+  
+  .accordion-content.open,
+  .collapsible-content {
+    padding: 0.75rem;
+  }
+  
+  .mobile-drawer {
+    transform: translateY(calc(100% - 50px));
+  }
+  
+  .drawer-header {
+    padding: 0.75rem;
+  }
+}
+
+/* Animation Classes */
+.collapse-enter {
+  max-height: 0;
+  opacity: 0;
+}
+
+.collapse-enter-active {
+  max-height: 1000px;
+  opacity: 1;
+  transition: max-height var(--transition-smooth), opacity var(--transition-base);
+}
+
+.collapse-exit {
+  max-height: 1000px;
+  opacity: 1;
+}
+
+.collapse-exit-active {
+  max-height: 0;
+  opacity: 0;
+  transition: max-height var(--transition-smooth), opacity var(--transition-base);
+}
+
+/* Utility Classes */
+.collapsible {
+  overflow: hidden;
+  transition: max-height var(--transition-smooth);
+}
+
+.collapsed {
+  max-height: 0 !important;
+}
+
+.expanded {
+  max-height: none !important;
+}
