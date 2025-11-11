@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Component Styles Demo - CodeQuest</title>
+    <link rel="stylesheet" href="design-system.css">
+    <link rel="stylesheet" href="css/components.css">
+    <style>
+        .demo-section {
+            margin: 2rem 0;
+            padding: 1.5rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+        }
+        
+        .component-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 1rem 0;
+        }
+        
+        .component-demo {
+            background: #f9fafb;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+        }
+        
+        .demo-controls {
+            display: flex;
+            gap: 0.5rem;
+            margin: 1rem 0;
+            flex-wrap: wrap;
+        }
+        
+        .code-example {
+            background: #1f2937;
+            color: #f9fafb;
+            padding: 1rem;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 0.875rem;
+            margin: 1rem 0;
+            overflow-x: auto;
+        }
+        
+        .avatar-group {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+        
+        .progress-demo {
+            margin: 1rem 0;
+        }
+        
+        .tooltip-demo {
+            display: inline-block;
+            margin: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <header role="banner">
+        <nav aria-label="Main navigation">
+            <div class="nav-brand">
+                <h1>CodeQuest</h1>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html">Dashboard</a></li>
+                <li><a href="#" class="active">Component Styles</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <main role="main">
+            <section class="hero">
+                <h1>Component Styles Demo</h1>
+                <p>Modular, reusable CSS components</p>
+            </section>
+
+            <section class="demo-section">
+                <h2>Buttons</h2>
+                <div class="component-demo">
+                    <div class="demo-controls">
+                        <button class="btn btn--primary">Primary</button>
+                        <button class="btn btn--secondary">Secondary</button>
+                        <button class="btn btn--outline">Outline</button>
+                        <button class="btn btn--primary" disabled>Disabled</button>
+                    </div>
+                    
+                    <div class="demo-controls">
+                        <button class="btn btn--primary btn--sm">Small</button>
+                        <button class="btn btn--primary">Default</button>
+                        <button class="btn btn--primary btn--lg">Large</button>
+                    </div>
+                    
+                    <button class="btn btn--primary btn--full">Full Width</button>
+                </div>
+                
+                <div class="code-example">
+&lt;button class="btn btn--primary"&gt;Primary&lt;/button&gt;
+&lt;button class="btn btn--outline btn--sm"&gt;Small Outline&lt;/button&gt;
+&lt;button class="btn btn--primary btn--full"&gt;Full Width&lt;/button&gt;
+                </div>
+            </section>
+
+            <section class="demo-section">
+                <h2>Cards</h2>
+                <div class="component-grid">
+                    <div class="card">
+                        <div class="card__header">
+                            <h3 class="card__title">Basic Card</h3>
+                        </div>
+                        <div class="card__body">
+                            <p>This is a basic card with header, body, and footer sections.</p>
+                        </div>
+                        <div class="card__footer">
+                            <button class="btn btn--primary btn--sm">Action</button>
+                        </div>
+                    </div>
+                    
+                    <div class="card card--elevated">
+                        <div class="card__body">
+                            <h4>Elevated Card</h4>
+                            <p>This card has enhanced shadow for elevation effect.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="card card--flat">
+                        <div class="card__body">
+                            <h4>Flat Card</h4>
+                            <p>This card has no shadow, just a border.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="code-example">
+&lt;div class="card"&gt;
+  &lt;div class="card__header"&gt;
+    &lt;h3 class="card__title"&gt;Card Title&lt;/h3&gt;
+  &lt;/div&gt;
+  &lt;div class="card__body"&gt;Card content&lt;/div&gt;
+  &lt;div class="card__footer"&gt;Footer content&lt;/div&gt;
+&lt;/div&gt;
+                </div>
+            </section>
+
+            <section class="demo-section">
+                <h2>Form Inputs</h2>
+                <div class="component-demo">
+                    <div style="max-width: 400px;">
+                        <input type="text" class="input" placeholder="Default input" style="margin-bottom: 1rem;">
+                        <input type="text" class="input input--error" placeholder="Error state" style="margin-bottom: 1rem;">
+                        <input type="text" class="input" placeholder="Disabled" disabled style="margin-bottom: 1rem;">
+                        
+                        <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
+                            <input type="text" class="input input--sm" placeholder="Small">
+                            <input type="text" class="input input--lg" placeholder="Large">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="code-example">
+&lt;input type="text" class="input" placeholder="Default"&gt;
+&lt;input type="text" class="input input--error" placeholder="Error"&gt;
+&lt;input type="text" class="input input--sm" placeholder="Small"&gt;
+                </div>
+            </section>
+
+            <section class="demo-section">
+                <h2>Badges</h2>
+                <div class="component-demo">
+                    <div class="demo-controls">
+                        <span class="badge badge--primary">Primary</span>
+                        <span class="badge badge--success">Success</span>
+                        <span class="badge badge--warning">Warning</span>
+                        <span class="badge badge--error">Error</span>
+                    </div>
+                    
+                    <div class="demo-controls">
+                        <span class="badge badge--primary badge--sm">Small</span>
+                        <span class="badge badge--success">Default</span>
+                    </div>
+                </div>
+                
+                <div class="code-example">
+&lt;span class="badge badge--primary"&gt;Primary&lt;/span&gt;
+&lt;span class="badge badge--success badge--sm"&gt;Small Success&lt;/span&gt;
+                </div>
+            </section>
+
+            <section class="demo-section">
+                <h2>Alerts</h2>
+                <div class="component-demo">
+                    <div class="alert alert--info">
+                        <div class="alert__title">Information</div>
+                        <div class="alert__message">This is an informational alert message.</div>
+                    </div>
+                    
+                    <div class="alert alert--success">
+                        <div class="alert__message">Operation completed successfully!</div>
+                    </div>
+                    
+                    <div class="alert alert--warning">
+                        <div class="alert__message">Please review your input before proceeding.</div>
+                    </div>
+                    
+                    <div class="alert alert--error">
+                        <div class="alert__message">An error occurred while processing your request.</div>
+                    </div>
+                </div>
+                
+                <div class="code-example">
+&lt;div class="alert alert--success"&gt;
+  &lt;div class="alert__title"&gt;Success&lt;/div&gt;
+  &lt;div class="alert__message"&gt;Operation completed!&lt;/div&gt;
+&lt;/div&gt;
+                </div>
+            </section>
+
+            <section class="demo-section">
+                <h2>Progress Bars</h2>
+                <div class="component-demo">
+                    <div class="progress-demo">
+                        <p>Default Progress (75%)</p>
+                        <div class="progress">
+                            <div class="progress__bar" style="width: 75%;"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="progress-demo">
+                        <p>Success Progress (90%)</p>
+                        <div class="progress progress--success">
+                            <div class="progress__bar" style="width: 90%;"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="progress-demo">
+                        <p>Warning Progress (45%)</p>
+                        <div class="progress progress--warning">
+                            <div class="progress__bar" style="width: 45%;"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="progress-demo">
+                        <p>Large Progress (60%)</p>
+                        <div class="progress progress--lg">
+                            <div class="progress__bar" style="width: 60%;"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="code-example">
+&lt;div class="progress progress--success"&gt;
+  &lt;div class="progress__bar" style="width: 75%;"&gt;&lt;/div&gt;
+&lt;/div&gt;
+                </div>
+            </section>
+
+            <section class="demo-section">
+                <h2>Spinners</h2>
+                <div class="component-demo">
+                    <div class="demo-controls">
+                        <div class="spinner spinner--sm"></div>
+                        <div class="spinner"></div>
+                        <div class="spinner spinner--lg"></div>
+                    </div>
+                </div>
+                
+                <div class="code-example">
+&lt;div class="spinner"&gt;&lt;/div&gt;
+&lt;div class="spinner spinner--lg"&gt;&lt;/div&gt;
+                </div>
+            </section>
+
+            <section class="demo-section">
+                <h2>Avatars</h2>
+                <div class="component-demo">
+                    <div class="avatar-group">
+                        <div class="avatar avatar--sm">
+                            <div class="avatar__text">JS</div>
+                        </div>
+                        <div class="avatar">
+                            <div class="avatar__text">AB</div>
+                        </div>
+                        <div class="avatar avatar--lg">
+                            <div class="avatar__text">CD</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="code-example">
+&lt;div class="avatar"&gt;
+  &lt;div class="avatar__text"&gt;AB&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="avatar"&gt;
+  &lt;img src="avatar.jpg" class="avatar__img" alt="User"&gt;
+&lt;/div&gt;
+                </div>
+            </section>
+
+            <section class="demo-section">
+                <h2>Interactive Components</h2>
+                
+                <h3>Modal</h3>
+                <div class="component-demo">
+                    <button class="btn btn--primary" onclick="openModal()">Open Modal</button>
+                </div>
+                
+                <h3>Dropdown</h3>
+                <div class="component-demo">
+                    <div class="dropdown" data-component="dropdown">
+                        <button class="btn btn--outline" data-dropdown-trigger>
+                            Dropdown Menu ▼
+                        </button>
+                        <div class="dropdown__menu">
+                            <a href="#" class="dropdown__item">Action 1</a>
+                            <a href="#" class="dropdown__item">Action 2</a>
+                            <a href="#" class="dropdown__item">Action 3</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <h3>Tabs</h3>
+                <div class="component-demo">
+                    <div class="tabs" data-component="tabs">
+                        <ul class="tabs__nav">
+                            <li class="tabs__item">
+                                <a href="#" class="tabs__link" data-tab="0">Tab 1</a>
+                            </li>
+                            <li class="tabs__item">
+                                <a href="#" class="tabs__link" data-tab="1">Tab 2</a>
+                            </li>
+                            <li class="tabs__item">
+                                <a href="#" class="tabs__link" data-tab="2">Tab 3</a>
+                            </li>
+                        </ul>
+                        <div class="tabs__content">
+                            <div class="tabs__panel">Content for Tab 1</div>
+                            <div class="tabs__panel">Content for Tab 2</div>
+                            <div class="tabs__panel">Content for Tab 3</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <h3>Tooltips</h3>
+                <div class="component-demo">
+                    <div class="tooltip tooltip-demo" data-component="tooltip" data-tooltip="This is a tooltip">
+                        <button class="btn btn--outline">Hover for tooltip</button>
+                        <div class="tooltip__content">This is a tooltip</div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal" id="demo-modal" data-component="modal">
+        <div class="modal__content">
+            <div class="modal__header">
+                <h3 class="modal__title">Demo Modal</h3>
+            </div>
+            <div class="modal__body">
+                <p>This is a modal dialog example. It can contain any content.</p>
+            </div>
+            <div class="modal__footer">
+                <button class="btn btn--secondary" data-modal-close>Cancel</button>
+                <button class="btn btn--primary" data-modal-close>Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/component-manager.js"></script>
+    <script>
+        // Open modal function
+        function openModal() {
+            const modal = componentManager.getInstance(document.getElementById('demo-modal'));
+            if (modal) {
+                modal.open();
+            }
+        }
+
+        // Demo: Create components programmatically
+        document.addEventListener('DOMContentLoaded', function() {
+            // Example of creating components with JavaScript
+            const dynamicSection = document.createElement('section');
+            dynamicSection.className = 'demo-section';
+            dynamicSection.innerHTML = '<h2>Programmatically Created Components</h2>';
+            
+            const demoDiv = document.createElement('div');
+            demoDiv.className = 'component-demo';
+            
+            // Create components using the manager
+            const button = componentManager.createButton('Dynamic Button', 'primary', 'sm');
+            const card = componentManager.createCard('Dynamic Card', 'This card was created with JavaScript');
+            const badge = componentManager.createBadge('New', 'success');
+            const alert = componentManager.createAlert('This alert was created dynamically!', 'info');
+            const progress = componentManager.createProgress(65, 'success');
+            
+            demoDiv.appendChild(button);
+            demoDiv.appendChild(document.createElement('br'));
+            demoDiv.appendChild(document.createElement('br'));
+            demoDiv.appendChild(badge);
+            demoDiv.appendChild(document.createElement('br'));
+            demoDiv.appendChild(document.createElement('br'));
+            demoDiv.appendChild(alert);
+            demoDiv.appendChild(progress);
+            demoDiv.appendChild(card);
+            
+            dynamicSection.appendChild(demoDiv);
+            document.querySelector('main').appendChild(dynamicSection);
+        });
+    </script>
+</body>
+</html>
