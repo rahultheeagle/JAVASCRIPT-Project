@@ -2587,3 +2587,321 @@ a:focus {
   outline-color: var(--error-color);
   box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.1);
 }
+
+/* =============================================================================
+   FOCUS INDICATORS
+   ============================================================================= */
+
+/* Enhanced Focus Styles */
+:focus {
+  outline: 2px solid var(--primary-500);
+  outline-offset: 2px;
+  transition: outline-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--primary-500);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
+}
+
+/* Button Focus States */
+.btn:focus {
+  outline: 2px solid var(--primary-500);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
+}
+
+.btn-primary:focus {
+  outline-color: var(--primary-700);
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
+}
+
+.btn-secondary:focus {
+  outline-color: var(--secondary-600);
+  box-shadow: 0 0 0 4px rgba(100, 116, 139, 0.15);
+}
+
+.btn-success:focus {
+  outline-color: var(--success-color);
+  box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.15);
+}
+
+.btn-warning:focus {
+  outline-color: var(--warning-color);
+  box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.15);
+}
+
+.btn-error:focus {
+  outline-color: var(--error-color);
+  box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.15);
+}
+
+.btn-outline:focus {
+  outline-color: var(--primary-600);
+  background: var(--primary-50);
+}
+
+.btn-ghost:focus {
+  outline-color: var(--primary-500);
+  background: var(--primary-50);
+}
+
+/* Form Focus States */
+.form-input:focus {
+  outline: 2px solid var(--primary-500);
+  outline-offset: 0;
+  border-color: var(--primary-500);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.form-input.error:focus {
+  outline-color: var(--error-color);
+  border-color: var(--error-color);
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+.form-input:focus + .form-label {
+  color: var(--primary-600);
+}
+
+select:focus {
+  outline: 2px solid var(--primary-500);
+  outline-offset: 0;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+textarea:focus {
+  outline: 2px solid var(--primary-500);
+  outline-offset: 0;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Checkbox and Radio Focus */
+input[type="checkbox"]:focus,
+input[type="radio"]:focus {
+  outline: 2px solid var(--primary-500);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
+}
+
+/* Link Focus States */
+a:focus {
+  outline: 2px solid var(--primary-500);
+  outline-offset: 2px;
+  border-radius: 0.125rem;
+  background: rgba(59, 130, 246, 0.1);
+  text-decoration: underline;
+}
+
+a:focus:not(:focus-visible) {
+  outline: none;
+  background: transparent;
+}
+
+/* Card Focus States */
+.card:focus {
+  outline: 2px solid var(--primary-500);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1), 0 8px 25px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+/* Navigation Focus */
+.nav-link:focus {
+  outline: 2px solid var(--primary-500);
+  outline-offset: 2px;
+  background: var(--primary-50);
+  border-radius: 0.25rem;
+}
+
+/* Tab Focus States */
+[role="tab"]:focus {
+  outline: 2px solid var(--primary-500);
+  outline-offset: -2px;
+  background: var(--primary-50);
+  z-index: 1;
+}
+
+[role="tab"][aria-selected="true"]:focus {
+  outline-color: var(--primary-700);
+  background: var(--primary-100);
+}
+
+/* Menu Focus States */
+[role="menuitem"]:focus {
+  outline: 2px solid var(--primary-500);
+  outline-offset: -2px;
+  background: var(--primary-50);
+  color: var(--primary-700);
+}
+
+/* Accordion Focus */
+.accordion-header:focus {
+  outline: 2px solid var(--primary-500);
+  outline-offset: -2px;
+  background: var(--primary-50);
+  z-index: 1;
+}
+
+.accordion-header[aria-expanded="true"]:focus {
+  background: var(--primary-100);
+}
+
+/* Table Focus States */
+th:focus,
+td:focus,
+[role="gridcell"]:focus,
+[role="columnheader"]:focus {
+  outline: 2px solid var(--primary-500);
+  outline-offset: -2px;
+  background: var(--primary-50);
+  position: relative;
+  z-index: 1;
+}
+
+/* Modal Focus */
+.modal:focus {
+  outline: none;
+}
+
+.modal-content:focus {
+  outline: 2px solid var(--primary-500);
+  outline-offset: -2px;
+}
+
+/* Skip Link Focus */
+.skip-link:focus {
+  position: static;
+  width: auto;
+  height: auto;
+  padding: 0.5rem 1rem;
+  margin: 0;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+  background: var(--primary-600);
+  color: white;
+  text-decoration: none;
+  border-radius: 0.25rem;
+  outline: 2px solid var(--primary-800);
+  outline-offset: 2px;
+}
+
+/* Focus Ring Variants */
+.focus-ring-primary:focus {
+  outline-color: var(--primary-500);
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
+}
+
+.focus-ring-success:focus {
+  outline-color: var(--success-color);
+  box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.15);
+}
+
+.focus-ring-warning:focus {
+  outline-color: var(--warning-color);
+  box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.15);
+}
+
+.focus-ring-error:focus {
+  outline-color: var(--error-color);
+  box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.15);
+}
+
+/* Focus Within States */
+.focus-within:focus-within {
+  outline: 2px solid var(--primary-500);
+  outline-offset: 2px;
+  border-radius: 0.25rem;
+}
+
+/* High Contrast Focus */
+@media (prefers-contrast: high) {
+  :focus,
+  :focus-visible {
+    outline: 3px solid;
+    outline-offset: 2px;
+    box-shadow: none;
+  }
+  
+  .btn:focus {
+    outline: 3px solid;
+    outline-offset: 2px;
+  }
+  
+  .form-input:focus {
+    outline: 3px solid;
+    outline-offset: 0;
+    box-shadow: none;
+  }
+}
+
+/* Reduced Motion Focus */
+@media (prefers-reduced-motion: reduce) {
+  :focus,
+  :focus-visible,
+  .btn:focus,
+  .form-input:focus,
+  .card:focus {
+    transition: none;
+    transform: none;
+  }
+}
+
+/* Dark Theme Focus Adjustments */
+[data-theme="dark"] :focus,
+[data-theme="dark"] :focus-visible {
+  outline-color: var(--primary-400);
+}
+
+[data-theme="dark"] .btn:focus {
+  outline-color: var(--primary-400);
+  box-shadow: 0 0 0 4px rgba(96, 165, 250, 0.2);
+}
+
+[data-theme="dark"] .form-input:focus {
+  outline-color: var(--primary-400);
+  border-color: var(--primary-400);
+  box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.15);
+}
+
+/* Focus Trap Indicator */
+.focus-trap-active {
+  position: relative;
+}
+
+.focus-trap-active::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  border: 2px dashed var(--primary-500);
+  border-radius: 0.5rem;
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+/* Keyboard Navigation Indicator */
+.keyboard-user *:focus {
+  outline: 2px solid var(--primary-500) !important;
+  outline-offset: 2px !important;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15) !important;
+}
+
+/* Focus Utilities */
+.focus-visible-only:focus:not(:focus-visible) {
+  outline: none;
+  box-shadow: none;
+}
+
+.no-focus-ring:focus {
+  outline: none;
+  box-shadow: none;
+}
