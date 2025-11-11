@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DOM Manipulation Demo - CodeQuest</title>
+    <link rel="stylesheet" href="design-system.css">
+    <style>
+        .demo-section { margin: 2rem 0; padding: 1.5rem; border: 1px solid var(--border-color); border-radius: 8px; }
+        .demo-controls { margin-bottom: 1rem; display: flex; gap: 0.5rem; flex-wrap: wrap; }
+        .demo-output { min-height: 200px; border: 1px solid #ddd; padding: 1rem; border-radius: 4px; background: #f9f9f9; }
+        .cards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; }
+        .data-table { width: 100%; border-collapse: collapse; }
+        .data-table th, .data-table td { padding: 0.5rem; border: 1px solid #ddd; text-align: left; }
+        .data-table th { background: var(--primary-color); color: white; }
+        .dynamic-form .field-wrapper { margin-bottom: 1rem; }
+        .dynamic-form label { display: block; margin-bottom: 0.25rem; font-weight: bold; }
+        .dynamic-form input, .dynamic-form select, .dynamic-form textarea { width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px; }
+        .status-badge { padding: 0.25rem 0.5rem; border-radius: 12px; font-size: 0.75rem; }
+        .status-active { background: #d4edda; color: #155724; }
+        .status-inactive { background: #f8d7da; color: #721c24; }
+        .priority-high { color: #dc3545; font-weight: bold; }
+        .priority-medium { color: #ffc107; }
+        .priority-low { color: #28a745; }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <h1>DOM Manipulation Demo</h1>
+            <nav>
+                <a href="index.html">← Back to Dashboard</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- Dynamic Lists -->
+        <section class="demo-section">
+            <h2>Dynamic Lists</h2>
+            <div class="demo-controls">
+                <button onclick="renderTasks()">Render Tasks</button>
+                <button onclick="filterTasks('high')">High Priority</button>
+                <button onclick="filterTasks('completed')">Completed</button>
+                <button onclick="sortTasks()">Sort by Date</button>
+                <button onclick="addTask()">Add Task</button>
+                <button onclick="clearTasks()">Clear</button>
+            </div>
+            <div id="tasks-output" class="demo-output"></div>
+        </section>
+
+        <!-- Dynamic Tables -->
+        <section class="demo-section">
+            <h2>Dynamic Tables</h2>
+            <div class="demo-controls">
+                <button onclick="renderUsersTable()">Render Users</button>
+                <button onclick="renderProductsTable()">Render Products</button>
+                <button onclick="addTableRow()">Add Row</button>
+            </div>
+            <div id="table-output" class="demo-output"></div>
+        </section>
+
+        <!-- Dynamic Forms -->
+        <section class="demo-section">
+            <h2>Dynamic Forms</h2>
+            <div class="demo-controls">
+                <button onclick="renderLoginForm()">Login Form</button>
+                <button onclick="renderRegistrationForm()">Registration Form</button>
+                <button onclick="renderSurveyForm()">Survey Form</button>
+            </div>
+            <div id="form-output" class="demo-output"></div>
+        </section>
+
+        <!-- Card Grids -->
+        <section class="demo-section">
+            <h2>Card Grids</h2>
+            <div class="demo-controls">
+                <button onclick="renderProductCards()">Product Cards</button>
+                <button onclick="renderUserCards()">User Cards</button>
+                <button onclick="renderChallengeCards()">Challenge Cards</button>
+            </div>
+            <div id="cards-output" class="demo-output"></div>
+        </section>
+
+        <!-- Template Rendering -->
+        <section class="demo-section">
+            <h2>Template Rendering</h2>
+            <div class="demo-controls">
+                <button onclick="renderWithTemplate()">Render Template</button>
+                <button onclick="renderWithFunction()">Function Template</button>
+                <button onclick="updateContent()">Update Content</button>
+            </div>
+            <div id="template-output" class="demo-output"></div>
+        </section>
+
+        <!-- Batch Operations -->
+        <section class="demo-section">
+            <h2>Batch Operations</h2>
+            <div class="demo-controls">
+                <button onclick="batchOperations()">Execute Batch</button>
+                <button onclick="animatedRender()">Animated Render</button>
+            </div>
+            <div id="batch-output" class="demo-output"></div>
+        </section>
+    </main>
+
+    <script src="js/dom-manipulator.js"></script>
+    <script>
+        // Sample data
+        const tasks = [
+            { id: 1, title: 'Complete project', priority: 'high', status: 'active', date: '2024-01-15' },
+            { id: 2, title: 'Review code', priority: 'medium', status: 'completed', date: '2024-01-14' },
+            { id: 3, title: 'Write tests', priority: 'high', status: 'active', date: '2024-01-16' },
+            { id: 4, title: 'Update docs', priority: 'low', status: 'active', date: '2024-01-13' }
+        ];
+
+        const users = [
+            { id: 1, name: 'John Doe', email: 'john@example.com', role: 'Admin', status: 'Active' },
+            { id: 2, name: 'Jane Smith', email: 'jane@example.com', role: 'User', status: 'Active' },
+            { id: 3, name: 'Bob Johnson', email: 'bob@example.com', role: 'User', status: 'Inactive' }
+        ];
+
+        const products = [
+            { id: 1, name: 'Laptop', price: 999, category: 'Electronics', stock: 15 },
+            { id: 2, name: 'Phone', price: 599, category: 'Electronics', stock: 25 },
+            { id: 3, name: 'Book', price: 29, category: 'Education', stock: 100 }
+        ];
+
+        // Task rendering functions
+        function renderTasks() {
+            const template = (task) => `
+                <div class="card" data-id="${task.id}">
+                    <h4>${task.title}</h4>
+                    <div class="status-badge status-${task.status}">${task.status}</div>
+                    <div class="priority-${task.priority}">Priority: ${task.priority}</div>
+                    <small>Due: ${task.date}</small>
+                </div>
+            `;
+            dom.render('#tasks-output', tasks, template);
+        }
+
+        function filterTasks(filter) {
+            let filtered;
+            if (filter === 'high') {
+                filtered = tasks.filter(t => t.priority === 'high');
+            } else if (filter === 'completed') {
+                filtered = tasks.filter(t => t.status === 'completed');
+            }
+            
+            const template = (task) => `
+                <div class="card" data-id="${task.id}">
+                    <h4>${task.title}</h4>
+                    <div class="status-badge status-${task.status}">${task.status}</div>
+                    <div class="priority-${task.priority}">Priority: ${task.priority}</div>
+                </div>
+            `;
+            dom.render('#tasks-output', filtered, template);
+        }
+
+        function sortTasks() {
+            const sorted = [...tasks].sort((a, b) => new Date(a.date) - new Date(b.date));
+            const template = (task) => `
+                <div class="card" data-id="${task.id}">
+                    <h4>${task.title}</h4>
+                    <div class="priority-${task.priority}">Priority: ${task.priority}</div>
+                    <small>Due: ${task.date}</small>
+                </div>
+            `;
+            dom.render('#tasks-output', sorted, template);
+        }
+
+        function addTask() {
+            const newTask = {
+                id: Date.now(),
+                title: 'New Task',
+                priority: 'medium',
+                status: 'active',
+                date: new Date().toISOString().split('T')[0]
+            };
+            
+            const template = (task) => `
+                <div class="card" data-id="${task.id}">
+                    <h4>${task.title}</h4>
+                    <div class="status-badge status-${task.status}">${task.status}</div>
+                </div>
+            `;
+            
+            dom.append('#tasks-output', newTask, template);
+        }
+
+        function clearTasks() {
+            dom.clear('#tasks-output');
+        }
+
+        // Table rendering functions
+        function renderUsersTable() {
+            const columns = [
+                { key: 'name', label: 'Name' },
+                { key: 'email', label: 'Email' },
+                { key: 'role', label: 'Role' },
+                { 
+                    key: 'status', 
+                    label: 'Status',
+                    render: (value) => `<span class="status-badge status-${value.toLowerCase()}">${value}</span>`
+                }
+            ];
+            dom.renderTable('#table-output', users, columns);
+        }
+
+        function renderProductsTable() {
+            const columns = [
+                { key: 'name', label: 'Product' },
+                { key: 'category', label: 'Category' },
+                { 
+                    key: 'price', 
+                    label: 'Price',
+                    render: (value) => `$${value}`
+                },
+                { key: 'stock', label: 'Stock' }
+            ];
+            dom.renderTable('#table-output', products, columns);
+        }
+
+        function addTableRow() {
+            const newUser = {
+                id: Date.now(),
+                name: 'New User',
+                email: 'new@example.com',
+                role: 'User',
+                status: 'Active'
+            };
+            users.push(newUser);
+            renderUsersTable();
+        }
+
+        // Form rendering functions
+        function renderLoginForm() {
+            const fields = [
+                { name: 'email', type: 'email', label: 'Email', placeholder: 'Enter your email' },
+                { name: 'password', type: 'password', label: 'Password', placeholder: 'Enter password' }
+            ];
+            dom.renderForm('#form-output', fields, { submitText: 'Login' });
+        }
+
+        function renderRegistrationForm() {
+            const fields = [
+                { name: 'name', label: 'Full Name', placeholder: 'Enter your name' },
+                { name: 'email', type: 'email', label: 'Email', placeholder: 'Enter email' },
+                { name: 'password', type: 'password', label: 'Password' },
+                { 
+                    name: 'role', 
+                    type: 'select', 
+                    label: 'Role',
+                    options: [
+                        { value: 'user', label: 'User' },
+                        { value: 'admin', label: 'Admin' }
+                    ]
+                }
+            ];
+            dom.renderForm('#form-output', fields, { submitText: 'Register' });
+        }
+
+        function renderSurveyForm() {
+            const fields = [
+                { name: 'rating', type: 'number', label: 'Rating (1-5)', placeholder: '5' },
+                { name: 'feedback', type: 'textarea', label: 'Feedback', placeholder: 'Your feedback...' },
+                { 
+                    name: 'recommend', 
+                    type: 'select', 
+                    label: 'Would you recommend?',
+                    options: [
+                        { value: 'yes', label: 'Yes' },
+                        { value: 'no', label: 'No' }
+                    ]
+                }
+            ];
+            dom.renderForm('#form-output', fields, { submitText: 'Submit Survey' });
+        }
+
+        // Card rendering functions
+        function renderProductCards() {
+            const template = (product) => `
+                <h4>${product.name}</h4>
+                <p>Category: ${product.category}</p>
+                <p class="price">$${product.price}</p>
+                <p>Stock: ${product.stock}</p>
+            `;
+            dom.renderCards('#cards-output', products, template);
+        }
+
+        function renderUserCards() {
+            const template = (user) => `
+                <h4>${user.name}</h4>
+                <p>${user.email}</p>
+                <div class="status-badge status-${user.status.toLowerCase()}">${user.status}</div>
+                <p>Role: ${user.role}</p>
+            `;
+            dom.renderCards('#cards-output', users, template);
+        }
+
+        function renderChallengeCards() {
+            const challenges = [
+                { title: 'Array Methods', difficulty: 'Easy', xp: 100 },
+                { title: 'DOM Events', difficulty: 'Medium', xp: 200 },
+                { title: 'Async/Await', difficulty: 'Hard', xp: 300 }
+            ];
+            
+            const template = (challenge) => `
+                <h4>${challenge.title}</h4>
+                <p>Difficulty: ${challenge.difficulty}</p>
+                <p>XP: ${challenge.xp}</p>
+                <button class="btn btn-primary">Start Challenge</button>
+            `;
+            dom.renderCards('#cards-output', challenges, template);
+        }
+
+        // Template rendering functions
+        function renderWithTemplate() {
+            const data = { name: 'John', score: 95, level: 'Expert' };
+            const template = '<div class="card"><h3>{{name}}</h3><p>Score: {{score}}</p><p>Level: {{level}}</p></div>';
+            dom.render('#template-output', data, template);
+        }
+
+        function renderWithFunction() {
+            const data = { name: 'Jane', achievements: ['First Steps', 'Code Master', 'Bug Hunter'] };
+            const template = (data) => {
+                const achievementsList = data.achievements.map(a => `<li>${a}</li>`).join('');
+                return dom.create('div', { className: 'card' }, `
+                    <h3>${data.name}</h3>
+                    <h4>Achievements:</h4>
+                    <ul>${achievementsList}</ul>
+                `);
+            };
+            dom.render('#template-output', data, template);
+        }
+
+        function updateContent() {
+            dom.update('#template-output .card h3', { textContent: 'Updated Name' });
+            dom.update('#template-output .card p', { innerHTML: '<strong>Updated content!</strong>' });
+        }
+
+        // Batch operations
+        function batchOperations() {
+            const operations = [
+                { method: 'clear', args: ['#batch-output'] },
+                { method: 'append', args: ['#batch-output', dom.create('h3', {}, 'Batch Results')] },
+                { method: 'append', args: ['#batch-output', dom.create('p', {}, 'Operation 1 complete')] },
+                { method: 'append', args: ['#batch-output', dom.create('p', {}, 'Operation 2 complete')] },
+                { method: 'append', args: ['#batch-output', dom.create('div', { className: 'card' }, 'Batch card created')] }
+            ];
+            dom.batch(operations);
+        }
+
+        function animatedRender() {
+            dom.clear('#batch-output');
+            
+            const items = ['Item 1', 'Item 2', 'Item 3'];
+            items.forEach((item, index) => {
+                setTimeout(() => {
+                    const element = dom.create('div', { className: 'card' }, item);
+                    dom.append('#batch-output', element);
+                    dom.fadeIn(element);
+                }, index * 200);
+            });
+        }
+    </script>
+</body>
+</html>
