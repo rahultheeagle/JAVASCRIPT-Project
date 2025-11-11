@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Structure Demo - CodeQuest</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="toast-system.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <h2>CodeQuest</h2>
+            </div>
+            <div class="nav-links">
+                <a href="index.html">Dashboard</a>
+                <button id="theme-toggle" class="theme-toggle">🌙</button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="page-header">
+            <h1>Data Structure Demo</h1>
+            <p>Explore challenges, lessons, and achievements data</p>
+        </div>
+
+        <div class="demo-container">
+            <div class="demo-section">
+                <h3>Data Statistics</h3>
+                <div id="stats-display" class="stats-grid">
+                    <!-- Stats will be populated here -->
+                </div>
+            </div>
+
+            <div class="demo-section">
+                <h3>Challenges</h3>
+                <div class="filter-controls">
+                    <select id="category-filter">
+                        <option value="">All Categories</option>
+                    </select>
+                    <select id="difficulty-filter">
+                        <option value="">All Difficulties</option>
+                    </select>
+                    <input type="text" id="search-input" placeholder="Search challenges...">
+                    <button class="btn-primary" onclick="filterChallenges()">Filter</button>
+                </div>
+                <div id="challenges-list" class="content-grid">
+                    <!-- Challenges will be populated here -->
+                </div>
+            </div>
+
+            <div class="demo-section">
+                <h3>Lessons</h3>
+                <div id="lessons-list" class="content-grid">
+                    <!-- Lessons will be populated here -->
+                </div>
+            </div>
+
+            <div class="demo-section">
+                <h3>Achievements</h3>
+                <div id="achievements-list" class="achievements-grid">
+                    <!-- Achievements will be populated here -->
+                </div>
+            </div>
+
+            <div class="demo-section">
+                <h3>Data Management</h3>
+                <div class="demo-controls">
+                    <button class="btn-primary" onclick="exportData()">Export Data</button>
+                    <button class="btn-secondary" onclick="importData()">Import Data</button>
+                    <button class="btn-secondary" onclick="addSampleChallenge()">Add Sample Challenge</button>
+                    <button class="btn-secondary" onclick="showRawData()">Show Raw JSON</button>
+                </div>
+            </div>
+
+            <div id="raw-data-modal" class="modal-overlay">
+                <div class="modal">
+                    <div class="modal-header">
+                        <h3>Raw JSON Data</h3>
+                        <button class="modal-close" onclick="hideRawData()">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <pre id="raw-data-content"></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="storage-manager.js"></script>
+    <script src="theme-system.js"></script>
+    <script src="toast-system.js"></script>
+    <script src="data-structure.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            loadStats();
+            loadCategories();
+            loadDifficulties();
+            loadChallenges();
+            loadLessons();
+            loadAchievements();
+        });
+
+        function loadStats() {
+            const stats = window.dataStructure.getStats();
+            const statsDisplay = document.getElementById('stats-display');
+            
+            statsDisplay.innerHTML = `
+                <div class="stat-card">
+                    <div class="stat-number">${stats.totalChallenges}</div>
+                    <div class="stat-label">Challenges</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">${stats.totalLessons}</div>
+                    <div class="stat-label">Lessons</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">${stats.totalAchievements}</div>
+                    <div class="stat-label">Achievements</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">${Object.keys(stats.categoryCounts).length}</div>
+                    <div class="stat-label">Categories</div>
+                </div>
+            `;
+        }
+
+        function loadCategories() {
+            const categories = window.dataStructure.getCategories();
+            const select = document.getElementById('category-filter');
+            
+            categories.forEach(cat => {
+                const option = document.createElement('option');
+                option.value = cat.id;
+                option.textContent = `${cat.icon} ${cat.name}`;
+                select.appendChild(option);
+            });
+        }
+
+        function loadDifficulties() {
+            const difficulties = window.dataStructure.getDifficulties();
+            const select = document.getElementById('difficulty-filter');
+            
+            difficulties.forEach(diff => {
+                const option = document.createElement('option');
+                option.value = diff.id;
+                option.textContent = diff.name;
+                select.appendChild(option);
+            });
+        }
+
+        function loadChallenges() {
+            const challenges = window.dataStructure.getChallenges();
+            const container = document.getElementById('challenges-list');
+            
+            container.innerHTML = challenges.map(challenge => `
+                <div class="content-card challenge-card">
+                    <div class="content-header">
+                        <h4>${challenge.title}</h4>
+                        <div class="content-meta">
+                            <span class="difficulty ${challenge.difficulty}">${challenge.difficulty}</span>
+                            <span class="category">${challenge.category}</span>
+                            <span class="xp">+${challenge.xp} XP</span>
+                        </div>
+                    </div>
+                    <p>${challenge.description}</p>
+                    <div class="content-footer">
+                        <span class="time-limit">⏱️ ${challenge.timeLimit}s</span>
+                        <span class="tests">${challenge.tests.length} tests</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function loadLessons() {
+            const lessons = window.dataStructure.getLessons();
+            const container = document.getElementById('lessons-list');
+            
+            container.innerHTML = lessons.map(lesson => `
+                <div class="content-card lesson-card">
+                    <div class="content-header">
+                        <h4>${lesson.title}</h4>
+                        <div class="content-meta">
+                            <span class="difficulty ${lesson.difficulty}">${lesson.difficulty}</span>
+                            <span class="category">${lesson.category}</span>
+                            <span class="duration">📚 ${lesson.duration}min</span>
+                        </div>
+                    </div>
+                    <p>${lesson.description}</p>
+                    <div class="content-footer">
+                        <span class="sections">${lesson.content.sections.length} sections</span>
+                        <span class="quiz">${lesson.quiz.length} quiz questions</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function loadAchievements() {
+            const achievements = window.dataStructure.getAchievements();
+            const container = document.getElementById('achievements-list');
+            
+            container.innerHTML = achievements.map(achievement => `
+                <div class="achievement-card">
+                    <div class="achievement-icon">${achievement.icon}</div>
+                    <h4>${achievement.title}</h4>
+                    <p>${achievement.description}</p>
+                    <div class="achievement-xp">+${achievement.xp} XP</div>
+                </div>
+            `).join('');
+        }
+
+        function filterChallenges() {
+            const category = document.getElementById('category-filter').value;
+            const difficulty = document.getElementById('difficulty-filter').value;
+            const search = document.getElementById('search-input').value;
+            
+            const filters = {};
+            if (category) filters.category = category;
+            if (difficulty) filters.difficulty = difficulty;
+            if (search) filters.search = search;
+            
+            const challenges = window.dataStructure.getChallenges(filters);
+            const container = document.getElementById('challenges-list');
+            
+            container.innerHTML = challenges.map(challenge => `
+                <div class="content-card challenge-card">
+                    <div class="content-header">
+                        <h4>${challenge.title}</h4>
+                        <div class="content-meta">
+                            <span class="difficulty ${challenge.difficulty}">${challenge.difficulty}</span>
+                            <span class="category">${challenge.category}</span>
+                            <span class="xp">+${challenge.xp} XP</span>
+                        </div>
+                    </div>
+                    <p>${challenge.description}</p>
+                    <div class="content-footer">
+                        <span class="time-limit">⏱️ ${challenge.timeLimit}s</span>
+                        <span class="tests">${challenge.tests.length} tests</span>
+                    </div>
+                </div>
+            `).join('');
+            
+            window.toastSystem?.success(`Found ${challenges.length} challenges`);
+        }
+
+        function exportData() {
+            const data = window.dataStructure.exportData();
+            const blob = new Blob([data], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `codequest-data-${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            
+            URL.revokeObjectURL(url);
+            window.toastSystem?.success('Data exported successfully!');
+        }
+
+        function importData() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.json';
+            
+            input.onchange = (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+                
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const success = window.dataStructure.importData(e.target.result);
+                    if (success) {
+                        window.toastSystem?.success('Data imported successfully!');
+                        setTimeout(() => location.reload(), 1000);
+                    } else {
+                        window.toastSystem?.error('Failed to import data!');
+                    }
+                };
+                reader.readAsText(file);
+            };
+            
+            input.click();
+        }
+
+        function addSampleChallenge() {
+            const sampleChallenge = {
+                title: 'Sample Challenge',
+                description: 'This is a dynamically added challenge',
+                difficulty: 'intermediate',
+                category: 'javascript',
+                xp: 150,
+                timeLimit: 300,
+                instructions: 'Create a function that returns "Hello World"',
+                starterCode: 'function greet() {\n    // Your code here\n}',
+                solution: 'function greet() {\n    return "Hello World";\n}',
+                tests: [
+                    { description: 'Function returns "Hello World"', check: 'greet() === "Hello World"' }
+                ]
+            };
+            
+            const id = window.dataStructure.addChallenge(sampleChallenge);
+            window.toastSystem?.success(`Added challenge: ${id}`);
+            loadChallenges();
+            loadStats();
+        }
+
+        function showRawData() {
+            const data = window.dataStructure.exportData();
+            document.getElementById('raw-data-content').textContent = data;
+            document.getElementById('raw-data-modal').classList.add('active');
+        }
+
+        function hideRawData() {
+            document.getElementById('raw-data-modal').classList.remove('active');
+        }
+    </script>
+
+    <style>
+        .demo-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 2rem;
+        }
+
+        .demo-section {
+            background: var(--card-bg);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+        }
+
+        .stat-card {
+            background: var(--bg-secondary);
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        .filter-controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-controls select,
+        .filter-controls input {
+            padding: 0.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            background: var(--input-bg);
+            color: var(--text-primary);
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1rem;
+        }
+
+        .content-card {
+            background: var(--bg-secondary);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .content-header {
+            margin-bottom: 1rem;
+        }
+
+        .content-header h4 {
+            margin: 0 0 0.5rem 0;
+            color: var(--text-primary);
+        }
+
+        .content-meta {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .content-meta span {
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .difficulty.beginner { background: #22c55e; color: white; }
+        .difficulty.intermediate { background: #f59e0b; color: white; }
+        .difficulty.advanced { background: #ef4444; color: white; }
+
+        .category { background: var(--primary-color); color: white; }
+        .xp { background: #8b5cf6; color: white; }
+        .duration { background: #06b6d4; color: white; }
+
+        .content-footer {
+            margin-top: 1rem;
+            display: flex;
+            gap: 1rem;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .achievements-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .achievement-card {
+            background: var(--bg-secondary);
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .achievement-card:hover {
+            border-color: var(--primary-color);
+        }
+
+        .achievement-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .achievement-xp {
+            background: #8b5cf6;
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: inline-block;
+            margin-top: 0.5rem;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal {
+            background: var(--card-bg);
+            border-radius: 12px;
+            max-width: 800px;
+            width: 90%;
+            max-height: 80vh;
+            overflow: hidden;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+
+        .modal-body pre {
+            background: var(--bg-secondary);
+            padding: 1rem;
+            border-radius: 4px;
+            overflow-x: auto;
+            font-size: 0.875rem;
+            line-height: 1.4;
+        }
+
+        .demo-controls button {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+    </style>
+</body>
+</html>
