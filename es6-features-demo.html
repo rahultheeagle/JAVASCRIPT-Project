@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ES6+ Features Demo - CodeQuest</title>
+    <link rel="stylesheet" href="design-system.css">
+    <style>
+        .demo-section {
+            margin: 2rem 0;
+            padding: 1.5rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 1rem 0;
+        }
+        
+        .feature-card {
+            background: #f9fafb;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+        }
+        
+        .code-example {
+            background: #1f2937;
+            color: #f9fafb;
+            padding: 1rem;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.875rem;
+            margin: 1rem 0;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+        
+        .output {
+            background: #f0f9ff;
+            border: 1px solid #0ea5e9;
+            padding: 1rem;
+            border-radius: 4px;
+            margin: 1rem 0;
+            font-family: monospace;
+            font-size: 0.875rem;
+        }
+        
+        .controls {
+            display: flex;
+            gap: 0.5rem;
+            margin: 1rem 0;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 4px;
+            background: #3b82f6;
+            color: white;
+            cursor: pointer;
+            font-size: 0.875rem;
+        }
+        
+        .btn:hover {
+            background: #2563eb;
+        }
+        
+        .btn-secondary {
+            background: #6b7280;
+        }
+        
+        .input {
+            padding: 0.5rem;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+            font-size: 0.875rem;
+        }
+        
+        .async-demo {
+            min-height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f3f4f6;
+            border-radius: 4px;
+            margin: 1rem 0;
+        }
+        
+        .loading {
+            color: #6b7280;
+        }
+        
+        .success {
+            color: #059669;
+        }
+        
+        .error {
+            color: #dc2626;
+        }
+    </style>
+</head>
+<body>
+    <header role="banner">
+        <nav aria-label="Main navigation">
+            <div class="nav-brand">
+                <h1>CodeQuest</h1>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html">Dashboard</a></li>
+                <li><a href="#" class="active">ES6+ Features</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <main role="main">
+            <section class="hero">
+                <h1>ES6+ Features Demo</h1>
+                <p>Arrow functions, destructuring, modules</p>
+            </section>
+
+            <section class="demo-section">
+                <h2>Arrow Functions</h2>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h3>Basic Arrow Functions</h3>
+                        <div class="code-example">// Traditional function
+function add(a, b) {
+    return a + b;
+}
+
+// Arrow function
+const add = (a, b) => a + b;
+
+// Single parameter
+const square = x => x * x;
+
+// No parameters
+const getRandom = () => Math.random();</div>
+                        <div class="controls">
+                            <button class="btn" onclick="testArrowFunctions()">Test Arrow Functions</button>
+                        </div>
+                        <div class="output" id="arrow-output"></div>
+                    </div>
+
+                    <div class="feature-card">
+                        <h3>Higher-Order Functions</h3>
+                        <div class="code-example">// Create multiplier function
+const createMultiplier = factor => num => num * factor;
+
+const double = createMultiplier(2);
+const triple = createMultiplier(3);
+
+// Array methods with arrows
+const numbers = [1, 2, 3, 4, 5];
+const doubled = numbers.map(x => x * 2);
+const evens = numbers.filter(x => x % 2 === 0);</div>
+                        <div class="controls">
+                            <button class="btn" onclick="testHigherOrder()">Test Higher-Order</button>
+                        </div>
+                        <div class="output" id="higher-order-output"></div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="demo-section">
+                <h2>Destructuring</h2>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h3>Array Destructuring</h3>
+                        <div class="code-example">const numbers = [1, 2, 3, 4, 5];
+
+// Basic destructuring
+const [first, second] = numbers;
+
+// Skip elements
+const [, , third] = numbers;
+
+// Rest operator
+const [head, ...tail] = numbers;
+
+// Default values
+const [a = 0, b = 0] = [10];</div>
+                        <div class="controls">
+                            <button class="btn" onclick="testArrayDestructuring()">Test Array Destructuring</button>
+                        </div>
+                        <div class="output" id="array-destructuring-output"></div>
+                    </div>
+
+                    <div class="feature-card">
+                        <h3>Object Destructuring</h3>
+                        <div class="code-example">const user = {
+    name: 'John Doe',
+    email: 'john@example.com',
+    age: 30,
+    address: { city: 'New York' }
+};
+
+// Basic destructuring
+const { name, email } = user;
+
+// Rename variables
+const { name: userName } = user;
+
+// Nested destructuring
+const { address: { city } } = user;</div>
+                        <div class="controls">
+                            <button class="btn" onclick="testObjectDestructuring()">Test Object Destructuring</button>
+                        </div>
+                        <div class="output" id="object-destructuring-output"></div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="demo-section">
+                <h2>Template Literals & Spread Operator</h2>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h3>Template Literals</h3>
+                        <div class="code-example">const name = 'CodeQuest';
+const version = '2.0';
+
+// Template literal
+const message = `Welcome to ${name} v${version}!`;
+
+// Multi-line strings
+const html = `
+    &lt;div class="card"&gt;
+        &lt;h3&gt;${name}&lt;/h3&gt;
+        &lt;p&gt;Version: ${version}&lt;/p&gt;
+    &lt;/div&gt;
+`;</div>
+                        <div class="controls">
+                            <input type="text" class="input" id="name-input" placeholder="Enter name" value="CodeQuest">
+                            <button class="btn" onclick="testTemplateLiterals()">Generate Template</button>
+                        </div>
+                        <div class="output" id="template-output"></div>
+                    </div>
+
+                    <div class="feature-card">
+                        <h3>Spread Operator</h3>
+                        <div class="code-example">const arr1 = [1, 2, 3];
+const arr2 = [4, 5, 6];
+
+// Spread arrays
+const combined = [...arr1, ...arr2];
+
+// Spread objects
+const obj1 = { a: 1, b: 2 };
+const obj2 = { c: 3, d: 4 };
+const merged = { ...obj1, ...obj2 };
+
+// Function parameters
+const sum = (...numbers) => 
+    numbers.reduce((total, num) => total + num, 0);</div>
+                        <div class="controls">
+                            <button class="btn" onclick="testSpreadOperator()">Test Spread</button>
+                        </div>
+                        <div class="output" id="spread-output"></div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="demo-section">
+                <h2>Async/Await & Promises</h2>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h3>Promise-based Operations</h3>
+                        <div class="code-example">// Promise-based function
+const fetchUser = (id) => {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            if (id > 0) {
+                resolve({ id, name: `User ${id}` });
+            } else {
+                reject(new Error('Invalid ID'));
+            }
+        }, 1000);
+    });
+};
+
+// Async/await usage
+const getUserData = async (id) => {
+    try {
+        const user = await fetchUser(id);
+        return user;
+    } catch (error) {
+        throw error;
+    }
+};</div>
+                        <div class="controls">
+                            <input type="number" class="input" id="user-id" placeholder="User ID" value="1" min="1">
+                            <button class="btn" onclick="testAsyncAwait()">Fetch User</button>
+                        </div>
+                        <div class="async-demo" id="async-output">
+                            <span>Click "Fetch User" to test async operations</span>
+                        </div>
+                    </div>
+
+                    <div class="feature-card">
+                        <h3>Promise.all & Error Handling</h3>
+                        <div class="code-example">// Parallel operations
+const fetchMultipleUsers = async (ids) => {
+    const promises = ids.map(id => fetchUser(id));
+    return Promise.all(promises);
+};
+
+// Error handling with Promise.allSettled
+const fetchWithErrors = async (ids) => {
+    const promises = ids.map(id => fetchUser(id));
+    const results = await Promise.allSettled(promises);
+    
+    return {
+        successful: results
+            .filter(r => r.status === 'fulfilled')
+            .map(r => r.value),
+        failed: results
+            .filter(r => r.status === 'rejected')
+            .map(r => r.reason.message)
+    };
+};</div>
+                        <div class="controls">
+                            <button class="btn" onclick="testPromiseAll()">Test Promise.all</button>
+                            <button class="btn btn-secondary" onclick="testPromiseAllSettled()">Test with Errors</button>
+                        </div>
+                        <div class="async-demo" id="promise-all-output">
+                            <span>Click buttons to test parallel operations</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="demo-section">
+                <h2>Classes & Inheritance</h2>
+                <div class="feature-card">
+                    <h3>ES6 Classes</h3>
+                    <div class="code-example">class BaseComponent {
+    constructor(element, options = {}) {
+        this.element = element;
+        this.options = { ...this.defaultOptions, ...options };
+    }
+    
+    get defaultOptions() {
+        return { autoInit: true };
+    }
+    
+    static create(selector, options) {
+        const element = document.querySelector(selector);
+        return new this(element, options);
+    }
+}
+
+class Button extends BaseComponent {
+    get defaultOptions() {
+        return { ...super.defaultOptions, variant: 'primary' };
+    }
+    
+    onClick(handler) {
+        this.element.addEventListener('click', handler);
+        return this; // Method chaining
+    }
+}</div>
+                    <div class="controls">
+                        <button class="btn" onclick="testClasses()">Test Classes</button>
+                    </div>
+                    <div class="output" id="classes-output"></div>
+                </div>
+            </section>
+
+            <section class="demo-section">
+                <h2>Module System</h2>
+                <div class="feature-card">
+                    <h3>ES6 Modules (Simulated)</h3>
+                    <div class="code-example">// utils.js - Named exports
+export const formatDate = (date) => { /* ... */ };
+export const capitalize = (str) => { /* ... */ };
+export default { formatDate, capitalize };
+
+// main.js - Import examples
+import utils from './utils.js';
+import { formatDate, capitalize } from './utils.js';
+import { formatDate as format } from './utils.js';
+import * as allUtils from './utils.js';
+
+// Dynamic imports
+const module = await import('./utils.js');</div>
+                    <div class="controls">
+                        <button class="btn" onclick="testModules()">Test Module Functions</button>
+                    </div>
+                    <div class="output" id="modules-output"></div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script type="module">
+        // Import ES6 features (simulated for demo)
+        
+        // Arrow Functions Demo
+        window.testArrowFunctions = () => {
+            const add = (a, b) => a + b;
+            const square = x => x * x;
+            const getRandom = () => Math.random().toFixed(3);
+            
+            const output = document.getElementById('arrow-output');
+            output.innerHTML = `
+                add(5, 3) = ${add(5, 3)}<br>
+                square(4) = ${square(4)}<br>
+                getRandom() = ${getRandom()}
+            `;
+        };
+
+        // Higher-Order Functions Demo
+        window.testHigherOrder = () => {
+            const createMultiplier = factor => num => num * factor;
+            const double = createMultiplier(2);
+            const triple = createMultiplier(3);
+            
+            const numbers = [1, 2, 3, 4, 5];
+            const doubled = numbers.map(x => x * 2);
+            const evens = numbers.filter(x => x % 2 === 0);
+            
+            const output = document.getElementById('higher-order-output');
+            output.innerHTML = `
+                double(5) = ${double(5)}<br>
+                triple(4) = ${triple(4)}<br>
+                [1,2,3,4,5] doubled = [${doubled.join(', ')}]<br>
+                evens = [${evens.join(', ')}]
+            `;
+        };
+
+        // Array Destructuring Demo
+        window.testArrayDestructuring = () => {
+            const numbers = [1, 2, 3, 4, 5];
+            const [first, second] = numbers;
+            const [, , third] = numbers;
+            const [head, ...tail] = numbers;
+            const [a = 0, b = 0] = [10];
+            
+            const output = document.getElementById('array-destructuring-output');
+            output.innerHTML = `
+                first = ${first}, second = ${second}<br>
+                third = ${third}<br>
+                head = ${head}, tail = [${tail.join(', ')}]<br>
+                a = ${a}, b = ${b}
+            `;
+        };
+
+        // Object Destructuring Demo
+        window.testObjectDestructuring = () => {
+            const user = {
+                name: 'John Doe',
+                email: 'john@example.com',
+                age: 30,
+                address: { city: 'New York', country: 'USA' }
+            };
+            
+            const { name, email } = user;
+            const { name: userName, age = 25 } = user;
+            const { address: { city, country } } = user;
+            
+            const output = document.getElementById('object-destructuring-output');
+            output.innerHTML = `
+                name = ${name}<br>
+                email = ${email}<br>
+                userName = ${userName}<br>
+                city = ${city}, country = ${country}
+            `;
+        };
+
+        // Template Literals Demo
+        window.testTemplateLiterals = () => {
+            const name = document.getElementById('name-input').value;
+            const version = '2.0';
+            const timestamp = new Date().toLocaleTimeString();
+            
+            const message = `Welcome to ${name} v${version}!`;
+            const html = `
+                <div class="card">
+                    <h3>${name}</h3>
+                    <p>Version: ${version}</p>
+                    <small>Generated at: ${timestamp}</small>
+                </div>
+            `;
+            
+            const output = document.getElementById('template-output');
+            output.innerHTML = `
+                Message: ${message}<br><br>
+                Generated HTML:<br>
+                <pre>${html}</pre>
+            `;
+        };
+
+        // Spread Operator Demo
+        window.testSpreadOperator = () => {
+            const arr1 = [1, 2, 3];
+            const arr2 = [4, 5, 6];
+            const combined = [...arr1, ...arr2];
+            
+            const obj1 = { a: 1, b: 2 };
+            const obj2 = { c: 3, d: 4 };
+            const merged = { ...obj1, ...obj2 };
+            
+            const sum = (...numbers) => numbers.reduce((total, num) => total + num, 0);
+            
+            const output = document.getElementById('spread-output');
+            output.innerHTML = `
+                combined arrays = [${combined.join(', ')}]<br>
+                merged objects = ${JSON.stringify(merged)}<br>
+                sum(1,2,3,4,5) = ${sum(1,2,3,4,5)}
+            `;
+        };
+
+        // Async/Await Demo
+        const fetchUser = (id) => {
+            return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    if (id > 0) {
+                        resolve({ id, name: `User ${id}`, email: `user${id}@example.com` });
+                    } else {
+                        reject(new Error('Invalid user ID'));
+                    }
+                }, 1000);
+            });
+        };
+
+        window.testAsyncAwait = async () => {
+            const userId = parseInt(document.getElementById('user-id').value);
+            const output = document.getElementById('async-output');
+            
+            output.innerHTML = '<span class="loading">Loading user data...</span>';
+            
+            try {
+                const user = await fetchUser(userId);
+                output.innerHTML = `
+                    <div class="success">
+                        <strong>Success!</strong><br>
+                        ID: ${user.id}<br>
+                        Name: ${user.name}<br>
+                        Email: ${user.email}
+                    </div>
+                `;
+            } catch (error) {
+                output.innerHTML = `<div class="error">Error: ${error.message}</div>`;
+            }
+        };
+
+        // Promise.all Demo
+        window.testPromiseAll = async () => {
+            const output = document.getElementById('promise-all-output');
+            output.innerHTML = '<span class="loading">Fetching multiple users...</span>';
+            
+            try {
+                const users = await Promise.all([
+                    fetchUser(1),
+                    fetchUser(2),
+                    fetchUser(3)
+                ]);
+                
+                output.innerHTML = `
+                    <div class="success">
+                        <strong>All users fetched successfully!</strong><br>
+                        ${users.map(u => `${u.name} (${u.email})`).join('<br>')}
+                    </div>
+                `;
+            } catch (error) {
+                output.innerHTML = `<div class="error">Error: ${error.message}</div>`;
+            }
+        };
+
+        // Promise.allSettled Demo
+        window.testPromiseAllSettled = async () => {
+            const output = document.getElementById('promise-all-output');
+            output.innerHTML = '<span class="loading">Testing with some failures...</span>';
+            
+            const results = await Promise.allSettled([
+                fetchUser(1),
+                fetchUser(-1), // This will fail
+                fetchUser(2),
+                fetchUser(-2)  // This will also fail
+            ]);
+            
+            const successful = results.filter(r => r.status === 'fulfilled').map(r => r.value);
+            const failed = results.filter(r => r.status === 'rejected').map(r => r.reason.message);
+            
+            output.innerHTML = `
+                <div>
+                    <strong>Results:</strong><br>
+                    <div class="success">Successful (${successful.length}): ${successful.map(u => u.name).join(', ')}</div>
+                    <div class="error">Failed (${failed.length}): ${failed.join(', ')}</div>
+                </div>
+            `;
+        };
+
+        // Classes Demo
+        window.testClasses = () => {
+            class BaseComponent {
+                constructor(name, options = {}) {
+                    this.name = name;
+                    this.options = { ...this.defaultOptions, ...options };
+                }
+                
+                get defaultOptions() {
+                    return { autoInit: true, debug: false };
+                }
+                
+                getInfo() {
+                    return `${this.name} - Options: ${JSON.stringify(this.options)}`;
+                }
+            }
+
+            class Button extends BaseComponent {
+                get defaultOptions() {
+                    return { ...super.defaultOptions, variant: 'primary', size: 'medium' };
+                }
+                
+                click() {
+                    return `${this.name} button clicked!`;
+                }
+            }
+            
+            const button = new Button('MyButton', { variant: 'secondary' });
+            
+            const output = document.getElementById('classes-output');
+            output.innerHTML = `
+                ${button.getInfo()}<br>
+                ${button.click()}
+            `;
+        };
+
+        // Modules Demo (simulated)
+        window.testModules = () => {
+            // Simulated utility functions
+            const formatDate = (date, locale = 'en-US') => {
+                return new Intl.DateTimeFormat(locale).format(new Date(date));
+            };
+            
+            const capitalize = str => str.charAt(0).toUpperCase() + str.slice(1);
+            
+            const debounce = (func, delay) => {
+                let timeoutId;
+                return (...args) => {
+                    clearTimeout(timeoutId);
+                    timeoutId = setTimeout(() => func.apply(null, args), delay);
+                };
+            };
+            
+            const output = document.getElementById('modules-output');
+            output.innerHTML = `
+                formatDate(new Date()) = ${formatDate(new Date())}<br>
+                capitalize('hello world') = ${capitalize('hello world')}<br>
+                debounce function created = ${typeof debounce(() => {}, 100)}
+            `;
+        };
+    </script>
+</body>
+</html>
