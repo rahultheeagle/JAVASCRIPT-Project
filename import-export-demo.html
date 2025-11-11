@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Import/Export Demo - CodeQuest</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="toast-system.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <h2>CodeQuest</h2>
+            </div>
+            <div class="nav-links">
+                <a href="index.html">Dashboard</a>
+                <button id="theme-toggle" class="theme-toggle">🌙</button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="page-header">
+            <h1>Import/Export Demo</h1>
+            <p>Download and restore your progress as JSON files</p>
+        </div>
+
+        <div class="demo-container">
+            <div class="demo-section">
+                <h3>Current Progress Overview</h3>
+                <div id="progress-overview" class="progress-grid">
+                    <!-- Progress will be populated here -->
+                </div>
+            </div>
+
+            <div class="demo-section">
+                <h3>Export Options</h3>
+                <p>Download your progress and data in different formats:</p>
+                <div class="export-controls">
+                    <button class="btn-primary" onclick="exportFullProgress()">
+                        📥 Export Full Progress
+                    </button>
+                    <button class="btn-secondary" onclick="exportUserProfile()">
+                        👤 Export Profile Only
+                    </button>
+                    <button class="btn-secondary" onclick="exportAchievements()">
+                        🏆 Export Achievements
+                    </button>
+                    <button class="btn-secondary" onclick="exportStatistics()">
+                        📊 Export Statistics
+                    </button>
+                    <button class="btn-backup" onclick="createBackup()">
+                        💾 Create Full Backup
+                    </button>
+                </div>
+            </div>
+
+            <div class="demo-section">
+                <h3>Import Progress</h3>
+                <p>Restore your progress from a previously exported JSON file:</p>
+                <div class="import-controls">
+                    <button class="btn-primary" onclick="importProgress()">
+                        📤 Import Progress File
+                    </button>
+                    <button class="btn-secondary" onclick="generateSampleData()">
+                        🎲 Generate Sample Data
+                    </button>
+                    <button class="btn-danger" onclick="clearAllData()">
+                        🗑️ Clear All Data
+                    </button>
+                </div>
+                <div class="import-info">
+                    <h4>Import Instructions:</h4>
+                    <ul>
+                        <li>Select a JSON file exported from CodeQuest</li>
+                        <li>The file will be validated before import</li>
+                        <li>Your current progress will be overwritten</li>
+                        <li>A backup is recommended before importing</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="demo-section">
+                <h3>Data Preview</h3>
+                <p>Preview your current progress data structure:</p>
+                <div class="preview-controls">
+                    <button class="btn-secondary" onclick="previewProgressData()">
+                        👁️ Preview Progress JSON
+                    </button>
+                    <button class="btn-secondary" onclick="previewUserProfile()">
+                        👤 Preview Profile JSON
+                    </button>
+                    <button class="btn-secondary" onclick="previewAchievements()">
+                        🏆 Preview Achievements JSON
+                    </button>
+                </div>
+                <div id="data-preview" class="data-preview">
+                    <pre id="preview-content">Click a preview button to see JSON data...</pre>
+                </div>
+            </div>
+
+            <div class="demo-section">
+                <h3>File Format Information</h3>
+                <div class="format-info">
+                    <h4>Export File Structure:</h4>
+                    <div class="format-example">
+                        <pre>{
+  "exportInfo": {
+    "version": "1.0",
+    "exportDate": "2024-01-15T10:30:00.000Z",
+    "platform": "CodeQuest"
+  },
+  "userProfile": {
+    "username": "learner123",
+    "email": "user@example.com",
+    "firstName": "John",
+    "lastName": "Doe"
+  },
+  "progress": {
+    "completedLessons": ["html-intro", "css-intro"],
+    "currentStreak": 5,
+    "totalXP": 1250,
+    "currentLevel": 3
+  },
+  "achievements": [
+    {
+      "id": "first-steps",
+      "unlockedAt": "2024-01-10T15:20:00.000Z"
+    }
+  ],
+  "statistics": {
+    "challengesCompleted": 12,
+    "lessonsCompleted": 8,
+    "totalTimeSpent": 7200
+  }
+}</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="storage-manager.js"></script>
+    <script src="theme-system.js"></script>
+    <script src="toast-system.js"></script>
+    <script src="data-structure.js"></script>
+    <script src="import-export.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            loadProgressOverview();
+        });
+
+        function loadProgressOverview() {
+            const overview = document.getElementById('progress-overview');
+            
+            // Get current progress data
+            const profile = window.importExport.getUserProfile();
+            const progress = window.importExport.getProgress();
+            const achievements = window.importExport.getAchievements();
+            const statistics = window.importExport.getStatistics();
+            
+            overview.innerHTML = `
+                <div class="progress-card">
+                    <div class="progress-icon">👤</div>
+                    <div class="progress-info">
+                        <h4>Profile</h4>
+                        <p>${profile.username || 'Guest'}</p>
+                        <small>${profile.email || 'No email set'}</small>
+                    </div>
+                </div>
+                <div class="progress-card">
+                    <div class="progress-icon">⭐</div>
+                    <div class="progress-info">
+                        <h4>Level ${progress.currentLevel || 1}</h4>
+                        <p>${progress.totalXP || 0} XP</p>
+                        <small>Streak: ${progress.currentStreak || 0} days</small>
+                    </div>
+                </div>
+                <div class="progress-card">
+                    <div class="progress-icon">🏆</div>
+                    <div class="progress-info">
+                        <h4>Achievements</h4>
+                        <p>${achievements.length || 0} unlocked</p>
+                        <small>Keep learning!</small>
+                    </div>
+                </div>
+                <div class="progress-card">
+                    <div class="progress-icon">📚</div>
+                    <div class="progress-info">
+                        <h4>Progress</h4>
+                        <p>${statistics.lessonsCompleted || 0} lessons</p>
+                        <small>${statistics.challengesCompleted || 0} challenges</small>
+                    </div>
+                </div>
+            `;
+        }
+
+        function exportFullProgress() {
+            window.importExport.exportProgress();
+        }
+
+        function exportUserProfile() {
+            window.importExport.exportUserProfile();
+        }
+
+        function exportAchievements() {
+            window.importExport.exportAchievements();
+        }
+
+        function exportStatistics() {
+            window.importExport.exportStatistics();
+        }
+
+        function createBackup() {
+            window.importExport.createBackup();
+        }
+
+        function importProgress() {
+            window.importExport.importProgress();
+        }
+
+        function generateSampleData() {
+            if (!window.storageManager) return;
+            
+            // Generate sample progress data
+            const sampleData = {
+                username: 'demo_user',
+                email: 'demo@codequest.com',
+                firstName: 'Demo',
+                lastName: 'User'
+            };
+            
+            const sampleProgress = {
+                completedLessons: ['html-intro', 'css-intro'],
+                currentStreak: 7,
+                totalXP: 850,
+                currentLevel: 2,
+                lastActivity: new Date().toISOString()
+            };
+            
+            const sampleAchievements = [
+                {
+                    id: 'first-steps',
+                    unlockedAt: new Date(Date.now() - 86400000).toISOString()
+                },
+                {
+                    id: 'challenge-master',
+                    unlockedAt: new Date().toISOString()
+                }
+            ];
+            
+            const sampleStats = {
+                challengesCompleted: 8,
+                lessonsCompleted: 5,
+                totalTimeSpent: 3600,
+                streakRecord: 10
+            };
+            
+            // Save sample data
+            window.storageManager.setItem('userProfile', sampleData);
+            Object.entries(sampleProgress).forEach(([key, value]) => {
+                window.storageManager.setItem(key, value);
+            });
+            window.storageManager.setItem('unlockedAchievements', sampleAchievements);
+            Object.entries(sampleStats).forEach(([key, value]) => {
+                window.storageManager.setItem(key, value);
+            });
+            
+            window.toastSystem?.success('Sample data generated!');
+            loadProgressOverview();
+        }
+
+        function clearAllData() {
+            if (confirm('Are you sure you want to clear all progress data? This cannot be undone.')) {
+                if (window.storageManager) {
+                    window.storageManager.clearAll();
+                    window.toastSystem?.success('All data cleared!');
+                    loadProgressOverview();
+                }
+            }
+        }
+
+        function previewProgressData() {
+            const data = window.importExport.collectProgressData();
+            document.getElementById('preview-content').textContent = JSON.stringify(data, null, 2);
+        }
+
+        function previewUserProfile() {
+            const profile = window.importExport.getUserProfile();
+            document.getElementById('preview-content').textContent = JSON.stringify(profile, null, 2);
+        }
+
+        function previewAchievements() {
+            const achievements = window.importExport.getAchievements();
+            document.getElementById('preview-content').textContent = JSON.stringify(achievements, null, 2);
+        }
+    </script>
+
+    <style>
+        .demo-container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 2rem;
+        }
+
+        .demo-section {
+            background: var(--card-bg);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+        }
+
+        .demo-section h3 {
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+
+        .demo-section p {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+        }
+
+        .progress-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .progress-card {
+            background: var(--bg-secondary);
+            padding: 1.5rem;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .progress-icon {
+            font-size: 2rem;
+        }
+
+        .progress-info h4 {
+            margin: 0 0 0.25rem 0;
+            color: var(--text-primary);
+        }
+
+        .progress-info p {
+            margin: 0 0 0.25rem 0;
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .progress-info small {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        .export-controls,
+        .import-controls,
+        .preview-controls {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+
+        .export-controls button,
+        .import-controls button,
+        .preview-controls button {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-backup {
+            background: #8b5cf6;
+            color: white;
+        }
+
+        .btn-danger {
+            background: var(--error-color);
+            color: white;
+        }
+
+        .import-info {
+            background: var(--bg-secondary);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+        }
+
+        .import-info h4 {
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .import-info ul {
+            color: var(--text-secondary);
+            margin: 0;
+            padding-left: 1.5rem;
+        }
+
+        .import-info li {
+            margin-bottom: 0.25rem;
+        }
+
+        .data-preview {
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            margin-top: 1rem;
+            overflow: hidden;
+        }
+
+        .data-preview pre {
+            padding: 1.5rem;
+            margin: 0;
+            overflow-x: auto;
+            font-size: 0.875rem;
+            line-height: 1.4;
+            color: var(--text-primary);
+        }
+
+        .format-info {
+            background: var(--bg-secondary);
+            padding: 1.5rem;
+            border-radius: 8px;
+        }
+
+        .format-info h4 {
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+
+        .format-example {
+            background: var(--card-bg);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .format-example pre {
+            padding: 1rem;
+            margin: 0;
+            overflow-x: auto;
+            font-size: 0.8rem;
+            line-height: 1.3;
+            color: var(--text-secondary);
+        }
+
+        button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        @media (max-width: 768px) {
+            .progress-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .export-controls,
+            .import-controls,
+            .preview-controls {
+                flex-direction: column;
+            }
+        }
+    </style>
+</body>
+</html>
