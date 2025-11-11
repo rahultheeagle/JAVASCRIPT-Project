@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Handling Demo - CodeQuest</title>
+    <link rel="stylesheet" href="design-system.css">
+    <style>
+        .demo-section { margin: 2rem 0; padding: 1.5rem; border: 1px solid var(--border-color); border-radius: 8px; }
+        .demo-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem; }
+        .toast { position: fixed; top: 20px; right: 20px; background: var(--success-color); color: white; padding: 1rem; border-radius: 4px; z-index: 1000; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; }
+        .modal.active { display: flex; align-items: center; justify-content: center; }
+        .modal-content { background: white; padding: 2rem; border-radius: 8px; max-width: 500px; width: 90%; }
+        .invalid { border-color: var(--error-color); }
+        .counter { font-size: 0.875rem; color: var(--text-muted); }
+        .progress-bar { height: 4px; background: var(--primary-color); transition: width 0.3s; }
+        .dark-theme { background: #1a1a1a; color: #fff; }
+        .dark-theme .modal-content { background: #2a2a2a; color: #fff; }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <h1>Event Handling Demo</h1>
+            <nav>
+                <a href="index.html">← Back to Dashboard</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- Click Events -->
+        <section class="demo-section">
+            <h2>Click Events</h2>
+            <div class="demo-grid">
+                <div>
+                    <h3>Toggle & Modal</h3>
+                    <button class="btn btn-primary" data-click="toggle">Toggle Active</button>
+                    <button class="btn btn-secondary" data-click="modal" data-modal="demo-modal">Open Modal</button>
+                    <button class="btn btn-accent" data-click="theme">Toggle Theme</button>
+                </div>
+                <div>
+                    <h3>Data Actions</h3>
+                    <button class="btn btn-success" data-click="save" data-save="demo-data">Save Data</button>
+                    <button class="btn btn-error" data-click="delete" data-item>Delete Item</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Input Events -->
+        <section class="demo-section">
+            <h2>Input Events</h2>
+            <div class="demo-grid">
+                <div>
+                    <h3>Validation & Search</h3>
+                    <input type="email" placeholder="Email (validates)" data-input="validate" required>
+                    <input type="text" placeholder="Search items..." data-input="search">
+                </div>
+                <div>
+                    <h3>Auto-save & Counter</h3>
+                    <textarea placeholder="Auto-saves..." data-input="autosave" name="notes" maxlength="100"></textarea>
+                    <div class="counter" data-counter="notes">100</div>
+                </div>
+            </div>
+            
+            <div style="margin-top: 1rem;">
+                <h3>Filter Demo</h3>
+                <select data-input="filter">
+                    <option value="">All Categories</option>
+                    <option value="javascript">JavaScript</option>
+                    <option value="css">CSS</option>
+                    <option value="html">HTML</option>
+                </select>
+                <div style="margin-top: 1rem;">
+                    <div class="card" data-filter="javascript" data-searchable>JavaScript Challenge</div>
+                    <div class="card" data-filter="css" data-searchable>CSS Layout Task</div>
+                    <div class="card" data-filter="html" data-searchable>HTML Semantics</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Submit Events -->
+        <section class="demo-section">
+            <h2>Submit Events</h2>
+            <div class="demo-grid">
+                <form data-submit="login">
+                    <h3>Login Form</h3>
+                    <input type="email" name="email" placeholder="Email" required>
+                    <input type="password" name="password" placeholder="Password" required>
+                    <button type="submit" class="btn btn-primary">Login</button>
+                </form>
+                
+                <form data-submit="contact">
+                    <h3>Contact Form</h3>
+                    <input type="text" name="name" placeholder="Name" required>
+                    <textarea name="message" placeholder="Message" required></textarea>
+                    <button type="submit" class="btn btn-secondary">Send</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- Storage Events -->
+        <section class="demo-section">
+            <h2>Storage Events</h2>
+            <div class="demo-grid">
+                <div>
+                    <h3>Cross-tab Sync</h3>
+                    <p>Open this page in another tab and change theme/user data to see sync in action.</p>
+                    <div data-user-name>User</div>
+                    <div class="progress-bar" style="width: 50%; background: #eee; height: 20px; border-radius: 10px;">
+                        <div class="progress-bar" style="width: 50%;"></div>
+                    </div>
+                </div>
+                <div>
+                    <h3>Storage Actions</h3>
+                    <button onclick="localStorage.setItem('user', JSON.stringify({name: 'John Doe'}))">Update User</button>
+                    <button onclick="localStorage.setItem('progress', JSON.stringify({percentage: 75}))">Update Progress</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Event Listeners Demo -->
+        <section class="demo-section">
+            <h2>Custom Event Listeners</h2>
+            <div id="event-log" style="background: #f5f5f5; padding: 1rem; border-radius: 4px; max-height: 200px; overflow-y: auto;">
+                <p>Event log will appear here...</p>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal -->
+    <div id="demo-modal" class="modal">
+        <div class="modal-content">
+            <h3>Demo Modal</h3>
+            <p>This modal was opened using click event handling.</p>
+            <button class="btn btn-primary" data-click="close">Close</button>
+        </div>
+    </div>
+
+    <script src="js/event-handler.js"></script>
+    <script>
+        // Custom event listeners for demo
+        eventHandler.on('click', (data) => {
+            logEvent('Click', `Action: ${data.action}`);
+        });
+
+        eventHandler.on('input', (data) => {
+            logEvent('Input', `Action: ${data.action}, Value: ${data.element.value}`);
+        });
+
+        eventHandler.on('submit', (data) => {
+            logEvent('Submit', `Action: ${data.action}, Data: ${JSON.stringify(data.data)}`);
+        });
+
+        eventHandler.on('storage', (data) => {
+            logEvent('Storage', `Key: ${data.key}, Value: ${data.newValue}`);
+        });
+
+        function logEvent(type, details) {
+            const log = document.getElementById('event-log');
+            const entry = document.createElement('div');
+            entry.innerHTML = `<strong>${type}:</strong> ${details} <small>(${new Date().toLocaleTimeString()})</small>`;
+            log.appendChild(entry);
+            log.scrollTop = log.scrollHeight;
+        }
+
+        // Load saved theme
+        if (localStorage.getItem('theme') === 'dark') {
+            document.body.classList.add('dark-theme');
+        }
+    </script>
+</body>
+</html>
