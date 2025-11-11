@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Metadata Demo - CodeQuest</title>
+    <meta name="description" content="SEO-friendly meta tags demonstration for CodeQuest learning platform">
+    <meta name="keywords" content="SEO, meta tags, Open Graph, Twitter Cards, structured data">
+    <meta name="author" content="CodeQuest Team">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="Metadata Demo - CodeQuest">
+    <meta property="og:description" content="SEO-friendly meta tags demonstration">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://codequest.dev/metadata-demo">
+    <meta property="og:image" content="https://codequest.dev/og-image.jpg">
+    
+    <!-- Twitter Cards -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Metadata Demo - CodeQuest">
+    <meta name="twitter:description" content="SEO-friendly meta tags demonstration">
+    
+    <link rel="stylesheet" href="design-system.css">
+    <style>
+        .demo-section {
+            margin: 2rem 0;
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+        }
+        
+        .meta-display {
+            background: var(--background-secondary);
+            padding: 1rem;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 0.9rem;
+            margin: 1rem 0;
+            overflow-x: auto;
+        }
+        
+        .meta-category {
+            margin: 1.5rem 0;
+        }
+        
+        .meta-category h4 {
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .meta-tag {
+            background: var(--background-dark);
+            color: var(--text-light);
+            padding: 0.5rem;
+            margin: 0.25rem 0;
+            border-radius: 4px;
+            word-break: break-all;
+        }
+        
+        .controls {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin: 1rem 0;
+        }
+        
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 4px;
+            background: var(--primary-color);
+            color: white;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        
+        .btn:hover {
+            background: var(--primary-dark);
+        }
+        
+        .btn-secondary {
+            background: var(--background-secondary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+        
+        .btn-secondary:hover {
+            background: var(--background-tertiary);
+        }
+        
+        .seo-preview {
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        
+        .seo-title {
+            color: #1a0dab;
+            font-size: 1.2rem;
+            text-decoration: none;
+            margin-bottom: 0.25rem;
+            display: block;
+        }
+        
+        .seo-url {
+            color: #006621;
+            font-size: 0.9rem;
+            margin-bottom: 0.25rem;
+        }
+        
+        .seo-description {
+            color: #545454;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+        
+        .social-preview {
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+            margin: 1rem 0;
+            max-width: 500px;
+        }
+        
+        .social-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        .social-content {
+            padding: 1rem;
+        }
+        
+        .social-title {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        
+        .social-description {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <header role="banner">
+        <nav aria-label="Main navigation">
+            <div class="nav-brand">
+                <h1>CodeQuest</h1>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html">Dashboard</a></li>
+                <li><a href="#" class="active">Metadata</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main role="main">
+        <section class="hero">
+            <h1>Metadata Demo</h1>
+            <p>SEO-friendly meta tags</p>
+        </section>
+
+        <section class="demo-section">
+            <h2>Dynamic Metadata Control</h2>
+            <div class="controls">
+                <button class="btn" onclick="setPageMeta('home')">Home Page</button>
+                <button class="btn" onclick="setPageMeta('challenges')">Challenges</button>
+                <button class="btn" onclick="setPageMeta('tutorials')">Tutorials</button>
+                <button class="btn" onclick="setPageMeta('editor')">Editor</button>
+                <button class="btn btn-secondary" onclick="showCurrentMeta()">Show Current Meta</button>
+            </div>
+        </section>
+
+        <section class="demo-section">
+            <h2>Current Page Metadata</h2>
+            <div id="current-meta" class="meta-display">
+                <!-- Current meta tags will be displayed here -->
+            </div>
+        </section>
+
+        <section class="demo-section">
+            <h2>Search Engine Preview</h2>
+            <div class="seo-preview">
+                <a href="#" class="seo-title" id="seo-title">CodeQuest - Interactive Learning Platform</a>
+                <div class="seo-url" id="seo-url">https://codequest.dev</div>
+                <div class="seo-description" id="seo-description">
+                    Learn JavaScript, HTML, and CSS with interactive challenges, tutorials, and gamification. Master web development skills through hands-on coding practice.
+                </div>
+            </div>
+        </section>
+
+        <section class="demo-section">
+            <h2>Social Media Preview</h2>
+            <div class="social-preview">
+                <div class="social-image">CodeQuest</div>
+                <div class="social-content">
+                    <div class="social-title" id="social-title">CodeQuest - Interactive Learning Platform</div>
+                    <div class="social-description" id="social-description">
+                        Learn JavaScript, HTML, and CSS with interactive challenges, tutorials, and gamification.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="demo-section">
+            <h2>Meta Tags Reference</h2>
+            <div class="meta-category">
+                <h4>Basic SEO Tags</h4>
+                <div class="meta-tag">&lt;title&gt;Page Title&lt;/title&gt;</div>
+                <div class="meta-tag">&lt;meta name="description" content="Page description"&gt;</div>
+                <div class="meta-tag">&lt;meta name="keywords" content="keyword1, keyword2"&gt;</div>
+                <div class="meta-tag">&lt;meta name="robots" content="index, follow"&gt;</div>
+            </div>
+            
+            <div class="meta-category">
+                <h4>Open Graph Tags</h4>
+                <div class="meta-tag">&lt;meta property="og:title" content="Page Title"&gt;</div>
+                <div class="meta-tag">&lt;meta property="og:description" content="Description"&gt;</div>
+                <div class="meta-tag">&lt;meta property="og:type" content="website"&gt;</div>
+                <div class="meta-tag">&lt;meta property="og:url" content="https://example.com"&gt;</div>
+                <div class="meta-tag">&lt;meta property="og:image" content="image-url"&gt;</div>
+            </div>
+            
+            <div class="meta-category">
+                <h4>Twitter Cards</h4>
+                <div class="meta-tag">&lt;meta name="twitter:card" content="summary_large_image"&gt;</div>
+                <div class="meta-tag">&lt;meta name="twitter:title" content="Page Title"&gt;</div>
+                <div class="meta-tag">&lt;meta name="twitter:description" content="Description"&gt;</div>
+            </div>
+        </section>
+    </main>
+
+    <script src="js/metadata-manager.js"></script>
+    <script>
+        // Set page metadata
+        function setPageMeta(page) {
+            const meta = metadataManager.setMetadata(metadataManager.getPageMeta(page));
+            updatePreviews(meta);
+            showCurrentMeta();
+        }
+
+        // Show current meta tags
+        function showCurrentMeta() {
+            const metaTags = Array.from(document.querySelectorAll('meta')).map(tag => {
+                const name = tag.getAttribute('name') || tag.getAttribute('property');
+                const content = tag.getAttribute('content');
+                return name ? `<div class="meta-tag">&lt;meta ${tag.getAttribute('name') ? 'name' : 'property'}="${name}" content="${content}"&gt;</div>` : '';
+            }).filter(tag => tag).join('');
+            
+            const title = `<div class="meta-tag">&lt;title&gt;${document.title}&lt;/title&gt;</div>`;
+            
+            document.getElementById('current-meta').innerHTML = title + metaTags;
+        }
+
+        // Update previews
+        function updatePreviews(meta) {
+            document.getElementById('seo-title').textContent = meta.title;
+            document.getElementById('seo-url').textContent = meta.url;
+            document.getElementById('seo-description').textContent = meta.description;
+            
+            document.getElementById('social-title').textContent = meta.title;
+            document.getElementById('social-description').textContent = meta.description;
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            showCurrentMeta();
+            const meta = metadataManager.defaultMeta;
+            updatePreviews(meta);
+        });
+    </script>
+</body>
+</html>
