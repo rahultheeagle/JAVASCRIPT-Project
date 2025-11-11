@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reset System Demo - CodeQuest</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="toast-system.css">
+    <link rel="stylesheet" href="modal-system.css">
+    <link rel="stylesheet" href="reset-system.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <h2>CodeQuest</h2>
+            </div>
+            <div class="nav-links">
+                <a href="index.html">Dashboard</a>
+                <button id="theme-toggle" class="theme-toggle">🌙</button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="page-header">
+            <h1>Reset System Demo</h1>
+            <p>Clear progress with confirmation dialogs</p>
+        </div>
+
+        <div class="demo-container">
+            <div class="reset-section">
+                <h3>📊 Current Progress Overview</h3>
+                <div id="current-stats" class="reset-stats">
+                    <!-- Stats will be populated here -->
+                </div>
+                <p>Review your current progress before deciding what to reset.</p>
+            </div>
+
+            <div class="reset-section">
+                <h3>🔄 Reset Options</h3>
+                <p>Choose what you want to reset. Each option will show a confirmation dialog.</p>
+                <div class="reset-options">
+                    <div class="reset-option">
+                        <h4>📚 Learning Progress</h4>
+                        <p>Reset XP, achievements, completed lessons, and statistics. Keep profile settings.</p>
+                        <button class="btn-danger" onclick="resetProgress()">Reset Progress</button>
+                    </div>
+                    <div class="reset-option">
+                        <h4>👤 Profile Data</h4>
+                        <p>Reset profile information and preferences. Keep learning progress.</p>
+                        <button class="btn-warning" onclick="resetProfile()">Reset Profile</button>
+                    </div>
+                    <div class="reset-option">
+                        <h4>🗑️ Everything</h4>
+                        <p>Complete reset to initial state. All data will be permanently lost.</p>
+                        <button class="btn-danger" onclick="resetEverything()">Reset Everything</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="reset-section">
+                <h3>🎯 Selective Reset</h3>
+                <p>Reset specific types of data individually.</p>
+                <div class="reset-options">
+                    <div class="reset-option">
+                        <h4>🏆 Achievements</h4>
+                        <p>Clear all unlocked achievements and badges.</p>
+                        <button class="btn-secondary" onclick="resetAchievements()">Reset Achievements</button>
+                    </div>
+                    <div class="reset-option">
+                        <h4>📈 Statistics</h4>
+                        <p>Clear learning statistics and performance data.</p>
+                        <button class="btn-secondary" onclick="resetStatistics()">Reset Statistics</button>
+                    </div>
+                    <div class="reset-option">
+                        <h4>⚙️ Settings</h4>
+                        <p>Reset all settings to default values.</p>
+                        <button class="btn-secondary" onclick="resetSettings()">Reset Settings</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="reset-section">
+                <h3>💾 Backup & Reset</h3>
+                <p>Create a backup before resetting to restore later if needed.</p>
+                <div class="reset-options">
+                    <div class="reset-option">
+                        <h4>📥 Backup & Reset Progress</h4>
+                        <p>Create backup then reset learning progress.</p>
+                        <button class="btn-warning" onclick="backupAndResetProgress()">Backup & Reset</button>
+                    </div>
+                    <div class="reset-option">
+                        <h4>📥 Backup & Reset All</h4>
+                        <p>Create backup then reset everything.</p>
+                        <button class="btn-danger" onclick="backupAndResetAll()">Backup & Reset All</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="reset-section">
+                <h3>🚨 Emergency Reset</h3>
+                <div class="emergency-reset">
+                    <h4>⚠️ Emergency Reset</h4>
+                    <p>Immediate reset without confirmation. Use only if the app is not working properly.</p>
+                    <button onclick="emergencyReset()">Emergency Reset</button>
+                </div>
+            </div>
+
+            <div class="reset-section">
+                <h3>🧪 Test Data</h3>
+                <p>Generate test data to see the reset functionality in action.</p>
+                <div class="demo-controls">
+                    <button class="btn-primary" onclick="generateTestData()">Generate Test Data</button>
+                    <button class="btn-secondary" onclick="refreshStats()">Refresh Stats</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="storage-manager.js"></script>
+    <script src="theme-system.js"></script>
+    <script src="toast-system.js"></script>
+    <script src="data-structure.js"></script>
+    <script src="import-export.js"></script>
+    <script src="modal-system.js"></script>
+    <script src="reset-system.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            loadCurrentStats();
+        });
+
+        function loadCurrentStats() {
+            const statsContainer = document.getElementById('current-stats');
+            
+            // Get current data
+            const profile = window.storageManager?.getItem('userProfile') || {};
+            const totalXP = window.storageManager?.getItem('totalXP') || 0;
+            const currentLevel = window.storageManager?.getItem('currentLevel') || 1;
+            const achievements = window.storageManager?.getItem('unlockedAchievements') || [];
+            const completedLessons = window.storageManager?.getItem('completedLessons') || [];
+            const challengesCompleted = window.storageManager?.getItem('challengesCompleted') || 0;
+            
+            statsContainer.innerHTML = `
+                <div class="reset-stat">
+                    <div class="reset-stat-number">${profile.username ? '✓' : '✗'}</div>
+                    <div class="reset-stat-label">Profile Set</div>
+                </div>
+                <div class="reset-stat">
+                    <div class="reset-stat-number">${currentLevel}</div>
+                    <div class="reset-stat-label">Current Level</div>
+                </div>
+                <div class="reset-stat">
+                    <div class="reset-stat-number">${totalXP}</div>
+                    <div class="reset-stat-label">Total XP</div>
+                </div>
+                <div class="reset-stat">
+                    <div class="reset-stat-number">${achievements.length}</div>
+                    <div class="reset-stat-label">Achievements</div>
+                </div>
+                <div class="reset-stat">
+                    <div class="reset-stat-number">${completedLessons.length}</div>
+                    <div class="reset-stat-label">Lessons</div>
+                </div>
+                <div class="reset-stat">
+                    <div class="reset-stat-number">${challengesCompleted}</div>
+                    <div class="reset-stat-label">Challenges</div>
+                </div>
+            `;
+        }
+
+        function resetProgress() {
+            window.resetSystem.showResetConfirmation('progress');
+        }
+
+        function resetProfile() {
+            window.resetSystem.showResetConfirmation('profile');
+        }
+
+        function resetEverything() {
+            window.resetSystem.showResetConfirmation('all');
+        }
+
+        function resetAchievements() {
+            window.resetSystem.resetAchievements();
+            setTimeout(loadCurrentStats, 500);
+        }
+
+        function resetStatistics() {
+            window.resetSystem.resetStatistics();
+            setTimeout(loadCurrentStats, 500);
+        }
+
+        function resetSettings() {
+            window.resetSystem.resetSettings();
+        }
+
+        function backupAndResetProgress() {
+            window.resetSystem.backupAndReset('progress');
+        }
+
+        function backupAndResetAll() {
+            window.resetSystem.backupAndReset('all');
+        }
+
+        function emergencyReset() {
+            window.resetSystem.emergencyReset();
+        }
+
+        function generateTestData() {
+            if (!window.storageManager) return;
+            
+            // Generate test profile
+            window.storageManager.setItem('userProfile', {
+                username: 'test_user',
+                email: 'test@example.com',
+                firstName: 'Test',
+                lastName: 'User'
+            });
+            
+            // Generate test progress
+            window.storageManager.setItem('totalXP', 1250);
+            window.storageManager.setItem('currentLevel', 3);
+            window.storageManager.setItem('currentStreak', 5);
+            window.storageManager.setItem('completedLessons', ['html-intro', 'css-intro', 'js-basics']);
+            window.storageManager.setItem('challengesCompleted', 8);
+            
+            // Generate test achievements
+            window.storageManager.setItem('unlockedAchievements', [
+                { id: 'first-steps', unlockedAt: new Date().toISOString() },
+                { id: 'challenge-master', unlockedAt: new Date().toISOString() }
+            ]);
+            
+            // Generate test settings
+            window.storageManager.setItem('appSettings', {
+                theme: 'dark',
+                notifications: true,
+                autoSave: 60
+            });
+            
+            window.toastSystem?.success('Test data generated!');
+            loadCurrentStats();
+        }
+
+        function refreshStats() {
+            loadCurrentStats();
+            window.toastSystem?.success('Stats refreshed!');
+        }
+    </script>
+
+    <style>
+        .demo-container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 2rem;
+        }
+
+        .demo-controls {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .demo-controls button {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</body>
+</html>
