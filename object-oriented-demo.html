@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Object-Oriented Demo - CodeQuest</title>
+    <link rel="stylesheet" href="design-system.css">
+    <style>
+        .demo-section {
+            margin: 2rem 0;
+            padding: 1.5rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+        }
+        
+        .class-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 1.5rem;
+            margin: 1rem 0;
+        }
+        
+        .class-demo {
+            background: #f9fafb;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+        }
+        
+        .controls {
+            display: flex;
+            gap: 0.5rem;
+            margin: 1rem 0;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 4px;
+            background: #3b82f6;
+            color: white;
+            cursor: pointer;
+            font-size: 0.875rem;
+        }
+        
+        .btn:hover {
+            background: #2563eb;
+        }
+        
+        .btn-success {
+            background: #10b981;
+        }
+        
+        .btn-warning {
+            background: #f59e0b;
+        }
+        
+        .btn-error {
+            background: #ef4444;
+        }
+        
+        .output {
+            background: #f0f9ff;
+            border: 1px solid #0ea5e9;
+            padding: 1rem;
+            border-radius: 4px;
+            margin: 1rem 0;
+            font-family: monospace;
+            font-size: 0.875rem;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .user-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        
+        .user-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .user-name {
+            font-weight: 600;
+            font-size: 1.125rem;
+        }
+        
+        .user-level {
+            background: #3b82f6;
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.875rem;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e5e7eb;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 0.5rem 0;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: #10b981;
+            transition: width 0.3s ease;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #3b82f6;
+        }
+        
+        .stat-label {
+            font-size: 0.875rem;
+            color: #6b7280;
+        }
+        
+        .challenge-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 0.5rem 0;
+        }
+        
+        .challenge-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+        
+        .challenge-title {
+            font-weight: 600;
+        }
+        
+        .difficulty-badge {
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .difficulty-beginner {
+            background: #dcfce7;
+            color: #166534;
+        }
+        
+        .difficulty-intermediate {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        
+        .difficulty-advanced {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        
+        .achievement-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 0.5rem 0;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .achievement-icon {
+            font-size: 2rem;
+        }
+        
+        .achievement-info {
+            flex: 1;
+        }
+        
+        .achievement-name {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+        
+        .achievement-description {
+            color: #6b7280;
+            font-size: 0.875rem;
+        }
+        
+        .rarity-badge {
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .rarity-common { background: #f3f4f6; color: #374151; }
+        .rarity-uncommon { background: #dcfce7; color: #166534; }
+        .rarity-rare { background: #dbeafe; color: #1e40af; }
+        .rarity-epic { background: #ede9fe; color: #7c3aed; }
+        .rarity-legendary { background: #fef3c7; color: #92400e; }
+        
+        .input {
+            padding: 0.5rem;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+            font-size: 0.875rem;
+            margin-right: 0.5rem;
+        }
+        
+        .code-example {
+            background: #1f2937;
+            color: #f9fafb;
+            padding: 1rem;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.875rem;
+            margin: 1rem 0;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <header role="banner">
+        <nav aria-label="Main navigation">
+            <div class="nav-brand">
+                <h1>CodeQuest</h1>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html">Dashboard</a></li>
+                <li><a href="#" class="active">Object-Oriented</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <main role="main">
+            <section class="hero">
+                <h1>Object-Oriented Demo</h1>
+                <p>Classes for User, Challenge, Achievement</p>
+            </section>
+
+            <section class="demo-section">
+                <h2>User Class</h2>
+                <div class="class-grid">
+                    <div class="class-demo">
+                        <h3>User Management</h3>
+                        <div class="controls">
+                            <input type="text" class="input" id="user-name" placeholder="User Name" value="John Doe">
+                            <input type="email" class="input" id="user-email" placeholder="Email" value="john@example.com">
+                            <button class="btn" onclick="createUser()">Create User</button>
+                        </div>
+                        
+                        <div id="user-display"></div>
+                        
+                        <div class="controls">
+                            <button class="btn btn-success" onclick="addXP()">Add 50 XP</button>
+                            <button class="btn btn-warning" onclick="completeChallenge()">Complete Challenge</button>
+                            <button class="btn" onclick="updateProfile()">Update Profile</button>
+                        </div>
+                    </div>
+
+                    <div class="class-demo">
+                        <h3>User Class Structure</h3>
+                        <div class="code-example">
+class User {
+    constructor(id, name, email, options = {}) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.level = options.level || 1;
+        this.xp = options.xp || 0;
+        this.achievements = options.achievements || [];
+        this.completedChallenges = options.completedChallenges || [];
+        this.streak = options.streak || 0;
+    }
+
+    addXP(amount) {
+        this.xp += amount;
+        this.checkLevelUp();
+        return this.xp;
+    }
+
+    completeChallenge(challenge) {
+        // Challenge completion logic
+    }
+}</div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="demo-section">
+                <h2>Challenge Class</h2>
+                <div class="class-grid">
+                    <div class="class-demo">
+                        <h3>Challenge Management</h3>
+                        <div class="controls">
+                            <button class="btn" onclick="createChallenges()">Create Sample Challenges</button>
+                            <button class="btn btn-success" onclick="validateSolution()">Test Solution</button>
+                            <button class="btn btn-warning" onclick="getHint()">Get Hint</button>
+                        </div>
+                        
+                        <div id="challenges-display"></div>
+                    </div>
+
+                    <div class="class-demo">
+                        <h3>Challenge Class Structure</h3>
+                        <div class="code-example">
+class Challenge {
+    constructor(id, title, description, options = {}) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.difficulty = options.difficulty || 'beginner';
+        this.category = options.category || 'javascript';
+        this.xp = options.xp || this.calculateXP();
+        this.tests = options.tests || [];
+        this.hints = options.hints || [];
+    }
+
+    validateSolution(userCode) {
+        const results = this.runTests(userCode);
+        return {
+            passed: results.every(test => test.passed),
+            results,
+            score: this.calculateScore(results)
+        };
+    }
+}</div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="demo-section">
+                <h2>Achievement Class</h2>
+                <div class="class-grid">
+                    <div class="class-demo">
+                        <h3>Achievement System</h3>
+                        <div class="controls">
+                            <button class="btn" onclick="createAchievements()">Create Achievements</button>
+                            <button class="btn btn-success" onclick="checkAchievements()">Check Unlocks</button>
+                            <button class="btn btn-warning" onclick="unlockAchievement()">Force Unlock</button>
+                        </div>
+                        
+                        <div id="achievements-display"></div>
+                    </div>
+
+                    <div class="class-demo">
+                        <h3>Achievement Class Structure</h3>
+                        <div class="code-example">
+class Achievement {
+    constructor(id, name, description, options = {}) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.icon = options.icon || '🏆';
+        this.rarity = options.rarity || 'common';
+        this.xpReward = options.xpReward || this.calculateXPReward();
+        this.condition = options.condition || (() => false);
+    }
+
+    checkCondition(user, context = {}) {
+        return this.condition(user, context);
+    }
+
+    unlock(user) {
+        if (this.canUnlock(user)) {
+            user.addXP(this.xpReward);
+            return true;
+        }
+        return false;
+    }
+}</div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="demo-section">
+                <h2>Integrated System Demo</h2>
+                <div class="class-demo">
+                    <h3>Complete Workflow</h3>
+                    <div class="controls">
+                        <button class="btn" onclick="runCompleteDemo()">Run Complete Demo</button>
+                        <button class="btn btn-warning" onclick="resetDemo()">Reset</button>
+                    </div>
+                    
+                    <div class="output" id="demo-output">
+                        Click "Run Complete Demo" to see all classes working together
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script type="module">
+        // Import classes (simulated for demo)
+        
+        // User Class Implementation
+        class User {
+            constructor(id, name, email, options = {}) {
+                this.id = id;
+                this.name = name;
+                this.email = email;
+                this.level = options.level || 1;
+                this.xp = options.xp || 0;
+                this.achievements = options.achievements || [];
+                this.completedChallenges = options.completedChallenges || [];
+                this.streak = options.streak || 0;
+                this.lastActivity = options.lastActivity || null;
+                this.preferences = { theme: 'light', notifications: true, ...options.preferences };
+            }
+
+            addXP(amount) {
+                this.xp += amount;
+                this.checkLevelUp();
+                this.updateLastActivity();
+                return this.xp;
+            }
+
+            checkLevelUp() {
+                const newLevel = Math.floor(this.xp / 100) + 1;
+                if (newLevel > this.level) {
+                    const oldLevel = this.level;
+                    this.level = newLevel;
+                    console.log(`${this.name} leveled up from ${oldLevel} to ${newLevel}!`);
+                }
+            }
+
+            completeChallenge(challenge) {
+                if (this.hasCompletedChallenge(challenge.id)) return false;
+                
+                this.completedChallenges.push({
+                    id: challenge.id,
+                    completedAt: new Date(),
+                    xpEarned: challenge.xp
+                });
+                
+                this.addXP(challenge.xp);
+                return true;
+            }
+
+            hasCompletedChallenge(challengeId) {
+                return this.completedChallenges.some(c => c.id === challengeId);
+            }
+
+            unlockAchievement(achievement) {
+                if (this.hasAchievement(achievement.id)) return false;
+                
+                this.achievements.push({
+                    id: achievement.id,
+                    unlockedAt: new Date()
+                });
+                
+                this.addXP(achievement.xpReward);
+                return true;
+            }
+
+            hasAchievement(achievementId) {
+                return this.achievements.some(a => a.id === achievementId);
+            }
+
+            updateLastActivity() {
+                this.lastActivity = new Date();
+            }
+
+            getProgress() {
+                const currentLevelXP = (this.level - 1) * 100;
+                const nextLevelXP = this.level * 100;
+                const progress = ((this.xp - currentLevelXP) / (nextLevelXP - currentLevelXP)) * 100;
+                return Math.min(100, Math.max(0, progress));
+            }
+
+            static create(name, email) {
+                const id = Date.now().toString(36) + Math.random().toString(36).substr(2);
+                return new User(id, name, email);
+            }
+        }
+
+        // Challenge Class Implementation
+        class Challenge {
+            constructor(id, title, description, options = {}) {
+                this.id = id;
+                this.title = title;
+                this.description = description;
+                this.difficulty = options.difficulty || 'beginner';
+                this.category = options.category || 'javascript';
+                this.xp = options.xp || this.calculateXP();
+                this.timeEstimate = options.timeEstimate || '10 min';
+                this.hints = options.hints || [];
+                this.tests = options.tests || [];
+            }
+
+            calculateXP() {
+                const baseXP = { beginner: 25, intermediate: 50, advanced: 100, expert: 200 };
+                return baseXP[this.difficulty] || 25;
+            }
+
+            validateSolution(userCode) {
+                // Simulate validation
+                return {
+                    passed: Math.random() > 0.3,
+                    score: Math.floor(Math.random() * 100),
+                    results: this.tests.map(test => ({ name: test, passed: Math.random() > 0.2 }))
+                };
+            }
+
+            getHint(index = 0) {
+                if (index >= this.hints.length) return null;
+                return { text: this.hints[index], index, hasMore: index < this.hints.length - 1 };
+            }
+
+            static create(title, description, options = {}) {
+                const id = Date.now().toString(36) + Math.random().toString(36).substr(2);
+                return new Challenge(id, title, description, options);
+            }
+        }
+
+        // Achievement Class Implementation
+        class Achievement {
+            constructor(id, name, description, options = {}) {
+                this.id = id;
+                this.name = name;
+                this.description = description;
+                this.icon = options.icon || '🏆';
+                this.rarity = options.rarity || 'common';
+                this.xpReward = options.xpReward || this.calculateXPReward();
+                this.condition = options.condition || (() => false);
+            }
+
+            calculateXPReward() {
+                const baseRewards = { common: 10, uncommon: 25, rare: 50, epic: 100, legendary: 250 };
+                return baseRewards[this.rarity] || 10;
+            }
+
+            checkCondition(user, context = {}) {
+                try {
+                    return this.condition(user, context);
+                } catch (error) {
+                    return false;
+                }
+            }
+
+            canUnlock(user) {
+                return this.checkCondition(user) && !user.hasAchievement(this.id);
+            }
+
+            static createChallengeAchievement(challengeCount) {
+                return new Achievement(
+                    `challenge-${challengeCount}`,
+                    `Challenge Master ${challengeCount}`,
+                    `Complete ${challengeCount} challenges`,
+                    {
+                        icon: '🎯',
+                        rarity: challengeCount >= 10 ? 'rare' : 'common',
+                        condition: (user) => user.completedChallenges.length >= challengeCount
+                    }
+                );
+            }
+        }
+
+        // Global variables
+        let currentUser = null;
+        let sampleChallenges = [];
+        let sampleAchievements = [];
+
+        // Demo functions
+        window.createUser = () => {
+            const name = document.getElementById('user-name').value;
+            const email = document.getElementById('user-email').value;
+            
+            if (!name || !email) {
+                alert('Please enter name and email');
+                return;
+            }
+
+            currentUser = User.create(name, email);
+            displayUser();
+        };
+
+        window.addXP = () => {
+            if (!currentUser) {
+                alert('Create a user first');
+                return;
+            }
+            
+            currentUser.addXP(50);
+            displayUser();
+        };
+
+        window.completeChallenge = () => {
+            if (!currentUser) {
+                alert('Create a user first');
+                return;
+            }
+            
+            if (sampleChallenges.length === 0) {
+                createChallenges();
+            }
+            
+            const challenge = sampleChallenges[0];
+            const completed = currentUser.completeChallenge(challenge);
+            
+            if (completed) {
+                alert(`Challenge "${challenge.title}" completed! +${challenge.xp} XP`);
+                displayUser();
+            } else {
+                alert('Challenge already completed!');
+            }
+        };
+
+        window.updateProfile = () => {
+            if (!currentUser) {
+                alert('Create a user first');
+                return;
+            }
+            
+            currentUser.preferences.theme = currentUser.preferences.theme === 'light' ? 'dark' : 'light';
+            alert(`Theme changed to ${currentUser.preferences.theme}`);
+            displayUser();
+        };
+
+        window.createChallenges = () => {
+            sampleChallenges = [
+                Challenge.create('Hello World', 'Create your first JavaScript program', {
+                    difficulty: 'beginner',
+                    hints: ['Use console.log()', 'Remember the quotes'],
+                    tests: ['Basic output test', 'Syntax test']
+                }),
+                Challenge.create('Array Methods', 'Learn array manipulation', {
+                    difficulty: 'intermediate',
+                    hints: ['Use map() method', 'Return new array'],
+                    tests: ['Map test', 'Filter test']
+                }),
+                Challenge.create('Async Programming', 'Master promises and async/await', {
+                    difficulty: 'advanced',
+                    hints: ['Use async/await', 'Handle errors with try/catch'],
+                    tests: ['Promise test', 'Error handling test']
+                })
+            ];
+            
+            displayChallenges();
+        };
+
+        window.validateSolution = () => {
+            if (sampleChallenges.length === 0) {
+                createChallenges();
+            }
+            
+            const challenge = sampleChallenges[0];
+            const result = challenge.validateSolution('console.log("Hello World");');
+            
+            alert(`Solution ${result.passed ? 'passed' : 'failed'}! Score: ${result.score}%`);
+        };
+
+        window.getHint = () => {
+            if (sampleChallenges.length === 0) {
+                createChallenges();
+            }
+            
+            const challenge = sampleChallenges[0];
+            const hint = challenge.getHint(0);
+            
+            if (hint) {
+                alert(`Hint: ${hint.text}`);
+            } else {
+                alert('No hints available');
+            }
+        };
+
+        window.createAchievements = () => {
+            sampleAchievements = [
+                Achievement.createChallengeAchievement(1),
+                Achievement.createChallengeAchievement(5),
+                Achievement.createChallengeAchievement(10),
+                new Achievement('first-login', 'Welcome!', 'Complete your first login', {
+                    icon: '👋',
+                    rarity: 'common',
+                    condition: () => true
+                }),
+                new Achievement('level-master', 'Level Master', 'Reach level 5', {
+                    icon: '⭐',
+                    rarity: 'rare',
+                    condition: (user) => user.level >= 5
+                })
+            ];
+            
+            displayAchievements();
+        };
+
+        window.checkAchievements = () => {
+            if (!currentUser) {
+                alert('Create a user first');
+                return;
+            }
+            
+            if (sampleAchievements.length === 0) {
+                createAchievements();
+            }
+            
+            let unlocked = 0;
+            sampleAchievements.forEach(achievement => {
+                if (achievement.canUnlock(currentUser)) {
+                    currentUser.unlockAchievement(achievement);
+                    unlocked++;
+                }
+            });
+            
+            alert(`${unlocked} achievements unlocked!`);
+            displayUser();
+            displayAchievements();
+        };
+
+        window.unlockAchievement = () => {
+            if (!currentUser) {
+                alert('Create a user first');
+                return;
+            }
+            
+            if (sampleAchievements.length === 0) {
+                createAchievements();
+            }
+            
+            const achievement = sampleAchievements[0];
+            const unlocked = currentUser.unlockAchievement(achievement);
+            
+            if (unlocked) {
+                alert(`Achievement "${achievement.name}" unlocked! +${achievement.xpReward} XP`);
+                displayUser();
+            } else {
+                alert('Achievement already unlocked!');
+            }
+        };
+
+        window.runCompleteDemo = () => {
+            const output = document.getElementById('demo-output');
+            let log = '';
+            
+            // Create user
+            currentUser = User.create('Demo User', 'demo@example.com');
+            log += `✓ Created user: ${currentUser.name}\n`;
+            
+            // Create challenges
+            createChallenges();
+            log += `✓ Created ${sampleChallenges.length} challenges\n`;
+            
+            // Create achievements
+            createAchievements();
+            log += `✓ Created ${sampleAchievements.length} achievements\n`;
+            
+            // Complete challenges
+            sampleChallenges.forEach((challenge, index) => {
+                if (index < 2) { // Complete first 2 challenges
+                    currentUser.completeChallenge(challenge);
+                    log += `✓ Completed challenge: ${challenge.title} (+${challenge.xp} XP)\n`;
+                }
+            });
+            
+            // Check achievements
+            let unlockedCount = 0;
+            sampleAchievements.forEach(achievement => {
+                if (achievement.canUnlock(currentUser)) {
+                    currentUser.unlockAchievement(achievement);
+                    log += `🏆 Unlocked achievement: ${achievement.name} (+${achievement.xpReward} XP)\n`;
+                    unlockedCount++;
+                }
+            });
+            
+            log += `\n📊 Final Stats:\n`;
+            log += `   Level: ${currentUser.level}\n`;
+            log += `   XP: ${currentUser.xp}\n`;
+            log += `   Challenges: ${currentUser.completedChallenges.length}\n`;
+            log += `   Achievements: ${currentUser.achievements.length}\n`;
+            
+            output.textContent = log;
+            displayUser();
+            displayChallenges();
+            displayAchievements();
+        };
+
+        window.resetDemo = () => {
+            currentUser = null;
+            sampleChallenges = [];
+            sampleAchievements = [];
+            
+            document.getElementById('user-display').innerHTML = '';
+            document.getElementById('challenges-display').innerHTML = '';
+            document.getElementById('achievements-display').innerHTML = '';
+            document.getElementById('demo-output').textContent = 'Click "Run Complete Demo" to see all classes working together';
+        };
+
+        // Display functions
+        function displayUser() {
+            if (!currentUser) return;
+            
+            const display = document.getElementById('user-display');
+            display.innerHTML = `
+                <div class="user-card">
+                    <div class="user-header">
+                        <div class="user-name">${currentUser.name}</div>
+                        <div class="user-level">Level ${currentUser.level}</div>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: ${currentUser.getProgress()}%"></div>
+                    </div>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <div class="stat-value">${currentUser.xp}</div>
+                            <div class="stat-label">XP</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">${currentUser.completedChallenges.length}</div>
+                            <div class="stat-label">Challenges</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">${currentUser.achievements.length}</div>
+                            <div class="stat-label">Achievements</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">${currentUser.streak}</div>
+                            <div class="stat-label">Streak</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function displayChallenges() {
+            const display = document.getElementById('challenges-display');
+            display.innerHTML = sampleChallenges.map(challenge => `
+                <div class="challenge-card">
+                    <div class="challenge-header">
+                        <div class="challenge-title">${challenge.title}</div>
+                        <div class="difficulty-badge difficulty-${challenge.difficulty}">${challenge.difficulty}</div>
+                    </div>
+                    <div style="color: #6b7280; font-size: 0.875rem; margin-bottom: 0.5rem;">
+                        ${challenge.description}
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span style="color: #3b82f6; font-weight: 600;">+${challenge.xp} XP</span>
+                        <span style="color: #6b7280; font-size: 0.875rem;">${challenge.timeEstimate}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function displayAchievements() {
+            const display = document.getElementById('achievements-display');
+            display.innerHTML = sampleAchievements.map(achievement => {
+                const isUnlocked = currentUser && currentUser.hasAchievement(achievement.id);
+                return `
+                    <div class="achievement-card" style="opacity: ${isUnlocked ? 1 : 0.6}">
+                        <div class="achievement-icon">${achievement.icon}</div>
+                        <div class="achievement-info">
+                            <div class="achievement-name">${achievement.name}</div>
+                            <div class="achievement-description">${achievement.description}</div>
+                        </div>
+                        <div class="rarity-badge rarity-${achievement.rarity}">${achievement.rarity}</div>
+                        ${isUnlocked ? '<div style="color: #10b981; font-weight: 600;">✓ Unlocked</div>' : ''}
+                    </div>
+                `;
+            }).join('');
+        }
+    </script>
+</body>
+</html>
