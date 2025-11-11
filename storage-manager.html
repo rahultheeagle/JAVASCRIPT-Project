@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Storage Manager - CodeQuest</title>
+    <link rel="stylesheet" href="storage-manager-styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🗄️ Storage Manager</h1>
+            <nav>
+                <a href="index.html">← Dashboard</a>
+            </nav>
+        </header>
+
+        <div class="storage-overview">
+            <div class="storage-stats" id="storageStats">
+                <div class="stat-card">
+                    <h3>Storage Usage</h3>
+                    <div class="usage-bar">
+                        <div class="usage-fill" id="usageFill"></div>
+                    </div>
+                    <span id="usageText">Loading...</span>
+                </div>
+                <div class="stat-card">
+                    <h3>Total Items</h3>
+                    <span class="stat-number" id="totalItems">0</span>
+                </div>
+                <div class="stat-card">
+                    <h3>Last Backup</h3>
+                    <span class="stat-text" id="lastBackup">Never</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="tabs">
+            <button class="tab-btn active" onclick="showTab('data')">📊 Data Management</button>
+            <button class="tab-btn" onclick="showTab('backups')">💾 Backups</button>
+            <button class="tab-btn" onclick="showTab('sessions')">📝 Sessions</button>
+            <button class="tab-btn" onclick="showTab('advanced')">⚙️ Advanced</button>
+        </div>
+
+        <div id="dataTab" class="tab-content active">
+            <div class="manager-grid">
+                <div class="section">
+                    <h2>📊 Progress Data</h2>
+                    <div class="data-display" id="progressData"></div>
+                    <div class="section-actions">
+                        <button onclick="exportProgress()">Export</button>
+                        <button onclick="createBackup('progress')">Backup</button>
+                        <button onclick="clearProgress()">Clear</button>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h2>⚙️ Settings</h2>
+                    <div class="data-display" id="settingsData"></div>
+                    <div class="section-actions">
+                        <button onclick="exportSettings()">Export</button>
+                        <button onclick="createBackup('settings')">Backup</button>
+                        <button onclick="clearSettings()">Clear</button>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h2>💾 Saved Code</h2>
+                    <div class="data-display" id="codeData"></div>
+                    <div class="section-actions">
+                        <button onclick="exportCode()">Export</button>
+                        <button onclick="createBackup('savedCode')">Backup</button>
+                        <button onclick="clearCode()">Clear</button>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h2>🎮 Gamification</h2>
+                    <div class="data-display" id="gameData"></div>
+                    <div class="section-actions">
+                        <button onclick="exportGame()">Export</button>
+                        <button onclick="createBackup('gamification')">Backup</button>
+                        <button onclick="clearGame()">Clear</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="backupsTab" class="tab-content">
+            <div class="backups-section">
+                <h2>💾 Backup Management</h2>
+                <div class="backup-actions">
+                    <button onclick="createFullBackup()">📦 Create Full Backup</button>
+                    <button onclick="showBackupHistory()">📋 View History</button>
+                </div>
+                <div class="backup-list" id="backupList"></div>
+            </div>
+        </div>
+
+        <div id="sessionsTab" class="tab-content">
+            <div class="sessions-section">
+                <h2>📝 Session History</h2>
+                <div class="sessions-list" id="sessionsList"></div>
+            </div>
+        </div>
+
+        <div id="advancedTab" class="tab-content">
+            <div class="advanced-section">
+                <h2>⚙️ Advanced Options</h2>
+                <div class="advanced-grid">
+                    <div class="advanced-card">
+                        <h3>🧹 Storage Cleanup</h3>
+                        <p>Remove old backups and session data</p>
+                        <button onclick="performCleanup()">Run Cleanup</button>
+                    </div>
+                    <div class="advanced-card">
+                        <h3>🔄 Sync Settings</h3>
+                        <p>Enable cross-tab synchronization</p>
+                        <button onclick="toggleSync()" id="syncBtn">Enable Sync</button>
+                    </div>
+                    <div class="advanced-card">
+                        <h3>📊 Storage Analysis</h3>
+                        <p>Detailed storage usage breakdown</p>
+                        <button onclick="showStorageAnalysis()">Analyze</button>
+                    </div>
+                </div>
+                <div class="storage-analysis" id="storageAnalysis"></div>
+            </div>
+        </div>
+
+        <div class="main-actions">
+            <button onclick="exportAll()" class="primary-btn">📤 Export All Data</button>
+            <button onclick="importData()" class="primary-btn">📥 Import Data</button>
+            <button onclick="StorageManager.createFullBackup()" class="secondary-btn">💾 Full Backup</button>
+            <button onclick="clearAll()" class="danger-btn">🗑️ Clear All Data</button>
+        </div>
+
+        <input type="file" id="importFile" accept=".json" style="display:none" onchange="handleImport(event)">
+    </div>
+
+    <script src="storage-manager.js"></script>
+</body>
+</html>
