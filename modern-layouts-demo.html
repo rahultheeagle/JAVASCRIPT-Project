@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Layouts Demo - CodeQuest</title>
+    <link rel="stylesheet" href="design-system.css">
+    <link rel="stylesheet" href="css/modern-layouts.css">
+    <style>
+        .demo-section {
+            margin: 2rem 0;
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+        }
+        
+        .demo-box {
+            background: var(--primary-light);
+            color: var(--primary-color);
+            padding: 1rem;
+            border-radius: 4px;
+            text-align: center;
+            font-weight: 600;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .demo-box.tall {
+            min-height: 120px;
+        }
+        
+        .demo-box.short {
+            min-height: 40px;
+        }
+        
+        .layout-preview {
+            border: 2px dashed var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+            min-height: 200px;
+        }
+        
+        .layout-preview.full-height {
+            height: 400px;
+        }
+        
+        .controls {
+            display: flex;
+            gap: 1rem;
+            margin: 1rem 0;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 4px;
+            background: var(--primary-color);
+            color: white;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        
+        .btn:hover {
+            background: var(--primary-dark);
+        }
+        
+        .btn.active {
+            background: var(--success-color);
+        }
+        
+        .code-display {
+            background: var(--background-dark);
+            color: var(--text-light);
+            padding: 1rem;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 0.9rem;
+            margin: 1rem 0;
+            overflow-x: auto;
+        }
+        
+        .masonry-demo .demo-box:nth-child(1) { --span: 15; }
+        .masonry-demo .demo-box:nth-child(2) { --span: 25; }
+        .masonry-demo .demo-box:nth-child(3) { --span: 20; }
+        .masonry-demo .demo-box:nth-child(4) { --span: 30; }
+        .masonry-demo .demo-box:nth-child(5) { --span: 18; }
+        .masonry-demo .demo-box:nth-child(6) { --span: 22; }
+    </style>
+</head>
+<body>
+    <header role="banner">
+        <nav aria-label="Main navigation">
+            <div class="nav-brand">
+                <h1>CodeQuest</h1>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html">Dashboard</a></li>
+                <li><a href="#" class="active">Modern Layouts</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main role="main">
+        <section class="hero">
+            <h1>Modern Layouts Demo</h1>
+            <p>CSS Grid & Flexbox techniques</p>
+        </section>
+
+        <section class="demo-section">
+            <h2>CSS Grid Layouts</h2>
+            
+            <h3>Basic Grid System</h3>
+            <div class="controls">
+                <button class="btn active" onclick="changeGrid('grid-2')">2 Columns</button>
+                <button class="btn" onclick="changeGrid('grid-3')">3 Columns</button>
+                <button class="btn" onclick="changeGrid('grid-4')">4 Columns</button>
+                <button class="btn" onclick="changeGrid('grid-auto')">Auto Fit</button>
+            </div>
+            
+            <div class="layout-preview">
+                <div class="grid grid-2" id="basic-grid">
+                    <div class="demo-box">Item 1</div>
+                    <div class="demo-box">Item 2</div>
+                    <div class="demo-box">Item 3</div>
+                    <div class="demo-box">Item 4</div>
+                    <div class="demo-box">Item 5</div>
+                    <div class="demo-box">Item 6</div>
+                </div>
+            </div>
+            
+            <div class="code-display" id="grid-code">
+&lt;div class="grid grid-2"&gt;
+  &lt;div&gt;Item 1&lt;/div&gt;
+  &lt;div&gt;Item 2&lt;/div&gt;
+&lt;/div&gt;
+            </div>
+        </section>
+
+        <section class="demo-section">
+            <h2>Grid Areas Layout</h2>
+            <div class="layout-preview full-height">
+                <div class="grid-layout">
+                    <div class="grid-header demo-box">Header</div>
+                    <div class="grid-sidebar demo-box">Sidebar</div>
+                    <div class="grid-main demo-box">Main Content</div>
+                    <div class="grid-aside demo-box">Aside</div>
+                    <div class="grid-footer demo-box">Footer</div>
+                </div>
+            </div>
+            
+            <div class="code-display">
+.grid-layout {
+  display: grid;
+  grid-template-areas: 
+    "header header header"
+    "sidebar main aside"
+    "footer footer footer";
+  grid-template-columns: 200px 1fr 200px;
+}
+            </div>
+        </section>
+
+        <section class="demo-section">
+            <h2>Flexbox Layouts</h2>
+            
+            <h3>Flex Direction & Alignment</h3>
+            <div class="controls">
+                <button class="btn active" onclick="changeFlex('flex-row justify-between')">Space Between</button>
+                <button class="btn" onclick="changeFlex('flex-row justify-center')">Center</button>
+                <button class="btn" onclick="changeFlex('flex-col items-center')">Column Center</button>
+                <button class="btn" onclick="changeFlex('flex-wrap justify-evenly')">Wrap Evenly</button>
+            </div>
+            
+            <div class="layout-preview">
+                <div class="flex flex-row justify-between" id="flex-demo">
+                    <div class="demo-box">Flex 1</div>
+                    <div class="demo-box">Flex 2</div>
+                    <div class="demo-box">Flex 3</div>
+                </div>
+            </div>
+            
+            <div class="code-display" id="flex-code">
+&lt;div class="flex flex-row justify-between"&gt;
+  &lt;div&gt;Flex 1&lt;/div&gt;
+  &lt;div&gt;Flex 2&lt;/div&gt;
+&lt;/div&gt;
+            </div>
+        </section>
+
+        <section class="demo-section">
+            <h2>Responsive Card Grid</h2>
+            <div class="layout-preview">
+                <div class="card-grid">
+                    <div class="demo-box">Card 1</div>
+                    <div class="demo-box">Card 2</div>
+                    <div class="demo-box">Card 3</div>
+                    <div class="demo-box">Card 4</div>
+                    <div class="demo-box">Card 5</div>
+                    <div class="demo-box">Card 6</div>
+                </div>
+            </div>
+            
+            <div class="code-display">
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+            </div>
+        </section>
+
+        <section class="demo-section">
+            <h2>Masonry Layout</h2>
+            <div class="layout-preview">
+                <div class="masonry masonry-demo">
+                    <div class="demo-box masonry-item">Item 1</div>
+                    <div class="demo-box masonry-item">Item 2</div>
+                    <div class="demo-box masonry-item">Item 3</div>
+                    <div class="demo-box masonry-item">Item 4</div>
+                    <div class="demo-box masonry-item">Item 5</div>
+                    <div class="demo-box masonry-item">Item 6</div>
+                </div>
+            </div>
+            
+            <div class="code-display">
+.masonry {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  grid-auto-rows: 10px;
+}
+.masonry-item {
+  grid-row-end: span var(--span, 20);
+}
+            </div>
+        </section>
+
+        <section class="demo-section">
+            <h2>Holy Grail Layout</h2>
+            <div class="layout-preview full-height">
+                <div class="holy-grail">
+                    <div class="demo-box" style="grid-area: header;">Header</div>
+                    <div class="demo-box" style="grid-area: nav;">Nav</div>
+                    <div class="demo-box" style="grid-area: main;">Main</div>
+                    <div class="demo-box" style="grid-area: aside;">Aside</div>
+                    <div class="demo-box" style="grid-area: footer;">Footer</div>
+                </div>
+            </div>
+            
+            <div class="code-display">
+.holy-grail {
+  display: grid;
+  grid-template: 
+    "header header header" auto
+    "nav main aside" 1fr
+    "footer footer footer" auto
+    / 200px 1fr 150px;
+}
+            </div>
+        </section>
+
+        <section class="demo-section">
+            <h2>Centering Techniques</h2>
+            
+            <h3>Grid Center</h3>
+            <div class="layout-preview">
+                <div class="center-grid">
+                    <div class="demo-box">Centered with Grid</div>
+                </div>
+            </div>
+            
+            <h3>Flex Center</h3>
+            <div class="layout-preview">
+                <div class="center-flex">
+                    <div class="demo-box">Centered with Flex</div>
+                </div>
+            </div>
+            
+            <div class="code-display">
+/* Grid Center */
+.center-grid {
+  display: grid;
+  place-items: center;
+}
+
+/* Flex Center */
+.center-flex {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+            </div>
+        </section>
+
+        <section class="demo-section">
+            <h2>Responsive Behavior</h2>
+            <p>Resize your browser window to see how layouts adapt to different screen sizes.</p>
+            
+            <div class="layout-preview">
+                <div class="responsive-grid">
+                    <div class="demo-box">Responsive 1</div>
+                    <div class="demo-box">Responsive 2</div>
+                    <div class="demo-box">Responsive 3</div>
+                    <div class="demo-box">Responsive 4</div>
+                </div>
+            </div>
+            
+            <div class="code-display">
+.responsive-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+  gap: 1rem;
+}
+
+@media (max-width: 768px) {
+  .grid-2, .grid-3, .grid-4 {
+    grid-template-columns: 1fr;
+  }
+}
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Change grid layout
+        function changeGrid(gridClass) {
+            const grid = document.getElementById('basic-grid');
+            grid.className = `grid ${gridClass}`;
+            
+            // Update active button
+            document.querySelectorAll('.demo-section:nth-of-type(2) .btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Update code display
+            document.getElementById('grid-code').innerHTML = 
+`&lt;div class="grid ${gridClass}"&gt;
+  &lt;div&gt;Item 1&lt;/div&gt;
+  &lt;div&gt;Item 2&lt;/div&gt;
+&lt;/div&gt;`;
+        }
+
+        // Change flex layout
+        function changeFlex(flexClasses) {
+            const flex = document.getElementById('flex-demo');
+            flex.className = `flex ${flexClasses}`;
+            
+            // Update active button
+            document.querySelectorAll('.demo-section:nth-of-type(4) .btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Update code display
+            document.getElementById('flex-code').innerHTML = 
+`&lt;div class="flex ${flexClasses}"&gt;
+  &lt;div&gt;Flex 1&lt;/div&gt;
+  &lt;div&gt;Flex 2&lt;/div&gt;
+&lt;/div&gt;`;
+        }
+    </script>
+</body>
+</html>
