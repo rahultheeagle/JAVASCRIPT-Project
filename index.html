@@ -4,16 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CodeQuest - Interactive Learning Platform</title>
+    <meta name="description" content="Interactive coding platform for learning JavaScript, HTML, and CSS with challenges, tutorials, and gamification">
+    <meta name="keywords" content="coding, learning, JavaScript, HTML, CSS, programming, tutorials, challenges">
     <link rel="stylesheet" href="design-system.css">
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="theme-styles.css">
 </head>
 <body>
-    <button class="theme-toggle" id="theme-toggle">🌙</button>
+    <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark theme">🌙</button>
     <div class="container">
-        <header>
+        <header role="banner">
             <h1>CodeQuest</h1>
-            <div class="profile-section">
+            <section class="profile-section" aria-label="User profile information">
                 <div id="profile-display" class="profile-display">
                     <img id="profile-avatar" src="https://via.placeholder.com/50" alt="Avatar">
                     <div class="profile-info">
@@ -50,12 +52,14 @@
             </div>
         </div>
 
-        <main>
-            <div class="dashboard">
-                <h2>Welcome to your Dashboard</h2>
-                <p>Start your coding journey!</p>
+        <main role="main">
+            <section class="dashboard">
+                <header>
+                    <h2>Welcome to your Dashboard</h2>
+                    <p>Start your coding journey!</p>
+                </header>
                 
-                <div class="quick-actions">
+                <nav class="quick-actions" aria-label="Quick access to learning tools">
                     <a href="editor.html" class="action-btn editor-btn">
                         <span class="btn-icon">💻</span>
                         <div class="btn-content">
@@ -315,10 +319,17 @@
                             <p>Easy navigation for assistive technology</p>
                         </div>
                     </a>
+                    <a href="semantic-html-demo.html" class="action-btn semantic-btn">
+                        <span class="btn-icon">🏷️</span>
+                        <div class="btn-content">
+                            <h4>Semantic HTML5</h4>
+                            <p>Proper element usage throughout</p>
+                        </div>
+                    </a>
                 </div>
                 
-                <div class="progress-section">
-                    <h3>Learning Progress</h3>
+                <section class="progress-section" aria-labelledby="progress-heading">
+                    <h3 id="progress-heading">Learning Progress</h3>
                     <div class="progress-overview">
                         <div class="progress-stat">
                             <span class="stat-number" id="completed-lessons">0</span>
@@ -354,8 +365,8 @@
                         </div>
                     </div>
                     
-                    <div class="learning-path">
-                        <h4>Learning Path</h4>
+                    <section class="learning-path" aria-labelledby="path-heading">
+                        <h4 id="path-heading">Learning Path</h4>
                         <div class="path-container">
                             <div class="path-line"></div>
                             <div class="path-nodes">
@@ -411,7 +422,7 @@
                         </div>
                     </div>
                     
-                    <div class="lessons-grid">
+                    <section class="lessons-grid" aria-label="Available lessons">
                         <div class="lesson-card" data-lesson="1">
                             <div class="lesson-status"></div>
                             <h4>HTML Basics</h4>
@@ -474,8 +485,8 @@
                         </div>
                     </div>
                     
-                    <div class="daily-challenges-section">
-                        <h3>Daily Challenge 🌟</h3>
+                    <section class="daily-challenges-section" aria-labelledby="daily-challenge-heading">
+                        <h3 id="daily-challenge-heading">Daily Challenge 🌟</h3>
                         <div class="daily-challenge-card" id="daily-challenge">
                             <div class="challenge-header">
                                 <div class="challenge-title">Loading...</div>
@@ -495,15 +506,15 @@
                         </div>
                     </div>
 
-                    <div class="missions-section">
-                        <h3>Active Missions 🎯</h3>
+                    <section class="missions-section" aria-labelledby="missions-heading">
+                        <h3 id="missions-heading">Active Missions 🎯</h3>
                         <div class="missions-container" id="missions-container">
                             <!-- Missions will be populated by JavaScript -->
                         </div>
                     </div>
 
-                    <div class="power-ups-section">
-                        <h3>Power-ups ⚡</h3>
+                    <section class="power-ups-section" aria-labelledby="powerups-heading">
+                        <h3 id="powerups-heading">Power-ups ⚡</h3>
                         <div class="power-ups-container">
                             <div class="power-up" data-powerup="double-xp">
                                 <div class="power-up-icon">⚡</div>
@@ -553,8 +564,8 @@
                         </div>
                     </div>
 
-                    <div class="leaderboard-section">
-                        <h3>Leaderboard 🏆</h3>
+                    <section class="leaderboard-section" aria-labelledby="leaderboard-heading">
+                        <h3 id="leaderboard-heading">Leaderboard 🏆</h3>
                         <div class="leaderboard-tabs">
                             <button class="tab-btn active" data-tab="weekly">Weekly</button>
                             <button class="tab-btn" data-tab="monthly">Monthly</button>
@@ -565,8 +576,8 @@
                         </div>
                     </div>
 
-                    <div class="achievements-section">
-                        <h3>Achievement Badges</h3>
+                    <section class="achievements-section" aria-labelledby="achievements-heading">
+                        <h3 id="achievements-heading">Achievement Badges</h3>
                         <div class="badges-container">
                             <div class="badge" data-badge="first-lesson">
                                 <div class="badge-icon">🎯</div>
@@ -730,9 +741,9 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-            </div>
+                    </section>
+                </section>
+            </section>
         </main>
     </div>
 
