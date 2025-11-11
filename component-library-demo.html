@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Component Library - CodeQuest Design System</title>
+    <link rel="stylesheet" href="design-system.css">
+    <style>
+        body {
+            background: var(--bg-primary);
+            margin: 0;
+            padding: 2rem;
+        }
+        .demo-section {
+            margin-bottom: 3rem;
+        }
+        .demo-grid {
+            display: grid;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .button-grid {
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        }
+        .card-grid {
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        }
+        .form-grid {
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        }
+        .demo-item {
+            padding: 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            background: var(--card-bg);
+        }
+        .demo-label {
+            font-size: var(--text-xs);
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+            font-weight: var(--font-medium);
+        }
+    </style>
+</head>
+<body>
+    <h1>Component Library</h1>
+    <p class="text-secondary">Reusable buttons, cards, and inputs for consistent UI design</p>
+
+    <!-- Buttons Section -->
+    <div class="demo-section">
+        <h2>Buttons</h2>
+        <div class="demo-grid button-grid">
+            <div class="demo-item">
+                <div class="demo-label">Primary</div>
+                <button class="btn btn-primary">Primary Button</button>
+            </div>
+            <div class="demo-item">
+                <div class="demo-label">Secondary</div>
+                <button class="btn btn-secondary">Secondary Button</button>
+            </div>
+            <div class="demo-item">
+                <div class="demo-label">Outline</div>
+                <button class="btn btn-outline">Outline Button</button>
+            </div>
+            <div class="demo-item">
+                <div class="demo-label">Ghost</div>
+                <button class="btn btn-ghost">Ghost Button</button>
+            </div>
+            <div class="demo-item">
+                <div class="demo-label">Small</div>
+                <button class="btn btn-primary btn-sm">Small</button>
+            </div>
+            <div class="demo-item">
+                <div class="demo-label">Large</div>
+                <button class="btn btn-primary btn-lg">Large Button</button>
+            </div>
+            <div class="demo-item">
+                <div class="demo-label">Disabled</div>
+                <button class="btn btn-primary" disabled>Disabled</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cards Section -->
+    <div class="demo-section">
+        <h2>Cards</h2>
+        <div class="demo-grid card-grid">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Card Title</h3>
+                    <p class="card-subtitle">Card subtitle</p>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">This is a basic card with header, body, and footer sections.</p>
+                </div>
+                <div class="card-footer">
+                    <button class="btn btn-primary btn-sm">Action</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="card-title">Simple Card</h3>
+                    <p class="card-text">A simple card with just a body section. Perfect for content blocks.</p>
+                    <button class="btn btn-outline btn-sm">Learn More</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Feature Card</h3>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">Cards can be used to showcase features, content, or any grouped information.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Inputs Section -->
+    <div class="demo-section">
+        <h2>Form Inputs</h2>
+        <div class="demo-grid form-grid">
+            <div class="demo-item">
+                <div class="demo-label">Text Input</div>
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-input" placeholder="Enter your email">
+                </div>
+            </div>
+
+            <div class="demo-item">
+                <div class="demo-label">Textarea</div>
+                <div class="form-group">
+                    <label class="form-label">Message</label>
+                    <textarea class="form-input form-textarea" placeholder="Enter your message"></textarea>
+                </div>
+            </div>
+
+            <div class="demo-item">
+                <div class="demo-label">Select</div>
+                <div class="form-group">
+                    <label class="form-label">Category</label>
+                    <select class="form-input form-select">
+                        <option>Choose option</option>
+                        <option>Option 1</option>
+                        <option>Option 2</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="demo-item">
+                <div class="demo-label">With Help Text</div>
+                <div class="form-group">
+                    <label class="form-label">Username</label>
+                    <input type="text" class="form-input" placeholder="username">
+                    <div class="form-help">Choose a unique username</div>
+                </div>
+            </div>
+
+            <div class="demo-item">
+                <div class="demo-label">Error State</div>
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <input type="password" class="form-input error" placeholder="password">
+                    <div class="form-error">Password is required</div>
+                </div>
+            </div>
+
+            <div class="demo-item">
+                <div class="demo-label">Disabled</div>
+                <div class="form-group">
+                    <label class="form-label">Disabled Input</label>
+                    <input type="text" class="form-input" value="Disabled" disabled>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Usage Examples -->
+    <div class="demo-section">
+        <h2>Usage Examples</h2>
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Login Form</h3>
+                <p class="card-subtitle">Example form using components</p>
+            </div>
+            <div class="card-body">
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-input" placeholder="Enter your email">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <input type="password" class="form-input" placeholder="Enter your password">
+                </div>
+            </div>
+            <div class="card-footer">
+                <button class="btn btn-primary">Sign In</button>
+                <button class="btn btn-ghost">Forgot Password?</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
