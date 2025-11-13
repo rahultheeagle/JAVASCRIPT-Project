@@ -4,714 +4,735 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CodeQuest - Interactive Learning Platform</title>
-    <meta name="description" content="Interactive coding platform for learning JavaScript, HTML, and CSS with challenges, tutorials, and gamification">
-    <meta name="keywords" content="coding, learning, JavaScript, HTML, CSS, programming, tutorials, challenges">
-    
-    <!-- PWA Meta Tags -->
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#667eea">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="apple-mobile-web-app-title" content="CodeQuest">
-    <link rel="apple-touch-icon" href="assets/icons/icon-192x192.png">
-    <meta name="msapplication-TileImage" content="assets/icons/icon-144x144.png">
-    <meta name="msapplication-TileColor" content="#667eea">
-    <link rel="stylesheet" href="design-system.css">
-    <!-- Critical CSS inlined for performance -->
     <style>
-        :root{--primary-color:#3b82f6;--secondary-color:#1e40af;--success-color:#10b981;--warning-color:#f59e0b;--error-color:#ef4444;--text-color:#1f2937;--bg-color:#f8fafc;--card-bg:rgba(255,255,255,0.98);--border-radius:12px;--shadow:0 4px 20px rgba(0,0,0,0.08);--transition:all 0.2s ease;--accent-color:#8b5cf6;--neutral-color:#6b7280;--light-gray:#f3f4f6;--border-color:#e5e7eb}
-        *{margin:0;padding:0;box-sizing:border-box}
-        body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;background:linear-gradient(135deg,#f8fafc 0%,#e2e8f0 100%);min-height:100vh;color:var(--text-color)}
-        .container{max-width:1200px;margin:0 auto;padding:20px}
-        header{background:var(--card-bg);padding:20px;border-radius:var(--border-radius);margin-bottom:30px;display:flex;justify-content:space-between;align-items:center;box-shadow:var(--shadow)}
-        .quick-actions-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:20px;margin:30px 0}
-        .action-btn{display:flex;align-items:center;padding:20px;background:var(--card-bg);border-radius:var(--border-radius);text-decoration:none;color:var(--text-color);transition:all 0.3s ease;box-shadow:var(--shadow);border:1px solid var(--border-color);position:relative;overflow:hidden}
-        .action-btn:hover{transform:translateY(-4px);box-shadow:0 15px 35px rgba(59,130,246,0.15);border-color:var(--primary-color)}
-        .btn-icon{font-size:2.8rem;margin-right:18px;filter:drop-shadow(0 2px 8px rgba(0,0,0,0.15));transition:transform 0.3s ease}
-        .action-btn:hover .btn-icon{transform:scale(1.1) rotate(5deg)}
-        .dashboard-section{background:var(--card-bg);border-radius:var(--border-radius);padding:25px;margin-bottom:30px;box-shadow:var(--shadow);border:1px solid var(--border-color);transition:all 0.3s ease}
-        .dashboard-section:hover{transform:translateY(-2px);box-shadow:0 8px 25px rgba(0,0,0,0.1)}
-        .section-header{margin-bottom:20px;text-align:center}
-        .section-header h3{color:var(--text-color);font-size:1.5rem;margin-bottom:8px;font-weight:700}
-        .section-subtitle{color:var(--neutral-color);font-size:0.95rem;margin:0;opacity:0.8}
-        .theme-toggle{position:fixed;top:20px;right:20px;z-index:1000;background:var(--card-bg);border:2px solid var(--border-color);border-radius:50%;width:50px;height:50px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.3s ease;box-shadow:var(--shadow)}
-        .theme-toggle:hover{transform:translateY(-2px) scale(1.05);border-color:var(--primary-color);box-shadow:0 8px 25px rgba(59,130,246,0.2)}
-        .featured-section{background:linear-gradient(135deg,var(--primary-color),var(--accent-color));border-radius:var(--border-radius);padding:30px;margin:30px 0;color:white}
-        .featured-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;margin-top:20px}
-        .featured-card{display:flex;align-items:center;padding:25px;background:rgba(255,255,255,0.15);border-radius:var(--border-radius);text-decoration:none;color:white;transition:all 0.3s ease;border:2px solid rgba(255,255,255,0.2);backdrop-filter:blur(10px)}
-        .featured-card:hover{transform:translateY(-5px);background:rgba(255,255,255,0.25);border-color:rgba(255,255,255,0.4);box-shadow:0 20px 40px rgba(0,0,0,0.2)}
-        .featured-icon{font-size:3.5rem;margin-right:20px;filter:drop-shadow(0 4px 8px rgba(0,0,0,0.3))}
-        .featured-content h4{margin:0 0 8px 0;font-size:1.3rem;font-weight:700}
-        .featured-content p{margin:0 0 10px 0;opacity:0.9;line-height:1.4}
-        .hero-section{background:linear-gradient(135deg,var(--primary-color),var(--accent-color));border-radius:var(--border-radius);padding:60px 40px;margin:30px 0;color:white;text-align:center}
-        .hero-content h2{font-size:3rem;margin-bottom:15px;font-weight:700}
-        .hero-content p{font-size:1.2rem;margin-bottom:30px;opacity:0.9}
-        .hero-actions{display:flex;gap:20px;justify-content:center;flex-wrap:wrap}
-        .hero-btn{padding:15px 30px;border-radius:25px;text-decoration:none;font-weight:600;transition:all 0.3s ease}
-        .hero-btn.primary{background:white;color:var(--primary-color)}
-        .hero-btn.secondary{background:rgba(255,255,255,0.2);color:white;border:2px solid white}
-        .hero-btn:hover{transform:translateY(-3px);box-shadow:0 10px 25px rgba(0,0,0,0.2)}
-        .category-section{margin:40px 0}
-        .category-section h3{font-size:1.5rem;margin-bottom:20px;color:var(--text-color);font-weight:700}
-        .category-row{display:flex;gap:15px;overflow-x:auto;padding:10px 0;scrollbar-width:none;-ms-overflow-style:none}
-        .category-row::-webkit-scrollbar{display:none}
-        .category-card{display:flex;flex-direction:column;align-items:center;min-width:120px;padding:20px 15px;background:var(--card-bg);border-radius:var(--border-radius);text-decoration:none;color:var(--text-color);transition:all 0.3s ease;border:2px solid var(--border-color);text-align:center}
-        .category-card:hover{transform:translateY(-5px);border-color:var(--primary-color);box-shadow:0 10px 25px rgba(59,130,246,0.15)}
-        .category-card.featured{background:linear-gradient(135deg,var(--success-color),#059669);color:white;border-color:var(--success-color)}
-        .card-icon{font-size:2.5rem;margin-bottom:10px}
-        .category-card h4{margin:0;font-size:0.9rem;font-weight:600;line-height:1.2}
-        .progress-overview{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;margin:20px 0}
-        .progress-stat{text-align:center;padding:20px;background:var(--light-gray);border-radius:var(--border-radius);border:2px solid transparent;transition:all 0.3s ease}
-        .progress-stat:hover{border-color:var(--primary-color);transform:translateY(-3px);box-shadow:0 8px 25px rgba(59,130,246,0.1)}
-        .stat-number{display:block;font-size:2.5rem;font-weight:700;color:var(--primary-color);margin-bottom:8px}
-        .stat-label{color:var(--text-color);font-weight:600;font-size:0.95rem}
-        .progress-bar-container{margin:30px 0}
-        .progress-bar{width:100%;height:12px;background:var(--light-gray);border-radius:6px;overflow:hidden}
-        .progress-fill{height:100%;background:linear-gradient(90deg,var(--primary-color),var(--accent-color));border-radius:6px;width:25%}
-        .learning-path{margin:30px 0}
-        .path-container{position:relative;padding:20px 0}
-        .path-nodes{display:flex;justify-content:space-between;flex-wrap:wrap;gap:15px}
-        .path-node{display:flex;flex-direction:column;align-items:center;cursor:pointer}
-        .node-circle{width:50px;height:50px;border-radius:50%;background:var(--light-gray);border:4px solid var(--border-color);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--neutral-color);margin-bottom:10px}
-        .path-node.completed .node-circle{background:var(--success-color);border-color:var(--success-color);color:white}
-        .node-label{font-size:0.8rem;color:var(--text-color);text-align:center;font-weight:600;max-width:80px}
-        .lessons-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:18px;margin:25px 0}
-        .lesson-card{background:white;border:2px solid var(--border-color);border-radius:var(--border-radius);padding:20px;text-align:center;transition:all 0.3s ease;position:relative}
-        .lesson-card:hover{transform:translateY(-3px);border-color:var(--primary-color);box-shadow:0 12px 30px rgba(59,130,246,0.15)}
-        .lesson-status{position:absolute;top:15px;right:15px;width:12px;height:12px;border-radius:50%;background:var(--border-color)}
-        .badges-container{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px;margin:25px 0}
-        .badge{display:flex;align-items:center;padding:18px;background:var(--card-bg);border-radius:var(--border-radius);transition:all 0.3s ease;opacity:0.7;border:2px solid var(--border-color)}
-        .badge:hover{transform:translateY(-3px);box-shadow:0 12px 30px rgba(0,0,0,0.15)}
-        .badge-icon{font-size:3rem;margin-right:20px;min-width:60px;text-align:center}
-        .badge-info h4{margin-bottom:8px;color:var(--text-color);font-size:1.2rem}
-        .badge-info p{color:var(--neutral-color);margin-bottom:10px;font-size:0.95rem}
-        @media (max-width:768px){.hero-content h2{font-size:2rem}.hero-actions{flex-direction:column;align-items:center}.hero-btn{width:200px}.category-row{gap:10px}.category-card{min-width:100px;padding:15px 10px}.card-icon{font-size:2rem}.category-card h4{font-size:0.8rem}.dashboard-section{padding:20px;margin-bottom:20px}}
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #141414;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        /* Netflix-like Header */
+        .header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: linear-gradient(180deg, rgba(0,0,0,0.7) 10%, transparent);
+            z-index: 1000;
+            padding: 15px 4%;
+            transition: background 0.3s ease;
+        }
+
+        .header.scrolled {
+            background: #141414;
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #e50914;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #ffffff;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #e50914;
+        }
+
+        .profile {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .profile-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #e50914, #ff6b6b);
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.6)), 
+                        url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600"><rect fill="%23e50914" width="1200" height="600"/><circle fill="%23ff6b6b" cx="200" cy="150" r="100" opacity="0.3"/><circle fill="%23ffd93d" cx="800" cy="300" r="150" opacity="0.2"/><circle fill="%236bcf7f" cx="1000" cy="100" r="80" opacity="0.3"/></svg>');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            padding: 0 20px;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, #e50914, #ff6b6b, #ffd93d);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { filter: drop-shadow(0 0 20px rgba(229, 9, 20, 0.5)); }
+            to { filter: drop-shadow(0 0 30px rgba(229, 9, 20, 0.8)); }
+        }
+
+        .hero p {
+            font-size: 1.5rem;
+            margin-bottom: 40px;
+            opacity: 0.9;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #e50914, #ff4757);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 2px solid rgba(255,255,255,0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        /* Content Sections */
+        .content {
+            padding: 80px 4% 40px;
+        }
+
+        .section {
+            margin-bottom: 60px;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            margin-bottom: 30px;
+            color: #ffffff;
+            font-weight: bold;
+        }
+
+        .row {
+            display: flex;
+            gap: 20px;
+            overflow-x: auto;
+            padding: 20px 0;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .row::-webkit-scrollbar {
+            display: none;
+        }
+
+        .card {
+            min-width: 300px;
+            height: 200px;
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            border-radius: 12px;
+            padding: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent, rgba(229, 9, 20, 0.1), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        .card:hover {
+            transform: scale(1.05) translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        .card-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+
+        .card-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .card-description {
+            opacity: 0.8;
+            font-size: 0.9rem;
+        }
+
+        /* Special Cards */
+        .card.featured {
+            background: linear-gradient(135deg, #e50914, #ff4757);
+        }
+
+        .card.tools {
+            background: linear-gradient(135deg, #3742fa, #5352ed);
+        }
+
+        .card.learning {
+            background: linear-gradient(135deg, #2ed573, #7bed9f);
+        }
+
+        .card.advanced {
+            background: linear-gradient(135deg, #ff6348, #ff7675);
+        }
+
+        /* Progress Section */
+        .progress-section {
+            background: rgba(255,255,255,0.05);
+            border-radius: 20px;
+            padding: 40px;
+            margin: 40px 0;
+            backdrop-filter: blur(10px);
+        }
+
+        .progress-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .progress-item {
+            text-align: center;
+            padding: 30px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .progress-item:hover {
+            transform: translateY(-5px);
+            background: rgba(255,255,255,0.15);
+        }
+
+        .progress-number {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #e50914;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .progress-label {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 4px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #e50914, #ff6b6b);
+            border-radius: 4px;
+            width: 35%;
+            animation: progressLoad 2s ease-out;
+        }
+
+        @keyframes progressLoad {
+            from { width: 0%; }
+            to { width: 35%; }
+        }
+
+        /* Achievements */
+        .achievements-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .achievement {
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .achievement:hover {
+            border-color: #e50914;
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(229, 9, 20, 0.2);
+        }
+
+        .achievement-icon {
+            font-size: 4rem;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .achievement-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .achievement-desc {
+            opacity: 0.8;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero p {
+                font-size: 1.2rem;
+            }
+            
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .card {
+                min-width: 250px;
+            }
+            
+            .content {
+                padding: 60px 20px 40px;
+            }
+        }
+
+        /* Floating Action Button */
+        .fab {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(45deg, #e50914, #ff4757);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+            text-decoration: none;
+            box-shadow: 0 10px 25px rgba(229, 9, 20, 0.3);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .fab:hover {
+            transform: scale(1.1) rotate(10deg);
+            box-shadow: 0 15px 35px rgba(229, 9, 20, 0.5);
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
     </style>
-    <link rel="stylesheet" href="css/main.css?v=2">
-    <link rel="stylesheet" href="css/components.css?v=2">
-    <link rel="stylesheet" href="css/animations.css?v=2">
-    <link rel="stylesheet" href="theme-styles.css">
 </head>
 <body>
-    <button class="theme-toggle btn-icon" id="theme-toggle" aria-label="Toggle dark theme">
-        <span class="theme-icon">🌙</span>
-    </button>
-    <div class="container">
-        <header role="banner">
-            <h1>CodeQuest</h1>
-            <section class="profile-section" aria-label="User profile information">
-                <div id="profile-display" class="profile-display">
-                    <img id="profile-avatar" src="https://via.placeholder.com/50" alt="Avatar">
-                    <div class="profile-info">
-                        <span id="profile-name">Guest</span>
-                        <div class="level-info">
-                            <span class="level-badge" id="level-badge">Level 1</span>
-                            <div class="xp-bar">
-                                <div class="xp-fill" id="xp-fill"></div>
-                            </div>
-                            <span class="xp-text" id="xp-text">0 / 100 XP</span>
-                        </div>
-                    </div>
-                    <button id="edit-profile-btn" class="btn-primary btn-sm">Edit Profile</button>
-                </div>
-            </section>
-        </header>
+    <!-- Header -->
+    <header class="header" id="header">
+        <nav class="nav">
+            <a href="#" class="logo">CodeQuest</a>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#challenges">Challenges</a></li>
+                <li><a href="#tutorials">Tutorials</a></li>
+                <li><a href="#progress">Progress</a></li>
+            </ul>
+            <div class="profile">
+                <span>Level 1</span>
+                <div class="profile-avatar"></div>
+            </div>
+        </nav>
+    </header>
 
-        <div id="profile-modal" class="modal">
-            <div class="modal-content">
-                <span class="close">&times;</span>
-                <h2>Edit Profile</h2>
-                <form id="profile-form">
-                    <label for="username">Username:</label>
-                    <input type="text" id="username" required>
-                    
-                    <label for="email">Email:</label>
-                    <input type="email" id="email" required>
-                    
-                    <label for="avatar-url">Avatar URL:</label>
-                    <input type="url" id="avatar-url" placeholder="https://example.com/avatar.jpg">
-                    
-                    <button type="submit" class="btn-success">Save Profile</button>
-                </form>
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1>Master Coding Skills</h1>
+            <p>Interactive challenges, real-time feedback, and gamified learning experience</p>
+            <div class="hero-buttons">
+                <a href="editor.html" class="btn btn-primary">
+                    <span>💻</span> Start Coding
+                </a>
+                <a href="challenges.html" class="btn btn-secondary">
+                    <span>🏆</span> View Challenges
+                </a>
             </div>
         </div>
+    </section>
 
-        <main role="main">
-            <section class="dashboard">
-                <header>
-                    <h2>Welcome to your Dashboard</h2>
-                    <p>Start your coding journey!</p>
-                </header>
-                
-                <!-- Hero Section -->
-                <section class="hero-section">
-                    <div class="hero-content">
-                        <h2>Continue Learning</h2>
-                        <p>Pick up where you left off</p>
-                        <div class="hero-actions">
-                            <a href="editor.html" class="hero-btn primary">💻 Code Editor</a>
-                            <a href="challenges.html" class="hero-btn secondary">🏆 Challenges</a>
-                        </div>
+    <!-- Content -->
+    <div class="content">
+        <!-- Quick Start Section -->
+        <section class="section">
+            <h2 class="section-title">🚀 Quick Start</h2>
+            <div class="row">
+                <div class="card featured" onclick="window.location.href='editor.html'">
+                    <div class="card-icon">💻</div>
+                    <div>
+                        <div class="card-title">Code Editor</div>
+                        <div class="card-description">Write and test your code with live preview</div>
                     </div>
-                </section>
-
-                <!-- Categories -->
-                <section class="category-section">
-                    <h3>🚀 Quick Start</h3>
-                    <div class="category-row">
-                        <a href="editor.html" class="category-card">
-                            <div class="card-icon">💻</div>
-                            <h4>Code Editor</h4>
-                        </a>
-                        <a href="js-executor.html" class="category-card">
-                            <div class="card-icon">⚡</div>
-                            <h4>JS Executor</h4>
-                        </a>
-                        <a href="challenges.html" class="category-card">
-                            <div class="card-icon">🏆</div>
-                            <h4>Challenges</h4>
-                        </a>
-                        <a href="tutorials.html" class="category-card">
-                            <div class="card-icon">📚</div>
-                            <h4>Tutorials</h4>
-                        </a>
-                        <a href="snippets.html" class="category-card">
-                            <div class="card-icon">📝</div>
-                            <h4>Snippets</h4>
-                        </a>
-                        <a href="achievements.html" class="category-card">
-                            <div class="card-icon">🏅</div>
-                            <h4>Achievements</h4>
-                        </a>
+                </div>
+                <div class="card featured" onclick="window.location.href='challenges.html'">
+                    <div class="card-icon">🏆</div>
+                    <div>
+                        <div class="card-title">Challenges</div>
+                        <div class="card-description">30+ interactive coding challenges</div>
                     </div>
-                </section>
-
-                <section class="category-section">
-                    <h3>🛠️ Tools & Utilities</h3>
-                    <div class="category-row">
-                        <a href="js-validator.html" class="category-card">
-                            <div class="card-icon">✓</div>
-                            <h4>JS Validator</h4>
-                        </a>
-                        <a href="validation.html" class="category-card">
-                            <div class="card-icon">🔍</div>
-                            <h4>Validation</h4>
-                        </a>
-                        <a href="automated-tests.html" class="category-card">
-                            <div class="card-icon">🤖</div>
-                            <h4>Auto Tests</h4>
-                        </a>
-                        <a href="storage-manager.html" class="category-card">
-                            <div class="card-icon">🗄️</div>
-                            <h4>Storage</h4>
-                        </a>
-                        <a href="progress-tracking.html" class="category-card">
-                            <div class="card-icon">📊</div>
-                            <h4>Progress</h4>
-                        </a>
+                </div>
+                <div class="card featured" onclick="window.location.href='tutorials.html'">
+                    <div class="card-icon">📚</div>
+                    <div>
+                        <div class="card-title">Tutorials</div>
+                        <div class="card-description">Step-by-step learning guides</div>
                     </div>
-                </section>
-
-                <section class="category-section">
-                    <h3>📱 Mobile & Certificates</h3>
-                    <div class="category-row">
-                        <a href="#" class="category-card featured" id="install-app">
-                            <div class="card-icon">📱</div>
-                            <h4>Install App</h4>
-                        </a>
-                        <a href="#" class="category-card featured" id="view-certificates">
-                            <div class="card-icon">🏆</div>
-                            <h4>Certificates</h4>
-                        </a>
+                </div>
+                <div class="card featured" onclick="window.location.href='achievements.html'">
+                    <div class="card-icon">🏅</div>
+                    <div>
+                        <div class="card-title">Achievements</div>
+                        <div class="card-description">Unlock badges and earn XP</div>
                     </div>
-                </section>
+                </div>
+            </div>
+        </section>
 
-                <section class="category-section">
-                    <h3>📚 Learning Resources</h3>
-                    <div class="category-row">
-                        <a href="cheatsheet.html" class="category-card">
-                            <div class="card-icon">📊</div>
-                            <h4>Cheat Sheet</h4>
-                        </a>
-                        <a href="videos.html" class="category-card">
-                            <div class="card-icon">🎥</div>
-                            <h4>Videos</h4>
-                        </a>
-                        <a href="resources.html" class="category-card">
-                            <div class="card-icon">🔗</div>
-                            <h4>Resources</h4>
-                        </a>
-                        <a href="glossary.html" class="category-card">
-                            <div class="card-icon">📜</div>
-                            <h4>Glossary</h4>
-                        </a>
-                        <a href="js-concepts.html" class="category-card">
-                            <div class="card-icon">🚀</div>
-                            <h4>JS Concepts</h4>
-                        </a>
+        <!-- Tools Section -->
+        <section class="section">
+            <h2 class="section-title">🛠️ Developer Tools</h2>
+            <div class="row">
+                <div class="card tools" onclick="window.location.href='js-validator.html'">
+                    <div class="card-icon">✓</div>
+                    <div>
+                        <div class="card-title">JS Validator</div>
+                        <div class="card-description">Validate your JavaScript code</div>
                     </div>
-                </section>
-
-                
-                <section class="dashboard-section progress-section" aria-labelledby="progress-heading">
-                    <div class="section-header">
-                        <h3 id="progress-heading">📊 Learning Progress</h3>
-                        <p class="section-subtitle">Track your coding journey and achievements</p>
+                </div>
+                <div class="card tools" onclick="window.location.href='validation.html'">
+                    <div class="card-icon">🔍</div>
+                    <div>
+                        <div class="card-title">Code Analysis</div>
+                        <div class="card-description">Deep code analysis and suggestions</div>
                     </div>
-                    <div class="progress-overview">
-                        <div class="progress-stat">
-                            <span class="stat-number" id="completed-lessons">0</span>
-                            <span class="stat-label">Lessons Completed</span>
-                        </div>
-                        <div class="progress-stat">
-                            <span class="stat-number" id="total-lessons">12</span>
-                            <span class="stat-label">Total Lessons</span>
-                        </div>
-                        <div class="progress-stat">
-                            <span class="stat-number" id="completion-percentage">0%</span>
-                            <span class="stat-label">Completion Rate</span>
-                        </div>
-                        <div class="progress-stat streak-stat">
-                            <span class="stat-number" id="streak-counter">0</span>
-                            <span class="stat-label">Day Streak 🔥</span>
-                            <div class="streak-info">
-                                <small id="last-activity">No activity yet</small>
-                            </div>
-                        </div>
-                        <div class="progress-stat xp-stat">
-                            <span class="stat-number" id="total-xp">0</span>
-                            <span class="stat-label">Total XP ⭐</span>
-                            <div class="xp-info">
-                                <small id="current-level-text">Level 1</small>
-                            </div>
-                        </div>
+                </div>
+                <div class="card tools" onclick="window.location.href='automated-tests.html'">
+                    <div class="card-icon">🤖</div>
+                    <div>
+                        <div class="card-title">Auto Tests</div>
+                        <div class="card-description">Automated testing framework</div>
                     </div>
-                    
-                    <div class="progress-bar-container">
-                        <div class="progress-bar">
-                            <div class="progress-fill" id="progress-fill"></div>
-                        </div>
+                </div>
+                <div class="card tools" onclick="window.location.href='progress-tracking.html'">
+                    <div class="card-icon">📊</div>
+                    <div>
+                        <div class="card-title">Progress Tracker</div>
+                        <div class="card-description">Monitor your learning journey</div>
                     </div>
-                    
-                    <section class="learning-path" aria-labelledby="path-heading">
-                        <h4 id="path-heading">Learning Path</h4>
-                        <div class="path-container">
-                            <div class="path-line"></div>
-                            <div class="path-nodes">
-                                <div class="path-node unlocked completed" data-lesson="1">
-                                    <div class="node-circle">1</div>
-                                    <span class="node-label">HTML Basics</span>
-                                </div>
-                                <div class="path-node" data-lesson="2">
-                                    <div class="node-circle">2</div>
-                                    <span class="node-label">CSS Styling</span>
-                                </div>
-                                <div class="path-node" data-lesson="3">
-                                    <div class="node-circle">3</div>
-                                    <span class="node-label">JavaScript Basics</span>
-                                </div>
-                                <div class="path-node" data-lesson="4">
-                                    <div class="node-circle">4</div>
-                                    <span class="node-label">DOM Manipulation</span>
-                                </div>
-                                <div class="path-node" data-lesson="5">
-                                    <div class="node-circle">5</div>
-                                    <span class="node-label">Events & Listeners</span>
-                                </div>
-                                <div class="path-node" data-lesson="6">
-                                    <div class="node-circle">6</div>
-                                    <span class="node-label">Functions & Scope</span>
-                                </div>
-                                <div class="path-node" data-lesson="7">
-                                    <div class="node-circle">7</div>
-                                    <span class="node-label">Arrays & Objects</span>
-                                </div>
-                                <div class="path-node" data-lesson="8">
-                                    <div class="node-circle">8</div>
-                                    <span class="node-label">API Integration</span>
-                                </div>
-                                <div class="path-node" data-lesson="9">
-                                    <div class="node-circle">9</div>
-                                    <span class="node-label">Local Storage</span>
-                                </div>
-                                <div class="path-node" data-lesson="10">
-                                    <div class="node-circle">10</div>
-                                    <span class="node-label">Form Validation</span>
-                                </div>
-                                <div class="path-node" data-lesson="11">
-                                    <div class="node-circle">11</div>
-                                    <span class="node-label">Responsive Design</span>
-                                </div>
-                                <div class="path-node" data-lesson="12">
-                                    <div class="node-circle">12</div>
-                                    <span class="node-label">Final Project</span>
-                                </div>
-                            </div>
-                        </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Learning Resources -->
+        <section class="section">
+            <h2 class="section-title">📚 Learning Resources</h2>
+            <div class="row">
+                <div class="card learning" onclick="window.location.href='cheatsheet.html'">
+                    <div class="card-icon">📋</div>
+                    <div>
+                        <div class="card-title">Cheat Sheet</div>
+                        <div class="card-description">Quick reference for all languages</div>
                     </div>
-                    
-                    <section class="lessons-grid" aria-label="Available lessons">
-                        <div class="lesson-card" data-lesson="1">
-                            <div class="lesson-status"></div>
-                            <h4>HTML Basics</h4>
-                            <p>Learn HTML fundamentals</p>
-                        </div>
-                        <div class="lesson-card" data-lesson="2">
-                            <div class="lesson-status"></div>
-                            <h4>CSS Styling</h4>
-                            <p>Master CSS properties</p>
-                        </div>
-                        <div class="lesson-card" data-lesson="3">
-                            <div class="lesson-status"></div>
-                            <h4>JavaScript Basics</h4>
-                            <p>Introduction to JS</p>
-                        </div>
-                        <div class="lesson-card" data-lesson="4">
-                            <div class="lesson-status"></div>
-                            <h4>DOM Manipulation</h4>
-                            <p>Control web elements</p>
-                        </div>
-                        <div class="lesson-card" data-lesson="5">
-                            <div class="lesson-status"></div>
-                            <h4>Events & Listeners</h4>
-                            <p>Handle user interactions</p>
-                        </div>
-                        <div class="lesson-card" data-lesson="6">
-                            <div class="lesson-status"></div>
-                            <h4>Functions & Scope</h4>
-                            <p>Organize your code</p>
-                        </div>
-                        <div class="lesson-card" data-lesson="7">
-                            <div class="lesson-status"></div>
-                            <h4>Arrays & Objects</h4>
-                            <p>Data structures</p>
-                        </div>
-                        <div class="lesson-card" data-lesson="8">
-                            <div class="lesson-status"></div>
-                            <h4>API Integration</h4>
-                            <p>Fetch external data</p>
-                        </div>
-                        <div class="lesson-card" data-lesson="9">
-                            <div class="lesson-status"></div>
-                            <h4>Local Storage</h4>
-                            <p>Store data locally</p>
-                        </div>
-                        <div class="lesson-card" data-lesson="10">
-                            <div class="lesson-status"></div>
-                            <h4>Form Validation</h4>
-                            <p>Validate user input</p>
-                        </div>
-                        <div class="lesson-card" data-lesson="11">
-                            <div class="lesson-status"></div>
-                            <h4>Responsive Design</h4>
-                            <p>Mobile-friendly layouts</p>
-                        </div>
-                        <div class="lesson-card" data-lesson="12">
-                            <div class="lesson-status"></div>
-                            <h4>Final Project</h4>
-                            <p>Build a complete app</p>
-                        </div>
-                    </section>
-                    
-                    <section class="dashboard-section daily-challenges-section" aria-labelledby="daily-challenge-heading">
-                        <div class="section-header">
-                            <h3 id="daily-challenge-heading">🌟 Daily Challenge</h3>
-                            <p class="section-subtitle">Complete today's challenge for bonus XP</p>
-                        </div>
-                        <div class="daily-challenge-card" id="daily-challenge">
-                            <div class="challenge-header">
-                                <div class="challenge-title">Loading...</div>
-                                <div class="challenge-reward">+100 XP</div>
-                            </div>
-                            <div class="challenge-description">Loading daily challenge...</div>
-                            <div class="challenge-progress">
-                                <div class="progress-bar">
-                                    <div class="progress-fill" id="daily-progress"></div>
-                                </div>
-                                <span class="progress-text" id="daily-progress-text">0/1</span>
-                            </div>
-                            <button class="challenge-btn btn-primary" id="daily-challenge-btn">Start Challenge</button>
-                        </div>
-                        <div class="challenge-timer">
-                            <span>⏰ Resets in: <span id="challenge-timer">--:--:--</span></span>
-                        </div>
-                    </section>
+                </div>
+                <div class="card learning" onclick="window.location.href='videos.html'">
+                    <div class="card-icon">🎥</div>
+                    <div>
+                        <div class="card-title">Video Tutorials</div>
+                        <div class="card-description">Visual learning content</div>
+                    </div>
+                </div>
+                <div class="card learning" onclick="window.location.href='glossary.html'">
+                    <div class="card-icon">📖</div>
+                    <div>
+                        <div class="card-title">Glossary</div>
+                        <div class="card-description">Programming terms explained</div>
+                    </div>
+                </div>
+                <div class="card learning" onclick="window.location.href='js-concepts.html'">
+                    <div class="card-icon">🧠</div>
+                    <div>
+                        <div class="card-title">JS Concepts</div>
+                        <div class="card-description">Advanced JavaScript topics</div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-                    <section class="dashboard-section missions-section" aria-labelledby="missions-heading">
-                        <div class="section-header">
-                            <h3 id="missions-heading">🎯 Active Missions</h3>
-                            <p class="section-subtitle">Complete missions to unlock special rewards</p>
-                        </div>
-                        <div class="missions-container" id="missions-container">
-                            <!-- Missions will be populated by JavaScript -->
-                        </div>
-                    </section>
+        <!-- Advanced Features -->
+        <section class="section">
+            <h2 class="section-title">⚡ Advanced Features</h2>
+            <div class="row">
+                <div class="card advanced">
+                    <div class="card-icon">🤖</div>
+                    <div>
+                        <div class="card-title">AI Assistant</div>
+                        <div class="card-description">Smart code suggestions and help</div>
+                    </div>
+                </div>
+                <div class="card advanced">
+                    <div class="card-icon">🎮</div>
+                    <div>
+                        <div class="card-title">Multiplayer Mode</div>
+                        <div class="card-description">Code with friends in real-time</div>
+                    </div>
+                </div>
+                <div class="card advanced">
+                    <div class="card-icon">🎤</div>
+                    <div>
+                        <div class="card-title">Voice Commands</div>
+                        <div class="card-description">Code using voice recognition</div>
+                    </div>
+                </div>
+                <div class="card advanced">
+                    <div class="card-icon">📱</div>
+                    <div>
+                        <div class="card-title">PWA Support</div>
+                        <div class="card-description">Install as mobile app</div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-                    <section class="dashboard-section power-ups-section" aria-labelledby="powerups-heading">
-                        <div class="section-header">
-                            <h3 id="powerups-heading">⚡ Power-ups</h3>
-                            <p class="section-subtitle">Boost your learning with special abilities</p>
-                        </div>
-                        <div class="power-ups-container">
-                            <div class="power-up" data-powerup="double-xp">
-                                <div class="power-up-icon">⚡</div>
-                                <div class="power-up-info">
-                                    <h4>Double XP</h4>
-                                    <p>2x XP for 1 hour</p>
-                                    <span class="power-up-cost">200 XP</span>
-                                </div>
-                                <button class="power-up-btn btn-secondary btn-sm">Activate</button>
-                            </div>
-                            <div class="power-up" data-powerup="hint-master">
-                                <div class="power-up-icon">💡</div>
-                                <div class="power-up-info">
-                                    <h4>Hint Master</h4>
-                                    <p>Free hints for 30 min</p>
-                                    <span class="power-up-cost">150 XP</span>
-                                </div>
-                                <button class="power-up-btn btn-secondary btn-sm">Activate</button>
-                            </div>
-                            <div class="power-up" data-powerup="streak-shield">
-                                <div class="power-up-icon">🛡️</div>
-                                <div class="power-up-info">
-                                    <h4>Streak Shield</h4>
-                                    <p>Protect 1-day streak loss</p>
-                                    <span class="power-up-cost">100 XP</span>
-                                </div>
-                                <button class="power-up-btn btn-secondary btn-sm">Activate</button>
-                            </div>
-                            <div class="power-up" data-powerup="dark-theme">
-                                <div class="power-up-icon">🌙</div>
-                                <div class="power-up-info">
-                                    <h4>Dark Theme</h4>
-                                    <p>Unlock dark mode theme</p>
-                                    <span class="power-up-cost">50 XP</span>
-                                </div>
-                                <button class="power-up-btn btn-warning btn-sm">Unlock</button>
-                            </div>
-                            <div class="power-up" data-powerup="skip-challenge">
-                                <div class="power-up-icon">⏭️</div>
-                                <div class="power-up-info">
-                                    <h4>Skip Challenge</h4>
-                                    <p>Skip any challenge once</p>
-                                    <span class="power-up-cost">75 XP</span>
-                                </div>
-                                <button class="power-up-btn btn-success btn-sm">Buy</button>
-                            </div>
-                        </div>
-                    </section>
+        <!-- Progress Section -->
+        <section class="progress-section" id="progress">
+            <h2 class="section-title">📊 Your Progress</h2>
+            <div class="progress-grid">
+                <div class="progress-item">
+                    <span class="progress-number" id="completed-challenges">0</span>
+                    <span class="progress-label">Challenges Completed</span>
+                </div>
+                <div class="progress-item">
+                    <span class="progress-number" id="total-xp">0</span>
+                    <span class="progress-label">Total XP Earned</span>
+                </div>
+                <div class="progress-item">
+                    <span class="progress-number" id="current-streak">0</span>
+                    <span class="progress-label">Day Streak 🔥</span>
+                </div>
+                <div class="progress-item">
+                    <span class="progress-number" id="badges-earned">0</span>
+                    <span class="progress-label">Badges Unlocked</span>
+                </div>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="overall-progress"></div>
+            </div>
+        </section>
 
-                    <section class="dashboard-section leaderboard-section" aria-labelledby="leaderboard-heading">
-                        <div class="section-header">
-                            <h3 id="leaderboard-heading">🏆 Leaderboard</h3>
-                            <p class="section-subtitle">See how you rank against other learners</p>
-                        </div>
-                        <div class="leaderboard-tabs">
-                            <button class="tab-btn btn-outline btn-sm active" data-tab="weekly">Weekly</button>
-                            <button class="tab-btn btn-outline btn-sm" data-tab="monthly">Monthly</button>
-                            <button class="tab-btn btn-outline btn-sm" data-tab="alltime">All Time</button>
-                        </div>
-                        <div class="leaderboard-content" id="leaderboard-content">
-                            <!-- Leaderboard will be populated by JavaScript -->
-                        </div>
-                    </section>
-
-                    <section class="dashboard-section achievements-section" aria-labelledby="achievements-heading">
-                        <div class="section-header">
-                            <h3 id="achievements-heading">🏅 Achievement Badges</h3>
-                            <p class="section-subtitle">Unlock badges by completing challenges and milestones</p>
-                        </div>
-                        <div class="badges-container">
-                            <div class="badge" data-badge="first-lesson">
-                                <div class="badge-icon">🎯</div>
-                                <div class="badge-info">
-                                    <h4>First Steps</h4>
-                                    <p>Complete your first lesson</p>
-                                </div>
-                            </div>
-                            <div class="badge" data-badge="early-bird">
-                                <div class="badge-icon">🌅</div>
-                                <div class="badge-info">
-                                    <h4>Early Bird</h4>
-                                    <p>Complete 3 lessons</p>
-                                </div>
-                            </div>
-                            <div class="badge" data-badge="dedicated">
-                                <div class="badge-icon">💪</div>
-                                <div class="badge-info">
-                                    <h4>Dedicated Learner</h4>
-                                    <p>Complete 5 lessons</p>
-                                </div>
-                            </div>
-                            <div class="badge" data-badge="halfway">
-                                <div class="badge-icon">🏃</div>
-                                <div class="badge-info">
-                                    <h4>Halfway Hero</h4>
-                                    <p>Complete 6 lessons</p>
-                                </div>
-                            </div>
-                            <div class="badge" data-badge="almost-there">
-                                <div class="badge-icon">🔥</div>
-                                <div class="badge-info">
-                                    <h4>Almost There</h4>
-                                    <p>Complete 9 lessons</p>
-                                </div>
-                            </div>
-                            <div class="badge" data-badge="champion">
-                                <div class="badge-icon">🏆</div>
-                                <div class="badge-info">
-                                    <h4>CodeQuest Champion</h4>
-                                    <p>Complete all 12 lessons</p>
-                                </div>
-                            </div>
-                            <div class="badge" data-badge="daily-warrior">
-                                <div class="badge-icon">⚔️</div>
-                                <div class="badge-info">
-                                    <h4>Daily Warrior</h4>
-                                    <p>Complete 7 daily challenges</p>
-                                </div>
-                            </div>
-                            <div class="badge" data-badge="mission-master">
-                                <div class="badge-icon">🎖️</div>
-                                <div class="badge-info">
-                                    <h4>Mission Master</h4>
-                                    <p>Complete 5 missions</p>
-                                </div>
-                            </div>
-                            <div class="badge" data-badge="first-challenge">
-                                <div class="badge-icon">🎯</div>
-                                <div class="badge-info">
-                                    <h4>First Challenge</h4>
-                                    <p>Complete your first coding challenge</p>
-                                </div>
-                            </div>
-                            <div class="badge" data-badge="streak-master">
-                                <div class="badge-icon">🔥</div>
-                                <div class="badge-info">
-                                    <h4>10-Day Streak Master</h4>
-                                    <p>Maintain a 10-day learning streak</p>
-                                </div>
-                            </div>
-                            <div class="badge" data-badge="speed-demon">
-                                <div class="badge-icon">⚡</div>
-                                <div class="badge-info">
-                                    <h4>Speed Demon</h4>
-                                    <p>Complete challenge in under 5 minutes</p>
-                                </div>
-                            </div>
-                            <div class="badge" data-badge="perfectionist">
-                                <div class="badge-icon">💎</div>
-                                <div class="badge-info">
-                                    <h4>Perfectionist</h4>
-                                    <p>Complete challenge without hints</p>
-                                </div>
-                            </div>
-                            <div class="badge" data-badge="night-owl">
-                                <div class="badge-icon">🦉</div>
-                                <div class="badge-info">
-                                    <h4>Night Owl</h4>
-                                    <p>Complete challenges after 10 PM</p>
-                                </div>
-                            </div>
-                            <div class="badge" data-badge="html-expert">
-                                <div class="badge-icon">📄</div>
-                                <div class="badge-info">
-                                    <h4>HTML Expert</h4>
-                                    <p>Complete 10 HTML challenges</p>
-                                </div>
-                            </div>
-                            <div class="badge" data-badge="css-master">
-                                <div class="badge-icon">🎨</div>
-                                <div class="badge-info">
-                                    <h4>CSS Master</h4>
-                                    <p>Complete 10 CSS challenges</p>
-                                </div>
-                            </div>
-                            <div class="badge" data-badge="js-ninja">
-                                <div class="badge-icon">🥷</div>
-                                <div class="badge-info">
-                                    <h4>JavaScript Ninja</h4>
-                                    <p>Complete 15 JavaScript challenges</p>
-                                </div>
-                            </div>
-                            <div class="badge" data-badge="code-warrior">
-                                <div class="badge-icon">⚔️</div>
-                                <div class="badge-info">
-                                    <h4>Code Warrior</h4>
-                                    <p>Complete 50 total challenges</p>
-                                </div>
-                            </div>
-                            <div class="badge" data-badge="early-bird-coder">
-                                <div class="badge-icon">🌅</div>
-                                <div class="badge-info">
-                                    <h4>Early Bird Coder</h4>
-                                    <p>Complete challenges before 6 AM</p>
-                                </div>
-                            </div>
-                            <div class="badge" data-badge="weekend-warrior">
-                                <div class="badge-icon">🏖️</div>
-                                <div class="badge-info">
-                                    <h4>Weekend Warrior</h4>
-                                    <p>Complete 5 challenges on weekends</p>
-                                </div>
-                            </div>
-                            <div class="badge" data-badge="marathon-coder">
-                                <div class="badge-icon">🏃</div>
-                                <div class="badge-info">
-                                    <h4>Marathon Coder</h4>
-                                    <p>Code for 2+ hours in one session</p>
-                                </div>
-                            </div>
-                            <div class="badge" data-badge="bug-hunter">
-                                <div class="badge-icon">🐛</div>
-                                <div class="badge-info">
-                                    <h4>Bug Hunter</h4>
-                                    <p>Fix 20 validation errors</p>
-                                </div>
-                            </div>
-                            <div class="badge" data-badge="power-user">
-                                <div class="badge-icon">💪</div>
-                                <div class="badge-info">
-                                    <h4>Power User</h4>
-                                    <p>Use 10 power-ups</p>
-                                </div>
-                            </div>
-                            <div class="badge" data-badge="xp-collector">
-                                <div class="badge-icon">⭐</div>
-                                <div class="badge-info">
-                                    <h4>XP Collector</h4>
-                                    <p>Earn 5000 total XP</p>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
-                </section>
-            </section>
-        </main>
+        <!-- Achievements -->
+        <section class="section">
+            <h2 class="section-title">🏅 Recent Achievements</h2>
+            <div class="achievements-grid">
+                <div class="achievement">
+                    <span class="achievement-icon">🎯</span>
+                    <div class="achievement-title">First Steps</div>
+                    <div class="achievement-desc">Complete your first challenge</div>
+                </div>
+                <div class="achievement">
+                    <span class="achievement-icon">🔥</span>
+                    <div class="achievement-title">Streak Master</div>
+                    <div class="achievement-desc">Maintain a 7-day streak</div>
+                </div>
+                <div class="achievement">
+                    <span class="achievement-icon">⚡</span>
+                    <div class="achievement-title">Speed Demon</div>
+                    <div class="achievement-desc">Complete challenge in under 5 minutes</div>
+                </div>
+                <div class="achievement">
+                    <span class="achievement-icon">🏆</span>
+                    <div class="achievement-title">Champion</div>
+                    <div class="achievement-desc">Complete all lessons</div>
+                </div>
+            </div>
+        </section>
     </div>
 
-    <!-- Critical scripts loaded immediately -->
-    <script src="js/storage.js"></script>
-    <script src="js/app.js"></script>
-    <script src="performance-optimizations.js"></script>
-    <script src="lighthouse-optimizations.js"></script>
-    <script src="evaluation-optimizer.js"></script>
-    <!-- Non-critical scripts deferred -->
-    <script defer src="js/achievements.js"></script>
-    <script defer src="js/utils.js"></script>
-    <script defer src="js/pwa.js"></script>
-    <script defer src="js/certificates.js"></script>
-    <script defer src="js/featured-actions.js"></script>
-    <link rel="stylesheet" href="css/evaluation-styles.css">
-    <link rel="stylesheet" href="css/button-styles.css">
-    <link rel="stylesheet" href="css/dashboard-styles.css">
-    <link rel="stylesheet" href="css/theme-toggle.css">
-    <link rel="stylesheet" href="toast-system.css">
-    <link rel="stylesheet" href="progress-bars.css">
-    <link rel="stylesheet" href="modal-system.css">
-    <link rel="stylesheet" href="reset-system.css">
-    <link rel="stylesheet" href="version-control.css">
-    <link rel="stylesheet" href="statistics-dashboard.css">
-    <link rel="stylesheet" href="css/dashboard-styles.css">
+    <!-- Floating Action Button -->
+    <a href="editor.html" class="fab" title="Quick Code">
+        💻
+    </a>
+
+    <script>
+        // Header scroll effect
+        window.addEventListener('scroll', () => {
+            const header = document.getElementById('header');
+            if (window.scrollY > 100) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // Animate progress numbers
+        function animateNumbers() {
+            const numbers = document.querySelectorAll('.progress-number');
+            numbers.forEach(num => {
+                const target = parseInt(num.textContent) || Math.floor(Math.random() * 100);
+                let current = 0;
+                const increment = target / 50;
+                const timer = setInterval(() => {
+                    current += increment;
+                    if (current >= target) {
+                        current = target;
+                        clearInterval(timer);
+                    }
+                    num.textContent = Math.floor(current);
+                }, 50);
+            });
+        }
+
+        // Initialize animations when page loads
+        window.addEventListener('load', () => {
+            setTimeout(animateNumbers, 1000);
+        });
+
+        // Add click animations
+        document.querySelectorAll('.card').forEach(card => {
+            card.addEventListener('click', function() {
+                this.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    this.style.transform = '';
+                }, 150);
+            });
+        });
+
+        // Smooth scrolling for navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
 </body>
 </html>
