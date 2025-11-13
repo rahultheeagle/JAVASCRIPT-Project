@@ -1965,6 +1965,317 @@
     }
 }
 
+/* Multiplayer System Styles */
+.multiplayer-panel {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    width: 320px;
+    max-height: 500px;
+    background: var(--card-bg);
+    border-radius: var(--border-radius);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+    border: 2px solid #e53e3e;
+    z-index: 999;
+    transition: all 0.3s ease;
+}
+
+.multiplayer-panel.collapsed .mp-content {
+    display: none;
+}
+
+.mp-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    background: #e53e3e;
+    color: white;
+    border-radius: var(--border-radius) var(--border-radius) 0 0;
+}
+
+.mp-header h4 {
+    margin: 0;
+    font-size: 1rem;
+}
+
+.mp-content {
+    padding: 15px;
+    max-height: 420px;
+    overflow-y: auto;
+}
+
+.lobby-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.mp-btn {
+    padding: 12px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+}
+
+.mp-btn.primary {
+    background: #e53e3e;
+    color: white;
+}
+
+.mp-btn.secondary {
+    background: #f7fafc;
+    color: #4a5568;
+    border: 2px solid #e2e8f0;
+}
+
+.mp-btn.danger {
+    background: #fed7d7;
+    color: #c53030;
+    border: 2px solid #feb2b2;
+}
+
+.mp-btn:hover {
+    transform: translateY(-1px);
+}
+
+.player-stats {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    background: #f7fafc;
+    border-radius: 6px;
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-label {
+    font-size: 0.8rem;
+    color: #718096;
+}
+
+.matchmaking, .room-created, .joining-room {
+    text-align: center;
+    padding: 20px;
+}
+
+.loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #e2e8f0;
+    border-top: 4px solid #e53e3e;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 15px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.found-players, .room-players {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 15px;
+}
+
+.player-found, .room-player {
+    padding: 8px 12px;
+    background: #f0fff4;
+    border-radius: 6px;
+    border-left: 4px solid var(--success-color);
+    font-size: 0.9rem;
+    animation: slideInLeft 0.3s ease;
+}
+
+@keyframes slideInLeft {
+    from { transform: translateX(-20px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+.room-code {
+    padding: 15px;
+    background: #2d3748;
+    color: white;
+    border-radius: 8px;
+    font-family: monospace;
+    font-size: 1.2rem;
+    margin: 15px 0;
+}
+
+.race-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding: 10px;
+    background: #f7fafc;
+    border-radius: 6px;
+}
+
+.challenge-title {
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+.race-timer {
+    font-family: monospace;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #e53e3e;
+}
+
+.players-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 15px;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.race-player {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    background: #f7fafc;
+    border-radius: 6px;
+    border-left: 4px solid #e2e8f0;
+}
+
+.race-player.me {
+    background: #e6fffa;
+    border-left-color: var(--primary-color);
+}
+
+.race-player.finished {
+    background: #f0fff4;
+    border-left-color: var(--success-color);
+}
+
+.player-rank {
+    font-weight: bold;
+    font-size: 1.1rem;
+    min-width: 30px;
+    color: #4a5568;
+}
+
+.player-info {
+    flex: 1;
+}
+
+.player-name {
+    font-weight: 600;
+    margin-bottom: 5px;
+    font-size: 0.9rem;
+}
+
+.player-progress-bar {
+    width: 100%;
+    height: 8px;
+    background: #e2e8f0;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 3px;
+}
+
+.player-progress-bar .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #e53e3e, #fc8181);
+    transition: width 0.3s ease;
+}
+
+.player-percentage {
+    font-size: 0.8rem;
+    color: #718096;
+    text-align: right;
+}
+
+.race-notification, .race-end-notification {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    z-index: 1001;
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.race-notification.show, .race-end-notification.show {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+.race-popup, .race-end-popup {
+    background: var(--card-bg);
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    min-width: 300px;
+    border: 3px solid #e53e3e;
+}
+
+.race-end-popup.win {
+    border-color: var(--success-color);
+    background: linear-gradient(135deg, #f0fff4, #c6f6d5);
+}
+
+.race-end-popup.lose {
+    border-color: #e53e3e;
+    background: linear-gradient(135deg, #fff5f5, #fed7d7);
+}
+
+.race-popup h3, .race-end-popup h3 {
+    margin-bottom: 15px;
+    color: var(--text-color);
+    font-size: 1.5rem;
+}
+
+.final-standings {
+    margin: 20px 0;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 8px;
+}
+
+.final-player {
+    padding: 8px;
+    margin-bottom: 5px;
+    border-radius: 4px;
+    font-family: monospace;
+    font-size: 0.9rem;
+}
+
+.final-player.me {
+    background: var(--primary-color);
+    color: white;
+    font-weight: bold;
+}
+
+@media (max-width: 768px) {
+    .multiplayer-panel {
+        width: calc(100% - 40px);
+        left: 20px;
+        right: 20px;
+    }
+    
+    .race-popup, .race-end-popup {
+        width: calc(100% - 40px);
+        margin: 0 20px;
+        min-width: auto;
+    }
+}
+
 @media (max-width: 768px) {
     .validation-container {
         grid-template-columns: 1fr;
