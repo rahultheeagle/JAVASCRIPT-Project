@@ -1,0 +1,120 @@
+[
+  {
+    "id": 1,
+    "title": "Hello World",
+    "category": "JavaScript",
+    "difficulty": "Beginner",
+    "description": "Create a function that returns 'Hello World'",
+    "starterCode": "function helloWorld() {\n  // Your code here\n}",
+    "solution": "function helloWorld() {\n  return 'Hello World';\n}",
+    "tests": [
+      { "input": "", "expected": "Hello World" }
+    ],
+    "xp": 50
+  },
+  {
+    "id": 2,
+    "title": "Sum Two Numbers",
+    "category": "JavaScript",
+    "difficulty": "Beginner",
+    "description": "Create a function that adds two numbers",
+    "starterCode": "function sum(a, b) {\n  // Your code here\n}",
+    "solution": "function sum(a, b) {\n  return a + b;\n}",
+    "tests": [
+      { "input": [2, 3], "expected": 5 },
+      { "input": [10, 15], "expected": 25 },
+      { "input": [-5, 5], "expected": 0 }
+    ],
+    "xp": 75
+  },
+  {
+    "id": 3,
+    "title": "Reverse String",
+    "category": "JavaScript",
+    "difficulty": "Beginner",
+    "description": "Create a function that reverses a string",
+    "starterCode": "function reverseString(str) {\n  // Your code here\n}",
+    "solution": "function reverseString(str) {\n  return str.split('').reverse().join('');\n}",
+    "tests": [
+      { "input": "hello", "expected": "olleh" },
+      { "input": "world", "expected": "dlrow" },
+      { "input": "JavaScript", "expected": "tpircSavaJ" }
+    ],
+    "xp": 100
+  },
+  {
+    "id": 4,
+    "title": "Find Maximum",
+    "category": "JavaScript",
+    "difficulty": "Intermediate",
+    "description": "Find the maximum number in an array",
+    "starterCode": "function findMax(numbers) {\n  // Your code here\n}",
+    "solution": "function findMax(numbers) {\n  return Math.max(...numbers);\n}",
+    "tests": [
+      { "input": [[1, 5, 3, 9, 2]], "expected": 9 },
+      { "input": [[-1, -5, -3]], "expected": -1 },
+      { "input": [[100, 200, 50]], "expected": 200 }
+    ],
+    "xp": 125
+  },
+  {
+    "id": 5,
+    "title": "Count Vowels",
+    "category": "JavaScript",
+    "difficulty": "Intermediate",
+    "description": "Count the number of vowels in a string",
+    "starterCode": "function countVowels(str) {\n  // Your code here\n}",
+    "solution": "function countVowels(str) {\n  return str.toLowerCase().match(/[aeiou]/g)?.length || 0;\n}",
+    "tests": [
+      { "input": "hello", "expected": 2 },
+      { "input": "JavaScript", "expected": 3 },
+      { "input": "xyz", "expected": 0 }
+    ],
+    "xp": 150
+  },
+  {
+    "id": 6,
+    "title": "Fibonacci Sequence",
+    "category": "JavaScript",
+    "difficulty": "Advanced",
+    "description": "Generate the nth Fibonacci number",
+    "starterCode": "function fibonacci(n) {\n  // Your code here\n}",
+    "solution": "function fibonacci(n) {\n  if (n <= 1) return n;\n  return fibonacci(n - 1) + fibonacci(n - 2);\n}",
+    "tests": [
+      { "input": 0, "expected": 0 },
+      { "input": 1, "expected": 1 },
+      { "input": 5, "expected": 5 },
+      { "input": 10, "expected": 55 }
+    ],
+    "xp": 200
+  },
+  {
+    "id": 7,
+    "title": "Palindrome Check",
+    "category": "JavaScript",
+    "difficulty": "Intermediate",
+    "description": "Check if a string is a palindrome",
+    "starterCode": "function isPalindrome(str) {\n  // Your code here\n}",
+    "solution": "function isPalindrome(str) {\n  const cleaned = str.toLowerCase().replace(/[^a-z0-9]/g, '');\n  return cleaned === cleaned.split('').reverse().join('');\n}",
+    "tests": [
+      { "input": "racecar", "expected": true },
+      { "input": "hello", "expected": false },
+      { "input": "A man a plan a canal Panama", "expected": true }
+    ],
+    "xp": 175
+  },
+  {
+    "id": 8,
+    "title": "Array Unique",
+    "category": "JavaScript",
+    "difficulty": "Intermediate",
+    "description": "Remove duplicates from an array",
+    "starterCode": "function removeDuplicates(arr) {\n  // Your code here\n}",
+    "solution": "function removeDuplicates(arr) {\n  return [...new Set(arr)];\n}",
+    "tests": [
+      { "input": [[1, 2, 2, 3, 4, 4, 5]], "expected": [1, 2, 3, 4, 5] },
+      { "input": [["a", "b", "a", "c"]], "expected": ["a", "b", "c"] }
+    ],
+    "xp": 125
+  }
+]

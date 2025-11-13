@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - CodeQuest</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/animations.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📊 Dashboard</h1>
+            <nav>
+                <a href="index.html">← Home</a>
+            </nav>
+        </header>
+
+        <main>
+            <div class="grid-3">
+                <div class="card">
+                    <h3>📈 Progress Overview</h3>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 65%"></div>
+                    </div>
+                    <p>8 of 12 lessons completed</p>
+                </div>
+
+                <div class="card">
+                    <h3>🔥 Current Streak</h3>
+                    <div class="stat-number">7 days</div>
+                    <p>Keep it up!</p>
+                </div>
+
+                <div class="card">
+                    <h3>⭐ Total XP</h3>
+                    <div class="stat-number">2,450</div>
+                    <p>Level 25</p>
+                </div>
+            </div>
+
+            <div class="grid-2" style="margin-top: 30px;">
+                <div class="card">
+                    <h3>🎯 Recent Achievements</h3>
+                    <div class="achievement-list">
+                        <div class="badge earned">
+                            <div class="badge-icon">🎯</div>
+                            <div class="badge-info">
+                                <h4>First Steps</h4>
+                                <p>Completed first lesson</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>📚 Quick Actions</h3>
+                    <div class="action-buttons">
+                        <a href="editor.html" class="action-btn">
+                            <span class="btn-icon">💻</span>
+                            <div class="btn-content">
+                                <h4>Code Editor</h4>
+                                <p>Start coding</p>
+                            </div>
+                        </a>
+                        <a href="challenges.html" class="action-btn">
+                            <span class="btn-icon">🏆</span>
+                            <div class="btn-content">
+                                <h4>Challenges</h4>
+                                <p>Test your skills</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/storage.js"></script>
+    <script src="js/achievements.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

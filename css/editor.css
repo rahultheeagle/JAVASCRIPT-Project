@@ -1,0 +1,102 @@
+/* Editor CSS - Code editor specific styles */
+
+.editor-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    height: 70vh;
+}
+
+.editor-panel {
+    background: var(--card-bg);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.panel-header {
+    background: var(--primary-color);
+    color: white;
+    padding: 15px;
+    font-weight: 600;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.panel-content {
+    flex: 1;
+    position: relative;
+}
+
+.code-editor {
+    width: 100%;
+    height: 100%;
+    border: none;
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+    padding: 15px;
+    resize: none;
+    background: #2d3748;
+    color: #e2e8f0;
+}
+
+.code-editor:focus {
+    outline: none;
+}
+
+.preview-frame {
+    width: 100%;
+    height: 100%;
+    border: none;
+    background: white;
+}
+
+.editor-toolbar {
+    display: flex;
+    gap: 10px;
+    padding: 15px;
+    background: #f7fafc;
+    border-top: 1px solid #e2e8f0;
+}
+
+.toolbar-btn {
+    padding: 8px 15px;
+    font-size: 0.9rem;
+    border-radius: 6px;
+}
+
+.console-panel {
+    background: #1a202c;
+    color: #e2e8f0;
+    padding: 15px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.9rem;
+    max-height: 200px;
+    overflow-y: auto;
+    border-top: 1px solid #4a5568;
+}
+
+.console-output {
+    margin-bottom: 5px;
+}
+
+.console-error {
+    color: #fc8181;
+}
+
+.console-log {
+    color: #68d391;
+}
+
+@media (max-width: 768px) {
+    .editor-container {
+        grid-template-columns: 1fr;
+        height: auto;
+    }
+    
+    .editor-panel {
+        height: 300px;
+    }
+}
