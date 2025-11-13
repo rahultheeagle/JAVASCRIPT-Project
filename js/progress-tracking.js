@@ -54,6 +54,10 @@ class ProgressTracker {
         document.getElementById('stop-timer').addEventListener('click', () => {
             this.stopChallengeTimer();
         });
+
+        document.getElementById('generate-stats').addEventListener('click', () => {
+            this.generateLearningStatistics();
+        });
     }
 
     loadProgress() {
@@ -431,6 +435,264 @@ class ProgressTracker {
 
     getAttempts(challengeName) {
         return this.timeTracking.attempts?.[challengeName] || 0;
+    }
+
+    generateLearningStatistics() {
+        const stats = {
+            overview: this.getOverviewStats(),
+            performance: this.getPerformanceStats(),
+            streaks: this.getStreakStats(),
+            timeAnalysis: this.getTimeAnalysisStats(),
+            recommendations: this.getRecommendations()
+        };
+        
+        this.displayStatistics(stats);
+        return stats;
+    }
+
+    getOverviewStats() {
+        const totalChallenges = Object.values(this.timeTracking.attempts || {}).reduce((sum, count) => sum + count, 0);
+        const uniqueChallenges = Object.keys(this.timeTracking.challengeTimes || {}).length;
+        const totalTime = this.timeTracking.totalTime || 0;
+        const avgTimePerChallenge = totalChallenges > 0 ? totalTime / totalChallenges : 0;
+        
+        return {
+            totalChallenges,
+            uniqueChallenges,
+            totalTime,
+            avgTimePerChallenge,
+            completionRate: this.calculateOverallPercentage()
+        };
+    }
+
+    getPerformanceStats() {
+        const bestTimes = this.timeTracking.bestTimes || {};
+        const attempts = this.timeTracking.attempts || {};
+        
+        const avgBestTime = Object.keys(bestTimes).length > 0 ? 
+            Object.values(bestTimes).reduce((sum, time) => sum + time, 0) / Object.keys(bestTimes).length : 0;
+        
+        const avgAttempts = Object.keys(attempts).length > 0 ?
+            Object.values(attempts).reduce((sum, count) => sum + count, 0) / Object.keys(attempts).length : 0;
+        
+        return {
+            avgBestTime,
+            avgAttempts,
+            fastestChallenge: this.getFastestChallenge(),
+            mostAttempted: this.getMostAttemptedChallenge()
+        };
+    }
+
+    getStreakStats() {
+        const sessions = this.getSessionData();
+        const currentStreak = this.calculateCurrentStreak(sessions);
+        const longestStreak = this.calculateLongestStreak(sessions);
+        
+        return {
+            currentStreak,
+            longestStreak,
+            totalSessions: sessions.length,
+            avgSessionTime: sessions.length > 0 ? sessions.reduce((sum, s) => sum + s.duration, 0) / sessions.length : 0
+        };
+    }
+
+    getTimeAnalysisStats() {
+        const challengeTimes = this.timeTracking.challengeTimes || {};
+        const timeDistribution = {};
+        
+        Object.entries(challengeTimes).forEach(([challenge, times]) => {
+            const avgTime = times.reduce((sum, t) => sum + t.duration, 0) / times.length;
+            timeDistribution[challenge] = {
+                avgTime,
+                improvement: this.calculateImprovement(times),
+                consistency: this.calculateConsistency(times)
+            };
+        });
+        
+        return timeDistribution;
+    }
+
+    getRecommendations() {
+        const recommendations = [];
+        const stats = this.getOverviewStats();
+        const performance = this.getPerformanceStats();
+        
+        if (stats.completionRate < 50) {
+            recommendations.push('Focus on completing more challenges to improve overall progress');
+        }
+        
+        if (performance.avgAttempts > 3) {
+            recommendations.push('Review challenge requirements before starting to reduce attempts');
+        }
+        
+        if (stats.avgTimePerChallenge > 600000) { // 10 minutes
+            recommendations.push('Break down complex challenges into smaller steps');
+        }
+        
+        return recommendations;
+    }
+
+    getFastestChallenge() {
+        const bestTimes = this.timeTracking.bestTimes || {};
+        return Object.keys(bestTimes).reduce((fastest, challenge) => 
+            !fastest || bestTimes[challenge] < bestTimes[fastest] ? challenge : fastest, null);
+    }
+
+    getMostAttemptedChallenge() {
+        const attempts = this.timeTracking.attempts || {};
+        return Object.keys(attempts).reduce((most, challenge) => 
+            !most || attempts[challenge] > attempts[most] ? challenge : most, null);
+    }
+
+    getSessionData() {
+        // Simulate session data from challenge times
+        const sessions = [];
+        Object.values(this.timeTracking.challengeTimes || {}).forEach(times => {
+            times.forEach(time => {
+                sessions.push({
+                    date: new Date(time.timestamp).toDateString(),
+                    duration: time.duration,
+                    timestamp: time.timestamp
+                });
+            });
+        });
+        return sessions.sort((a, b) => a.timestamp - b.timestamp);
+    }
+
+    calculateCurrentStreak(sessions) {
+        if (sessions.length === 0) return 0;
+        
+        const today = new Date().toDateString();
+        const uniqueDates = [...new Set(sessions.map(s => s.date))].sort();
+        
+        let streak = 0;
+        for (let i = uniqueDates.length - 1; i >= 0; i--) {
+            const date = new Date(uniqueDates[i]);
+            const daysDiff = Math.floor((new Date() - date) / (1000 * 60 * 60 * 24));
+            
+            if (daysDiff <= streak + 1) {
+                streak++;
+            } else {
+                break;
+            }
+        }
+        
+        return streak;
+    }
+
+    calculateLongestStreak(sessions) {
+        const uniqueDates = [...new Set(sessions.map(s => s.date))].sort();
+        let maxStreak = 0;
+        let currentStreak = 0;
+        
+        for (let i = 0; i < uniqueDates.length; i++) {
+            if (i === 0) {
+                currentStreak = 1;
+            } else {
+                const prevDate = new Date(uniqueDates[i - 1]);
+                const currDate = new Date(uniqueDates[i]);
+                const daysDiff = Math.floor((currDate - prevDate) / (1000 * 60 * 60 * 24));
+                
+                if (daysDiff === 1) {
+                    currentStreak++;
+                } else {
+                    maxStreak = Math.max(maxStreak, currentStreak);
+                    currentStreak = 1;
+                }
+            }
+        }
+        
+        return Math.max(maxStreak, currentStreak);
+    }
+
+    calculateImprovement(times) {
+        if (times.length < 2) return 0;
+        const first = times[0].duration;
+        const last = times[times.length - 1].duration;
+        return ((first - last) / first) * 100;
+    }
+
+    calculateConsistency(times) {
+        if (times.length < 2) return 100;
+        const durations = times.map(t => t.duration);
+        const avg = durations.reduce((sum, d) => sum + d, 0) / durations.length;
+        const variance = durations.reduce((sum, d) => sum + Math.pow(d - avg, 2), 0) / durations.length;
+        const stdDev = Math.sqrt(variance);
+        return Math.max(0, 100 - (stdDev / avg) * 100);
+    }
+
+    displayStatistics(stats) {
+        const container = document.getElementById('statistics-display');
+        if (!container) return;
+        
+        container.innerHTML = `
+            <div class="stats-overview">
+                <h3>Learning Overview</h3>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <span class="stat-value">${stats.overview.totalChallenges}</span>
+                        <span class="stat-label">Total Attempts</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value">${stats.overview.uniqueChallenges}</span>
+                        <span class="stat-label">Unique Challenges</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value">${this.formatTime(stats.overview.totalTime)}</span>
+                        <span class="stat-label">Total Time</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value">${stats.overview.completionRate}%</span>
+                        <span class="stat-label">Completion Rate</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="stats-performance">
+                <h3>Performance Metrics</h3>
+                <div class="performance-grid">
+                    <div class="performance-item">
+                        <label>Average Best Time:</label>
+                        <span>${this.formatTime(stats.performance.avgBestTime)}</span>
+                    </div>
+                    <div class="performance-item">
+                        <label>Average Attempts:</label>
+                        <span>${stats.performance.avgAttempts.toFixed(1)}</span>
+                    </div>
+                    <div class="performance-item">
+                        <label>Fastest Challenge:</label>
+                        <span>${stats.performance.fastestChallenge || 'None'}</span>
+                    </div>
+                    <div class="performance-item">
+                        <label>Most Attempted:</label>
+                        <span>${stats.performance.mostAttempted || 'None'}</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="stats-streaks">
+                <h3>Learning Streaks</h3>
+                <div class="streak-grid">
+                    <div class="streak-item">
+                        <span class="streak-value">${stats.streaks.currentStreak}</span>
+                        <span class="streak-label">Current Streak</span>
+                    </div>
+                    <div class="streak-item">
+                        <span class="streak-value">${stats.streaks.longestStreak}</span>
+                        <span class="streak-label">Longest Streak</span>
+                    </div>
+                </div>
+            </div>
+            
+            ${stats.recommendations.length > 0 ? `
+                <div class="stats-recommendations">
+                    <h3>Recommendations</h3>
+                    <ul class="recommendation-list">
+                        ${stats.recommendations.map(rec => `<li>${rec}</li>`).join('')}
+                    </ul>
+                </div>
+            ` : ''}
+        `;
     }
 }
 
