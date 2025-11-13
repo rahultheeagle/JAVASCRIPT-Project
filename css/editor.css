@@ -173,6 +173,66 @@
     cursor: pointer;
 }
 
+.validation-panel {
+    border-top: 1px solid #e2e8f0;
+    background: #f7fafc;
+}
+
+.validation-header {
+    padding: 10px 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.validate-btn {
+    padding: 5px 15px;
+    background: #48bb78;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.validation-results {
+    padding: 15px;
+    max-height: 150px;
+    overflow-y: auto;
+}
+
+.validation-success {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #48bb78;
+    font-weight: 600;
+}
+
+.validation-errors {
+    color: #e53e3e;
+}
+
+.validation-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+    padding: 8px;
+    background: white;
+    border-radius: 4px;
+    border-left: 3px solid #e53e3e;
+}
+
+.validation-item.warning {
+    border-left-color: #ed8936;
+    color: #ed8936;
+}
+
+.validation-icon {
+    font-size: 1.1rem;
+}
+
 .editor-toolbar {
     display: flex;
     gap: 10px;

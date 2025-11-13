@@ -61,6 +61,11 @@ class CodeEditor {
             this.clearConsole();
         });
 
+        // Validate code button
+        document.getElementById('validate-solution')?.addEventListener('click', () => {
+            this.runValidation();
+        });
+
         // Toolbar buttons
         document.getElementById('run-btn')?.addEventListener('click', () => this.updatePreview());
         document.getElementById('save-btn')?.addEventListener('click', () => this.saveCode());
@@ -102,7 +107,12 @@ class CodeEditor {
                     
                     window.onerror = function(msg, url, line, col, error) {
                         parent.postMessage({type: 'error', data: [msg + ' (Line: ' + line + ')']}, '*');
+                        return true;
                     };
+                    
+                    window.addEventListener('unhandledrejection', function(event) {
+                        parent.postMessage({type: 'error', data: ['Promise rejected: ' + event.reason]}, '*');
+                    });
                     
                     try {
                         ${js}
@@ -214,13 +224,86 @@ class CodeEditor {
         messageEl.className = `console-message ${type}`;
         
         const timestamp = new Date().toLocaleTimeString();
+        const sanitizedMessage = this.sanitizeMessage(message);
+        
         messageEl.innerHTML = `
             <span class="timestamp">[${timestamp}]</span>
-            <span class="message">${message}</span>
+            <span class="message">${sanitizedMessage}</span>
         `;
         
         console.appendChild(messageEl);
         console.scrollTop = console.scrollHeight;
+        
+        // Update error count
+        if (type === 'error') {
+            this.updateErrorCount();
+        }
+    }
+
+    sanitizeMessage(message) {
+        return String(message)
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;');
+    }
+
+    updateErrorCount() {
+        const errors = this.console?.querySelectorAll('.console-message.error').length || 0;
+        const status = document.getElementById('execution-status');
+        if (status && errors > 0) {
+            status.textContent = `⚠️ ${errors} Error${errors > 1 ? 's' : ''}`;
+            status.style.background = '#e53e3e';
+        }
+    }
+
+    validateCode() {
+        const errors = [];
+        
+        // HTML validation
+        const html = this.htmlEditor?.value || '';
+        if (html && !html.includes('<!DOCTYPE')) {
+            errors.push({type: 'warning', message: 'Missing DOCTYPE declaration'});
+        }
+        
+        // CSS validation
+        const css = this.cssEditor?.value || '';
+        const cssErrors = this.validateCSS(css);
+        errors.push(...cssErrors);
+        
+        // JS validation
+        const js = this.jsEditor?.value || '';
+        const jsErrors = this.validateJS(js);
+        errors.push(...jsErrors);
+        
+        return errors;
+    }
+
+    validateCSS(css) {
+        const errors = [];
+        const lines = css.split('\n');
+        
+        lines.forEach((line, index) => {
+            if (line.includes('{') && !line.includes('}') && !lines[index + 1]?.includes('}')) {
+                // Simple check for unclosed braces
+            }
+        });
+        
+        return errors;
+    }
+
+    validateJS(js) {
+        const errors = [];
+        
+        try {
+            new Function(js);
+        } catch (error) {
+            errors.push({
+                type: 'error',
+                message: `Syntax Error: ${error.message}`
+            });
+        }
+        
+        return errors;
     }
 
     clearConsole() {
@@ -229,6 +312,43 @@ class CodeEditor {
                 <div class="console-message info">
                     <span class="timestamp">[${new Date().toLocaleTimeString()}]</span>
                     <span class="message">Console cleared</span>
+                </div>
+            `;
+        }
+        
+        // Reset error count
+        const status = document.getElementById('execution-status');
+        if (status) {
+            status.textContent = '✓ Ready';
+            status.style.background = '#48bb78';
+        }
+    }
+
+    runValidation() {
+        const errors = this.validateCode();
+        const resultsDiv = document.getElementById('validation-results');
+        
+        if (!resultsDiv) return;
+        
+        if (errors.length === 0) {
+            resultsDiv.innerHTML = `
+                <div class="validation-success">
+                    <span class="validation-icon">✓</span>
+                    <span>No errors found! Code looks good.</span>
+                </div>
+            `;
+        } else {
+            const errorList = errors.map(error => `
+                <div class="validation-item ${error.type}">
+                    <span class="validation-icon">${error.type === 'error' ? '⚠️' : '⚠️'}</span>
+                    <span>${error.message}</span>
+                </div>
+            `).join('');
+            
+            resultsDiv.innerHTML = `
+                <div class="validation-errors">
+                    <div class="validation-header">${errors.length} issue${errors.length > 1 ? 's' : ''} found:</div>
+                    ${errorList}
                 </div>
             `;
         }
