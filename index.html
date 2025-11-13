@@ -43,8 +43,24 @@
         .featured-icon{font-size:3.5rem;margin-right:20px;filter:drop-shadow(0 4px 8px rgba(0,0,0,0.3))}
         .featured-content h4{margin:0 0 8px 0;font-size:1.3rem;font-weight:700}
         .featured-content p{margin:0 0 10px 0;opacity:0.9;line-height:1.4}
-        .featured-badge{display:inline-block;background:rgba(255,255,255,0.3);padding:4px 12px;border-radius:20px;font-size:0.8rem;font-weight:600;text-transform:uppercase;letter-spacing:0.5px}
-        @media (max-width:768px){.quick-actions-grid{grid-template-columns:1fr;gap:15px}.dashboard-section{padding:20px;margin-bottom:20px}.action-btn{padding:16px}.btn-icon{font-size:2.2rem;margin-right:15px}.featured-grid{grid-template-columns:1fr}.featured-card{flex-direction:column;text-align:center;padding:20px}.featured-icon{margin-right:0;margin-bottom:15px;font-size:3rem}}
+        .hero-section{background:linear-gradient(135deg,var(--primary-color),var(--accent-color));border-radius:var(--border-radius);padding:60px 40px;margin:30px 0;color:white;text-align:center}
+        .hero-content h2{font-size:3rem;margin-bottom:15px;font-weight:700}
+        .hero-content p{font-size:1.2rem;margin-bottom:30px;opacity:0.9}
+        .hero-actions{display:flex;gap:20px;justify-content:center;flex-wrap:wrap}
+        .hero-btn{padding:15px 30px;border-radius:25px;text-decoration:none;font-weight:600;transition:all 0.3s ease}
+        .hero-btn.primary{background:white;color:var(--primary-color)}
+        .hero-btn.secondary{background:rgba(255,255,255,0.2);color:white;border:2px solid white}
+        .hero-btn:hover{transform:translateY(-3px);box-shadow:0 10px 25px rgba(0,0,0,0.2)}
+        .category-section{margin:40px 0}
+        .category-section h3{font-size:1.5rem;margin-bottom:20px;color:var(--text-color);font-weight:700}
+        .category-row{display:flex;gap:15px;overflow-x:auto;padding:10px 0;scrollbar-width:none;-ms-overflow-style:none}
+        .category-row::-webkit-scrollbar{display:none}
+        .category-card{display:flex;flex-direction:column;align-items:center;min-width:120px;padding:20px 15px;background:var(--card-bg);border-radius:var(--border-radius);text-decoration:none;color:var(--text-color);transition:all 0.3s ease;border:2px solid var(--border-color);text-align:center}
+        .category-card:hover{transform:translateY(-5px);border-color:var(--primary-color);box-shadow:0 10px 25px rgba(59,130,246,0.15)}
+        .category-card.featured{background:linear-gradient(135deg,var(--success-color),#059669);color:white;border-color:var(--success-color)}
+        .card-icon{font-size:2.5rem;margin-bottom:10px}
+        .category-card h4{margin:0;font-size:0.9rem;font-weight:600;line-height:1.2}
+        @media (max-width:768px){.hero-content h2{font-size:2rem}.hero-actions{flex-direction:column;align-items:center}.hero-btn{width:200px}.category-row{gap:10px}.category-card{min-width:100px;padding:15px 10px}.card-icon{font-size:2rem}.category-card h4{font-size:0.8rem}.dashboard-section{padding:20px;margin-bottom:20px}}
     </style>
     <link rel="preload" href="css/main.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <link rel="preload" href="css/components.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
@@ -102,461 +118,115 @@
                     <p>Start your coding journey!</p>
                 </header>
                 
-                <!-- Featured Section -->
-                <section class="featured-section">
-                    <div class="section-header">
-                        <h3>🌟 Featured</h3>
-                        <p class="section-subtitle">Essential tools for your learning journey</p>
+                <!-- Hero Section -->
+                <section class="hero-section">
+                    <div class="hero-content">
+                        <h2>Continue Learning</h2>
+                        <p>Pick up where you left off</p>
+                        <div class="hero-actions">
+                            <a href="editor.html" class="hero-btn primary">💻 Code Editor</a>
+                            <a href="challenges.html" class="hero-btn secondary">🏆 Challenges</a>
+                        </div>
                     </div>
-                    <div class="featured-grid">
-                        <a href="#" class="featured-card pwa-card" id="install-app">
-                            <div class="featured-icon">📱</div>
-                            <div class="featured-content">
-                                <h4>Install Mobile App</h4>
-                                <p>Get CodeQuest on your phone for learning anywhere</p>
-                                <span class="featured-badge">PWA Ready</span>
-                            </div>
+                </section>
+
+                <!-- Categories -->
+                <section class="category-section">
+                    <h3>🚀 Quick Start</h3>
+                    <div class="category-row">
+                        <a href="editor.html" class="category-card">
+                            <div class="card-icon">💻</div>
+                            <h4>Code Editor</h4>
                         </a>
-                        <a href="#" class="featured-card certificate-card" id="view-certificates">
-                            <div class="featured-icon">🏆</div>
-                            <div class="featured-content">
-                                <h4>Your Certificates</h4>
-                                <p>View and download your earned certificates</p>
-                                <span class="featured-badge">Achievement</span>
-                            </div>
+                        <a href="js-executor.html" class="category-card">
+                            <div class="card-icon">⚡</div>
+                            <h4>JS Executor</h4>
+                        </a>
+                        <a href="challenges.html" class="category-card">
+                            <div class="card-icon">🏆</div>
+                            <h4>Challenges</h4>
+                        </a>
+                        <a href="tutorials.html" class="category-card">
+                            <div class="card-icon">📚</div>
+                            <h4>Tutorials</h4>
+                        </a>
+                        <a href="snippets.html" class="category-card">
+                            <div class="card-icon">📝</div>
+                            <h4>Snippets</h4>
+                        </a>
+                        <a href="achievements.html" class="category-card">
+                            <div class="card-icon">🏅</div>
+                            <h4>Achievements</h4>
                         </a>
                     </div>
                 </section>
-                
-                <nav class="quick-actions-grid" aria-label="Quick access to learning tools">
-                    <a href="editor.html" class="action-btn editor-btn">
-                        <span class="btn-icon">💻</span>
-                        <div class="btn-content">
-                            <h4>Code Editor</h4>
-                            <p>Practice coding with live preview</p>
-                        </div>
-                    </a>
-                    <a href="js-executor.html" class="action-btn js-executor-btn">
-                        <span class="btn-icon">⚡</span>
-                        <div class="btn-content">
-                            <h4>JS Executor</h4>
-                            <p>Run JavaScript code safely</p>
-                        </div>
-                    </a>
-                    <a href="js-validator.html" class="action-btn js-validator-btn">
-                        <span class="btn-icon">✓</span>
-                        <div class="btn-content">
+
+                <section class="category-section">
+                    <h3>🛠️ Tools & Utilities</h3>
+                    <div class="category-row">
+                        <a href="js-validator.html" class="category-card">
+                            <div class="card-icon">✓</div>
                             <h4>JS Validator</h4>
-                            <p>Test code against expected output</p>
-                        </div>
-                    </a>
-                    <a href="challenges.html" class="action-btn challenges-btn">
-                        <span class="btn-icon">🏆</span>
-                        <div class="btn-content">
-                            <h4>Challenges</h4>
-                            <p>Complete coding challenges and earn XP</p>
-                        </div>
-                    </a>
-                    <a href="tutorials.html" class="action-btn tutorials-btn">
-                        <span class="btn-icon">📚</span>
-                        <div class="btn-content">
-                            <h4>Tutorials</h4>
-                            <p>Interactive step-by-step learning</p>
-                        </div>
-                    </a>
-                    <a href="snippets.html" class="action-btn snippets-btn">
-                        <span class="btn-icon">📝</span>
-                        <div class="btn-content">
-                            <h4>Code Snippets</h4>
-                            <p>Ready-to-use code examples</p>
-                        </div>
-                    </a>
-                    <a href="cheatsheet.html" class="action-btn cheatsheet-btn">
-                        <span class="btn-icon">📊</span>
-                        <div class="btn-content">
+                        </a>
+                        <a href="validation.html" class="category-card">
+                            <div class="card-icon">🔍</div>
+                            <h4>Validation</h4>
+                        </a>
+                        <a href="automated-tests.html" class="category-card">
+                            <div class="card-icon">🤖</div>
+                            <h4>Auto Tests</h4>
+                        </a>
+                        <a href="storage-manager.html" class="category-card">
+                            <div class="card-icon">🗄️</div>
+                            <h4>Storage</h4>
+                        </a>
+                        <a href="progress-tracking.html" class="category-card">
+                            <div class="card-icon">📊</div>
+                            <h4>Progress</h4>
+                        </a>
+                    </div>
+                </section>
+
+                <section class="category-section">
+                    <h3>📱 Mobile & Certificates</h3>
+                    <div class="category-row">
+                        <a href="#" class="category-card featured" id="install-app">
+                            <div class="card-icon">📱</div>
+                            <h4>Install App</h4>
+                        </a>
+                        <a href="#" class="category-card featured" id="view-certificates">
+                            <div class="card-icon">🏆</div>
+                            <h4>Certificates</h4>
+                        </a>
+                    </div>
+                </section>
+
+                <section class="category-section">
+                    <h3>📚 Learning Resources</h3>
+                    <div class="category-row">
+                        <a href="cheatsheet.html" class="category-card">
+                            <div class="card-icon">📊</div>
                             <h4>Cheat Sheet</h4>
-                            <p>Quick reference guide</p>
-                        </div>
-                    </a>
-                    <a href="videos.html" class="action-btn videos-btn">
-                        <span class="btn-icon">🎥</span>
-                        <div class="btn-content">
-                            <h4>Video Tutorials</h4>
-                            <p>Learn with video content</p>
-                        </div>
-                    </a>
-                    <a href="resources.html" class="action-btn resources-btn">
-                        <span class="btn-icon">🔗</span>
-                        <div class="btn-content">
-                            <h4>External Resources</h4>
-                            <p>Links to MDN, W3Schools & more</p>
-                        </div>
-                    </a>
-                    <a href="glossary.html" class="action-btn glossary-btn">
-                        <span class="btn-icon">📜</span>
-                        <div class="btn-content">
+                        </a>
+                        <a href="videos.html" class="category-card">
+                            <div class="card-icon">🎥</div>
+                            <h4>Videos</h4>
+                        </a>
+                        <a href="resources.html" class="category-card">
+                            <div class="card-icon">🔗</div>
+                            <h4>Resources</h4>
+                        </a>
+                        <a href="glossary.html" class="category-card">
+                            <div class="card-icon">📜</div>
                             <h4>Glossary</h4>
-                            <p>Programming terms dictionary</p>
-                        </div>
-                    </a>
-                    <a href="storage-manager.html" class="action-btn storage-btn">
-                        <span class="btn-icon">🗄️</span>
-                        <div class="btn-content">
-                            <h4>Storage Manager</h4>
-                            <p>Manage your progress, settings, and saved code</p>
-                        </div>
-                    </a>
-                    <a href="js-concepts.html" class="action-btn concepts-btn">
-                        <span class="btn-icon">🚀</span>
-                        <div class="btn-content">
+                        </a>
+                        <a href="js-concepts.html" class="category-card">
+                            <div class="card-icon">🚀</div>
                             <h4>JS Concepts</h4>
-                            <p>Must-use JavaScript concepts with examples</p>
-                        </div>
-                    </a>
-                    <a href="validation.html" class="action-btn validation-btn">
-                        <span class="btn-icon">🔍</span>
-                        <div class="btn-content">
-                            <h4>Validation System</h4>
-                            <p>Compare your output with expected results</p>
-                        </div>
-                    </a>
-                    <a href="requirement-validator.html" class="action-btn requirement-btn">
-                        <span class="btn-icon">📋</span>
-                        <div class="btn-content">
-                            <h4>Requirement Validator</h4>
-                            <p>Check for specific HTML/CSS/JS requirements</p>
-                        </div>
-                    </a>
-                    <a href="partial-credit.html" class="action-btn credit-btn">
-                        <span class="btn-icon">📊</span>
-                        <div class="btn-content">
-                            <h4>Partial Credit</h4>
-                            <p>Grade incomplete solutions with detailed feedback</p>
-                        </div>
-                    </a>
-                    <a href="automated-tests.html" class="action-btn tests-btn">
-                        <span class="btn-icon">🤖</span>
-                        <div class="btn-content">
-                            <h4>Automated Tests</h4>
-                            <p>Run comprehensive test suites with performance metrics</p>
-                        </div>
-                    </a>
-                    <a href="progress-tracking.html" class="action-btn progress-btn">
-                        <span class="btn-icon">📊</span>
-                        <div class="btn-content">
-                            <h4>Progress Tracking</h4>
-                            <p>Calculate completion percentage and track learning progress</p>
-                        </div>
-                    </a>
-                    <a href="achievements.html" class="action-btn achievements-btn">
-                        <span class="btn-icon">🏆</span>
-                        <div class="btn-content">
-                            <h4>Achievement System</h4>
-                            <p>Unlock badges and track learning milestones</p>
-                        </div>
-                    </a>
-                    <a href="visual-code-builder.html" class="action-btn builder-btn">
-                        <span class="btn-icon">🎨</span>
-                        <div class="btn-content">
-                            <h4>Visual Code Builder</h4>
-                            <p>Build code visually with drag-and-drop blocks</p>
-                        </div>
-                    </a>
-                    <a href="registration.html" class="action-btn registration-btn">
-                        <span class="btn-icon">👤</span>
-                        <div class="btn-content">
-                            <h4>Registration</h4>
-                            <p>Create your account with our multi-step form</p>
-                        </div>
-                    </a>
-                    <a href="profile-setup.html" class="action-btn profile-btn">
-                        <span class="btn-icon">⚙️</span>
-                        <div class="btn-content">
-                            <h4>Profile Setup</h4>
-                            <p>Customize your learning preferences</p>
-                        </div>
-                    </a>
-                    <a href="modal-demo.html" class="action-btn modal-btn">
-                        <span class="btn-icon">💬</span>
-                        <div class="btn-content">
-                            <h4>Modal System</h4>
-                            <p>Test instructions, achievements, and settings dialogs</p>
-                        </div>
-                    </a>
-                    <a href="toast-demo.html" class="action-btn toast-btn">
-                        <span class="btn-icon">🍞</span>
-                        <div class="btn-content">
-                            <h4>Toast Notifications</h4>
-                            <p>Test success, error, and achievement notifications</p>
-                        </div>
-                    </a>
-                    <a href="progress-demo.html" class="action-btn progress-btn">
-                        <span class="btn-icon">📈</span>
-                        <div class="btn-content">
-                            <h4>Progress Bars</h4>
-                            <p>Animated progress bars with visual feedback</p>
-                        </div>
-                    </a>
-                    <a href="confetti-demo.html" class="action-btn confetti-btn">
-                        <span class="btn-icon">🎉</span>
-                        <div class="btn-content">
-                            <h4>Confetti Celebrations</h4>
-                            <p>Animated confetti for challenge completion</p>
-                        </div>
-                    </a>
-                    <a href="data-demo.html" class="action-btn data-btn">
-                        <span class="btn-icon">📊</span>
-                        <div class="btn-content">
-                            <h4>Data Structure</h4>
-                            <p>JSON data structure for challenges and content</p>
-                        </div>
-                    </a>
-                    <a href="import-export-demo.html" class="action-btn import-export-btn">
-                        <span class="btn-icon">💾</span>
-                        <div class="btn-content">
-                            <h4>Import/Export</h4>
-                            <p>Download and restore progress as JSON files</p>
-                        </div>
-                    </a>
-                    <a href="reset-demo.html" class="action-btn reset-btn">
-                        <span class="btn-icon">🔄</span>
-                        <div class="btn-content">
-                            <h4>Reset System</h4>
-                            <p>Clear progress with confirmation dialogs</p>
-                        </div>
-                    </a>
-                    <a href="version-control-demo.html" class="action-btn version-btn">
-                        <span class="btn-icon">📜</span>
-                        <div class="btn-content">
-                            <h4>Version Control</h4>
-                            <p>Track code history for each challenge</p>
-                        </div>
-                    </a>
-                    <a href="statistics-demo.html" class="action-btn statistics-btn">
-                        <span class="btn-icon">📈</span>
-                        <div class="btn-content">
-                            <h4>Statistics Dashboard</h4>
-                            <p>Charts showing learning analytics</p>
-                        </div>
-                    </a>
-                    <a href="color-palette-demo.html" class="action-btn design-btn">
-                        <span class="btn-icon">🎨</span>
-                        <div class="btn-content">
-                            <h4>Color Palette</h4>
-                            <p>Cohesive design system colors</p>
-                        </div>
-                    </a>
-                    <a href="typography-demo.html" class="action-btn typography-btn">
-                        <span class="btn-icon">🔤</span>
-                        <div class="btn-content">
-                            <h4>Typography Scale</h4>
-                            <p>Consistent heading and text sizes</p>
-                        </div>
-                    </a>
-                    <a href="component-library-demo.html" class="action-btn component-btn">
-                        <span class="btn-icon">🧩</span>
-                        <div class="btn-content">
-                            <h4>Component Library</h4>
-                            <p>Reusable buttons, cards, and inputs</p>
-                        </div>
-                    </a>
-                    <a href="icon-system-demo.html" class="action-btn icon-btn">
-                        <span class="btn-icon">✨</span>
-                        <div class="btn-content">
-                            <h4>Icon System</h4>
-                            <p>Custom SVG icons and Font Awesome integration</p>
-                        </div>
-                    </a>
-                    <a href="animations-demo.html" class="action-btn animation-btn">
-                        <span class="btn-icon">🎬</span>
-                        <div class="btn-content">
-                            <h4>Animations</h4>
-                            <p>Smooth transitions and micro-interactions</p>
-                        </div>
-                    </a>
-                    <a href="responsive-demo.html" class="action-btn responsive-btn">
-                        <span class="btn-icon">📱</span>
-                        <div class="btn-content">
-                            <h4>Responsive Design</h4>
-                            <p>Mobile-friendly functionality on all devices</p>
-                        </div>
-                    </a>
-                    <a href="touch-demo.html" class="action-btn touch-btn">
-                        <span class="btn-icon">👆</span>
-                        <div class="btn-content">
-                            <h4>Touch Interactions</h4>
-                            <p>Optimized for touch screens with gestures</p>
-                        </div>
-                    </a>
-                    <a href="collapsible-demo.html" class="action-btn collapsible-btn">
-                        <span class="btn-icon">📋</span>
-                        <div class="btn-content">
-                            <h4>Collapsible Panels</h4>
-                            <p>Maximize screen space on mobile devices</p>
-                        </div>
-                    </a>
-                    <a href="adaptive-layout-demo.html" class="action-btn adaptive-btn">
-                        <span class="btn-icon">🖥️</span>
-                        <div class="btn-content">
-                            <h4>Adaptive Layouts</h4>
-                            <p>Different layouts for different screens</p>
-                        </div>
-                    </a>
-                    <a href="keyboard-navigation-demo.html" class="action-btn keyboard-btn">
-                        <span class="btn-icon">⌨️</span>
-                        <div class="btn-content">
-                            <h4>Keyboard Navigation</h4>
-                            <p>Full keyboard support for accessibility</p>
-                        </div>
-                    </a>
-                    <a href="screen-reader-demo.html" class="action-btn screen-reader-btn">
-                        <span class="btn-icon">🔊</span>
-                        <div class="btn-content">
-                            <h4>Screen Reader Support</h4>
-                            <p>ARIA labels and roles for screen readers</p>
-                        </div>
-                    </a>
-                    <a href="focus-indicators-demo.html" class="action-btn focus-btn">
-                        <span class="btn-icon">🎯</span>
-                        <div class="btn-content">
-                            <h4>Focus Indicators</h4>
-                            <p>Clear focus states for accessibility</p>
-                        </div>
-                    </a>
-                    <a href="color-contrast-demo.html" class="action-btn contrast-btn">
-                        <span class="btn-icon">🎨</span>
-                        <div class="btn-content">
-                            <h4>Color Contrast</h4>
-                            <p>WCAG AA compliance for accessibility</p>
-                        </div>
-                    </a>
-                    <a href="skip-links-demo.html" class="action-btn skip-links-btn">
-                        <span class="btn-icon">⏭️</span>
-                        <div class="btn-content">
-                            <h4>Skip Links</h4>
-                            <p>Easy navigation for assistive technology</p>
-                        </div>
-                    </a>
-                    <a href="semantic-html-demo.html" class="action-btn semantic-btn">
-                        <span class="btn-icon">🏷️</span>
-                        <div class="btn-content">
-                            <h4>Semantic HTML5</h4>
-                            <p>Proper element usage throughout</p>
-                        </div>
-                    </a>
-                    <a href="template-system-demo.html" class="action-btn template-btn">
-                        <span class="btn-icon">🧩</span>
-                        <div class="btn-content">
-                            <h4>Template System</h4>
-                            <p>Reusable HTML structures in JS</p>
-                        </div>
-                    </a>
-                    <a href="dynamic-content-demo.html" class="action-btn dynamic-btn">
-                        <span class="btn-icon">⚙️</span>
-                        <div class="btn-content">
-                            <h4>Dynamic Content</h4>
-                            <p>Generate challenge cards via JavaScript</p>
-                        </div>
-                    </a>
-                    <a href="forms-demo.html" class="action-btn forms-btn">
-                        <span class="btn-icon">📋</span>
-                        <div class="btn-content">
-                            <h4>Forms</h4>
-                            <p>User input with validation</p>
-                        </div>
-                    </a>
-                    <a href="metadata-demo.html" class="action-btn metadata-btn">
-                        <span class="btn-icon">🏷️</span>
-                        <div class="btn-content">
-                            <h4>Metadata</h4>
-                            <p>SEO-friendly meta tags</p>
-                        </div>
-                    </a>
-                    <a href="modern-layouts-demo.html" class="action-btn layouts-btn">
-                        <span class="btn-icon">📏</span>
-                        <div class="btn-content">
-                            <h4>Modern Layouts</h4>
-                            <p>CSS Grid &amp; Flexbox techniques</p>
-                        </div>
-                    </a>
-                    <a href="css-variables-demo.html" class="action-btn variables-btn">
-                        <span class="btn-icon">🎨</span>
-                        <div class="btn-content">
-                            <h4>CSS Variables</h4>
-                            <p>Dynamic theming system</p>
-                        </div>
-                    </a>
-                    <a href="animations-demo.html" class="action-btn animations-btn">
-                        <span class="btn-icon">✨</span>
-                        <div class="btn-content">
-                            <h4>Animations</h4>
-                            <p>Keyframes for loading, success, errors</p>
-                        </div>
-                    </a>
-                    <a href="responsive-utilities-demo.html" class="action-btn responsive-utilities-btn">
-                        <span class="btn-icon">📱</span>
-                        <div class="btn-content">
-                            <h4>Responsive Utilities</h4>
-                            <p>Mobile-first approach</p>
-                        </div>
-                    </a>
-                    <a href="component-styles-demo.html" class="action-btn component-styles-btn">
-                        <span class="btn-icon">🧩</span>
-                        <div class="btn-content">
-                            <h4>Component Styles</h4>
-                            <p>Modular, reusable CSS</p>
-                        </div>
-                    </a>
-                    <a href="es6-features-demo.html" class="action-btn es6-btn">
-                        <span class="btn-icon">🚀</span>
-                        <div class="btn-content">
-                            <h4>ES6+ Features</h4>
-                            <p>Arrow functions, destructuring, modules</p>
-                        </div>
-                    </a>
-                    <a href="object-oriented-demo.html" class="action-btn oop-btn">
-                        <span class="btn-icon">🏧</span>
-                        <div class="btn-content">
-                            <h4>Object-Oriented</h4>
-                            <p>Classes for User, Challenge, Achievement</p>
-                        </div>
-                    </a>
-                    <a href="event-handling-demo.html" class="action-btn events-btn">
-                        <span class="btn-icon">⚡</span>
-                        <div class="btn-content">
-                            <h4>Event Handling</h4>
-                            <p>Click, input, submit, storage events</p>
-                        </div>
-                    </a>
-                    <a href="dom-manipulation-demo.html" class="action-btn dom-btn">
-                        <span class="btn-icon">🔄</span>
-                        <div class="btn-content">
-                            <h4>DOM Manipulation</h4>
-                            <p>Dynamic content rendering with templates</p>
-                        </div>
-                    </a>
-                    <a href="async-operations-demo.html" class="action-btn async-btn">
-                        <span class="btn-icon">⏳</span>
-                        <div class="btn-content">
-                            <h4>Async Operations</h4>
-                            <p>Simulated API calls, timers, promises</p>
-                        </div>
-                    </a>
-                    <a href="error-handling-demo.html" class="action-btn error-btn">
-                        <span class="btn-icon">⚠️</span>
-                        <div class="btn-content">
-                            <h4>Error Handling</h4>
-                            <p>Try-catch blocks, user-friendly messages</p>
-                        </div>
-                    </a>
-                    <a href="code-organization-demo.html" class="action-btn organization-btn">
-                        <span class="btn-icon">📁</span>
-                        <div class="btn-content">
-                            <h4>Code Organization</h4>
-                            <p>Separate files for different features</p>
-                        </div>
-                    </a>
-                </div>
+                        </a>
+                    </div>
+                </section>
+
                 
                 <section class="dashboard-section progress-section" aria-labelledby="progress-heading">
                     <div class="section-header">
