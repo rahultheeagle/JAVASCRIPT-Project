@@ -226,17 +226,20 @@ class AchievementSystem {
         notification.className = 'achievement-notification';
         notification.innerHTML = `
             <div class="achievement-popup">
-                <div class="achievement-icon">${achievement.icon}</div>
+                <div class="achievement-icon pulse">${achievement.icon}</div>
                 <div class="achievement-info">
-                    <h4>Achievement Unlocked!</h4>
-                    <p><strong>${achievement.title}</strong></p>
-                    <p>${achievement.description}</p>
-                    <p class="xp-reward">+${achievement.xpReward} XP</p>
+                    <h4 class="slide-in">Achievement Unlocked!</h4>
+                    <p class="slide-in delay-1"><strong>${achievement.title}</strong></p>
+                    <p class="slide-in delay-2">${achievement.description}</p>
+                    <p class="xp-reward bounce delay-3">+${achievement.xpReward} XP</p>
                 </div>
             </div>
         `;
 
         document.body.appendChild(notification);
+        
+        // Add confetti effect
+        this.createConfetti();
         
         setTimeout(() => {
             notification.classList.add('show');
@@ -245,7 +248,7 @@ class AchievementSystem {
         setTimeout(() => {
             notification.classList.remove('show');
             setTimeout(() => notification.remove(), 300);
-        }, 4000);
+        }, 5000);
     }
 
     updateAchievementDisplay() {
@@ -257,14 +260,14 @@ class AchievementSystem {
             const unlockedData = this.unlockedAchievements.find(a => a.id === achievement.id);
             
             return `
-                <div class="achievement-card ${isUnlocked ? 'unlocked' : 'locked'}">
-                    <div class="achievement-icon">${achievement.icon}</div>
+                <div class="achievement-card ${isUnlocked ? 'unlocked glow' : 'locked'} fade-in">
+                    <div class="achievement-icon ${isUnlocked ? 'spin' : ''}">${achievement.icon}</div>
                     <div class="achievement-details">
                         <h4>${achievement.title}</h4>
                         <p>${achievement.description}</p>
                         <span class="achievement-category">${achievement.category}</span>
-                        <span class="xp-value">+${achievement.xpReward} XP</span>
-                        ${isUnlocked ? `<span class="unlock-date">Unlocked: ${new Date(unlockedData.unlockedAt).toLocaleDateString()}</span>` : ''}
+                        <span class="xp-value ${isUnlocked ? 'shine' : ''}">⭐ ${achievement.xpReward} XP</span>
+                        ${isUnlocked ? `<span class="unlock-date flash">Unlocked: ${new Date(unlockedData.unlockedAt).toLocaleDateString()}</span>` : ''}
                     </div>
                 </div>
             `;
@@ -494,6 +497,30 @@ class AchievementSystem {
 
     getBadges() {
         return this.storageManager?.get('badges') || [];
+    }
+
+    createConfetti() {
+        const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#feca57', '#ff9ff3'];
+        
+        for (let i = 0; i < 50; i++) {
+            const confetti = document.createElement('div');
+            confetti.className = 'confetti';
+            confetti.style.cssText = `
+                position: fixed;
+                width: 10px;
+                height: 10px;
+                background: ${colors[Math.floor(Math.random() * colors.length)]};
+                left: ${Math.random() * 100}vw;
+                top: -10px;
+                z-index: 1002;
+                animation: confetti-fall ${2 + Math.random() * 3}s linear forwards;
+                transform: rotate(${Math.random() * 360}deg);
+            `;
+            
+            document.body.appendChild(confetti);
+            
+            setTimeout(() => confetti.remove(), 5000);
+        }
     }
 }
 

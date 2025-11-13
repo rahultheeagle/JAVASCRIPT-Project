@@ -1414,6 +1414,154 @@
     opacity: 0.9;
 }
 
+/* Achievement Animation Styles */
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+    40% { transform: translateY(-10px); }
+    60% { transform: translateY(-5px); }
+}
+
+@keyframes slide-in {
+    from { transform: translateX(-20px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes glow {
+    0%, 100% { box-shadow: 0 4px 12px rgba(72, 187, 120, 0.15); }
+    50% { box-shadow: 0 8px 25px rgba(72, 187, 120, 0.4); }
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+@keyframes shine {
+    0% { background-position: -100px; }
+    100% { background-position: 100px; }
+}
+
+@keyframes flash {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+@keyframes fade-in {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes confetti-fall {
+    0% {
+        transform: translateY(-10px) rotate(0deg);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(100vh) rotate(720deg);
+        opacity: 0;
+    }
+}
+
+/* Animation Classes */
+.pulse {
+    animation: pulse 1.5s infinite;
+}
+
+.bounce {
+    animation: bounce 1s ease-in-out;
+}
+
+.slide-in {
+    animation: slide-in 0.6s ease-out;
+}
+
+.slide-in.delay-1 {
+    animation-delay: 0.2s;
+    opacity: 0;
+    animation-fill-mode: forwards;
+}
+
+.slide-in.delay-2 {
+    animation-delay: 0.4s;
+    opacity: 0;
+    animation-fill-mode: forwards;
+}
+
+.delay-3 {
+    animation-delay: 0.6s;
+    opacity: 0;
+    animation-fill-mode: forwards;
+}
+
+.glow {
+    animation: glow 2s ease-in-out infinite;
+}
+
+.spin {
+    animation: spin 2s linear;
+}
+
+.shine {
+    background: linear-gradient(90deg, #ffd700, #fff, #ffd700);
+    background-size: 200px 100%;
+    animation: shine 2s ease-in-out;
+    -webkit-background-clip: text;
+    background-clip: text;
+}
+
+.flash {
+    animation: flash 1s ease-in-out 3;
+}
+
+.fade-in {
+    animation: fade-in 0.8s ease-out;
+}
+
+/* Enhanced Achievement Notification */
+.achievement-notification {
+    animation: slideInRight 0.5s ease-out;
+}
+
+.achievement-notification.show {
+    animation: none;
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Confetti Styles */
+.confetti {
+    pointer-events: none;
+    border-radius: 50%;
+}
+
+/* Achievement Card Hover Effects */
+.achievement-card {
+    transition: all 0.3s ease;
+}
+
+.achievement-card:hover {
+    transform: translateY(-5px);
+}
+
+.achievement-card.unlocked:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 12px 30px rgba(72, 187, 120, 0.3);
+}
+
 @media (max-width: 768px) {
     .achievement-stats {
         grid-template-columns: 1fr;
