@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Requirement Validator - CodeQuest</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/components.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📋 Requirement Validator</h1>
+            <nav>
+                <a href="index.html">← Dashboard</a>
+            </nav>
+        </header>
+
+        <div class="validator-container">
+            <div class="code-section">
+                <div class="code-tabs">
+                    <button class="tab-btn active" data-tab="html">HTML</button>
+                    <button class="tab-btn" data-tab="css">CSS</button>
+                    <button class="tab-btn" data-tab="js">JavaScript</button>
+                </div>
+
+                <div class="tab-content active" id="html-tab">
+                    <textarea id="html-code" placeholder="Enter your HTML code..."><!DOCTYPE html>
+<html>
+<head>
+    <title>My Page</title>
+</head>
+<body>
+    <h1>Hello World</h1>
+    <p>This is a paragraph.</p>
+    <div class="container">
+        <button onclick="myFunction()">Click me</button>
+    </div>
+</body>
+</html></textarea>
+                </div>
+
+                <div class="tab-content" id="css-tab">
+                    <textarea id="css-code" placeholder="Enter your CSS code...">body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+}
+
+button {
+    background-color: blue;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+}</textarea>
+                </div>
+
+                <div class="tab-content" id="js-tab">
+                    <textarea id="js-code" placeholder="Enter your JavaScript code...">function myFunction() {
+    console.log('Button clicked!');
+    document.getElementById('demo').innerHTML = 'Hello!';
+}
+
+const numbers = [1, 2, 3, 4, 5];
+const doubled = numbers.map(x => x * 2);</textarea>
+                </div>
+
+                <button id="validate-requirements" class="validate-btn">🔍 Check Requirements</button>
+            </div>
+
+            <div class="requirements-section">
+                <h3>Requirements Checklist</h3>
+                
+                <div class="requirement-group">
+                    <h4>HTML Tags Required:</h4>
+                    <div class="requirement-list" id="html-requirements">
+                        <div class="requirement-item">
+                            <input type="checkbox" id="req-h1" data-type="html" data-value="h1">
+                            <label for="req-h1">h1 tag</label>
+                        </div>
+                        <div class="requirement-item">
+                            <input type="checkbox" id="req-div" data-type="html" data-value="div">
+                            <label for="req-div">div tag</label>
+                        </div>
+                        <div class="requirement-item">
+                            <input type="checkbox" id="req-button" data-type="html" data-value="button">
+                            <label for="req-button">button tag</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="requirement-group">
+                    <h4>CSS Properties Required:</h4>
+                    <div class="requirement-list" id="css-requirements">
+                        <div class="requirement-item">
+                            <input type="checkbox" id="req-display" data-type="css" data-value="display">
+                            <label for="req-display">display property</label>
+                        </div>
+                        <div class="requirement-item">
+                            <input type="checkbox" id="req-background" data-type="css" data-value="background-color">
+                            <label for="req-background">background-color property</label>
+                        </div>
+                        <div class="requirement-item">
+                            <input type="checkbox" id="req-padding" data-type="css" data-value="padding">
+                            <label for="req-padding">padding property</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="requirement-group">
+                    <h4>JavaScript Functions Required:</h4>
+                    <div class="requirement-list" id="js-requirements">
+                        <div class="requirement-item">
+                            <input type="checkbox" id="req-console" data-type="js" data-value="console.log">
+                            <label for="req-console">console.log function</label>
+                        </div>
+                        <div class="requirement-item">
+                            <input type="checkbox" id="req-map" data-type="js" data-value=".map">
+                            <label for="req-map">Array.map method</label>
+                        </div>
+                        <div class="requirement-item">
+                            <input type="checkbox" id="req-getelementbyid" data-type="js" data-value="getElementById">
+                            <label for="req-getelementbyid">getElementById method</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="validation-results" id="validation-results">
+                    <p>Select requirements and click "Check Requirements" to validate your code.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/requirement-validator.js"></script>
+</body>
+</html>
