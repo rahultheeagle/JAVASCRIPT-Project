@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Progress Tracking - CodeQuest</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/components.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📊 Progress Tracking</h1>
+            <nav>
+                <a href="index.html">← Dashboard</a>
+            </nav>
+        </header>
+
+        <div class="progress-container">
+            <div class="overview-section">
+                <h3>Learning Progress Overview</h3>
+                
+                <div class="completion-stats">
+                    <div class="stat-card">
+                        <div class="stat-value" id="overall-percentage">0%</div>
+                        <div class="stat-label">Overall Completion</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="overall-progress"></div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-value" id="lessons-completed">0</div>
+                        <div class="stat-label">Lessons Completed</div>
+                        <div class="stat-sublabel" id="lessons-total">of 12 total</div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-value" id="challenges-completed">0</div>
+                        <div class="stat-label">Challenges Completed</div>
+                        <div class="stat-sublabel" id="challenges-total">of 25 total</div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-value" id="tutorials-completed">0</div>
+                        <div class="stat-label">Tutorials Completed</div>
+                        <div class="stat-sublabel" id="tutorials-total">of 8 total</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="category-breakdown">
+                <h3>Category Progress</h3>
+                
+                <div class="category-list">
+                    <div class="category-item">
+                        <div class="category-header">
+                            <span class="category-name">HTML Basics</span>
+                            <span class="category-percentage" id="html-percentage">0%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="html-progress"></div>
+                        </div>
+                        <div class="category-details">
+                            <span id="html-completed">0</span> of <span id="html-total">4</span> items completed
+                        </div>
+                    </div>
+
+                    <div class="category-item">
+                        <div class="category-header">
+                            <span class="category-name">CSS Styling</span>
+                            <span class="category-percentage" id="css-percentage">0%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="css-progress"></div>
+                        </div>
+                        <div class="category-details">
+                            <span id="css-completed">0</span> of <span id="css-total">5</span> items completed
+                        </div>
+                    </div>
+
+                    <div class="category-item">
+                        <div class="category-header">
+                            <span class="category-name">JavaScript Fundamentals</span>
+                            <span class="category-percentage" id="js-percentage">0%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="js-progress"></div>
+                        </div>
+                        <div class="category-details">
+                            <span id="js-completed">0</span> of <span id="js-total">8</span> items completed
+                        </div>
+                    </div>
+
+                    <div class="category-item">
+                        <div class="category-header">
+                            <span class="category-name">Advanced Topics</span>
+                            <span class="category-percentage" id="advanced-percentage">0%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="advanced-progress"></div>
+                        </div>
+                        <div class="category-details">
+                            <span id="advanced-completed">0</span> of <span id="advanced-total">6</span> items completed
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="actions-section">
+                <button id="simulate-progress" class="validate-btn">🎯 Simulate Progress</button>
+                <button id="reset-progress" class="secondary-btn">🔄 Reset Progress</button>
+                <button id="calculate-progress" class="validate-btn">📊 Recalculate</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/progress-tracking.js"></script>
+</body>
+</html>
