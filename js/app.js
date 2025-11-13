@@ -128,30 +128,123 @@ class StorageManager {
         gamification: 'codequest_gamification'
     };
 
+    static batchQueue = [];
+    static batchTimeout = null;
+
     static get(key) {
         try {
+            const start = performance.now();
             const data = localStorage.getItem(this.keys[key] || key);
-            return data ? JSON.parse(data) : null;
+            const result = data ? JSON.parse(data) : null;
+            const end = performance.now();
+            
+            if (end - start > 10) {
+                console.warn(`Storage read took ${(end - start).toFixed(2)}ms`);
+            }
+            
+            return result;
         } catch (e) {
+            console.error('Storage read error:', e);
             return null;
         }
     }
 
     static set(key, data) {
         try {
-            localStorage.setItem(this.keys[key] || key, JSON.stringify(data));
+            const start = performance.now();
+            
+            // Add timestamp for cleanup
+            const dataWithTimestamp = {
+                ...data,
+                _timestamp: Date.now()
+            };
+            
+            // Compress data
+            const compressed = JSON.stringify(dataWithTimestamp).replace(/\s+/g, '');
+            
+            localStorage.setItem(this.keys[key] || key, compressed);
+            
+            const end = performance.now();
+            if (end - start > 10) {
+                console.warn(`Storage write took ${(end - start).toFixed(2)}ms`);
+            }
+            
             return true;
         } catch (e) {
+            console.error('Storage write error:', e);
             return false;
         }
+    }
+
+    static batchSet(key, data) {
+        this.batchQueue.push({ key, data });
+        
+        if (this.batchTimeout) clearTimeout(this.batchTimeout);
+        this.batchTimeout = setTimeout(() => this.flushBatch(), 50);
+    }
+
+    static flushBatch() {
+        const start = performance.now();
+        
+        this.batchQueue.forEach(({ key, data }) => {
+            this.set(key, data);
+        });
+        
+        this.batchQueue = [];
+        
+        const end = performance.now();
+        console.log(`Batch storage operation: ${(end - start).toFixed(2)}ms`);
     }
 
     static remove(key) {
         localStorage.removeItem(this.keys[key] || key);
     }
+
+    static cleanup() {
+        const maxAge = 30 * 24 * 60 * 60 * 1000; // 30 days
+        const now = Date.now();
+        let cleaned = 0;
+
+        Object.keys(localStorage).forEach(key => {
+            try {
+                const data = JSON.parse(localStorage.getItem(key));
+                if (data._timestamp && (now - data._timestamp) > maxAge) {
+                    localStorage.removeItem(key);
+                    cleaned++;
+                }
+            } catch (e) {
+                // Invalid JSON, skip
+            }
+        });
+
+        if (cleaned > 0) {
+            console.log(`Cleaned up ${cleaned} old storage entries`);
+        }
+    }
+
+    static getStorageSize() {
+        let total = 0;
+        Object.keys(localStorage).forEach(key => {
+            total += localStorage.getItem(key).length;
+        });
+        return (total / 1024).toFixed(2) + ' KB';
+    }
 }
 
 // Initialize app when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
+    const start = performance.now();
+    
+    // Cleanup old storage data
+    StorageManager.cleanup();
+    
     window.app = new CodeQuestApp();
+    
+    const end = performance.now();
+    console.log(`App initialization: ${(end - start).toFixed(2)}ms`);
+    
+    // Performance monitoring
+    if (end - start > 100) {
+        console.warn('App initialization exceeds 100ms target');
+    }
 });

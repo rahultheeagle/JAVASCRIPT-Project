@@ -1,6 +1,6 @@
 /* Components CSS - Reusable UI components */
 
-/* Action Buttons */
+/* Action Buttons - Optimized for 60fps */
 .action-btn {
     display: flex;
     align-items: center;
@@ -9,13 +9,17 @@
     border-radius: var(--border-radius);
     text-decoration: none;
     color: var(--text-color);
-    transition: var(--transition);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     box-shadow: var(--shadow);
+    will-change: transform;
+    transform: translateZ(0);
+    contain: layout style paint;
 }
 
 .action-btn:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px) translateZ(0);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 }
 
 .btn-icon {
@@ -33,7 +37,7 @@
     font-size: 0.9rem;
 }
 
-/* Modal */
+/* Modal - Performance Optimized */
 .modal {
     display: none;
     position: fixed;
@@ -43,6 +47,9 @@
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(2px);
+    will-change: opacity;
+    contain: layout style paint;
 }
 
 .modal-content {
@@ -69,35 +76,44 @@
     color: var(--text-color);
 }
 
-/* Progress Bars */
+/* Progress Bars - GPU Accelerated */
 .progress-bar {
     width: 100%;
     height: 20px;
     background-color: #e2e8f0;
     border-radius: 10px;
     overflow: hidden;
+    contain: layout style;
 }
 
 .progress-fill {
     height: 100%;
     background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
-    transition: width 0.3s ease;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transform-origin: left center;
+    will-change: transform;
+    transform: scaleX(var(--progress, 0)) translateZ(0);
 }
 
-/* Badges */
+/* Badges - Optimized Animations */
 .badge {
     display: flex;
     align-items: center;
     padding: 15px;
     background: var(--card-bg);
     border-radius: 12px;
-    transition: var(--transition);
+    transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     opacity: 0.6;
+    will-change: opacity, transform;
+    transform: translateZ(0);
+    contain: layout style paint;
 }
 
 .badge.earned {
     opacity: 1;
     box-shadow: 0 0 20px rgba(102, 126, 234, 0.3);
+    transform: scale(1.02) translateZ(0);
 }
 
 .badge-icon {
