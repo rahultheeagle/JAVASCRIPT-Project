@@ -13,6 +13,12 @@ class CodeEditor {
             js: document.getElementById('js-highlight')
         };
         
+        this.lineNumberElements = {
+            html: document.getElementById('html-line-numbers'),
+            css: document.getElementById('css-line-numbers'),
+            js: document.getElementById('js-line-numbers')
+        };
+        
         this.init();
     }
 
@@ -29,16 +35,23 @@ class CodeEditor {
                 const lang = ['html', 'css', 'js'][index];
                 editor.addEventListener('input', () => {
                     this.updateSyntaxHighlight(lang, editor.value);
+                    this.updateLineNumbers(lang, editor.value);
                     this.debouncePreview();
                     this.autoSave();
                 });
                 
-                // Sync scroll between editor and highlight
+                // Sync scroll between editor, highlight, and line numbers
                 editor.addEventListener('scroll', () => {
                     const highlight = this.highlightElements[lang];
+                    const lineNumbers = this.lineNumberElements[lang];
+                    
                     if (highlight) {
                         highlight.parentElement.scrollTop = editor.scrollTop;
                         highlight.parentElement.scrollLeft = editor.scrollLeft;
+                    }
+                    
+                    if (lineNumbers) {
+                        lineNumbers.scrollTop = editor.scrollTop;
                     }
                 });
             }
@@ -196,11 +209,29 @@ class CodeEditor {
         }
     }
 
+    updateLineNumbers(lang, code) {
+        const lineNumbers = this.lineNumberElements[lang];
+        if (!lineNumbers) return;
+        
+        const lines = code.split('\n').length;
+        const numbers = Array.from({length: lines}, (_, i) => i + 1).join('\n');
+        lineNumbers.textContent = numbers;
+    }
+
     initSyntaxHighlighting() {
-        // Initialize syntax highlighting for all editors
-        if (this.htmlEditor) this.updateSyntaxHighlight('html', this.htmlEditor.value);
-        if (this.cssEditor) this.updateSyntaxHighlight('css', this.cssEditor.value);
-        if (this.jsEditor) this.updateSyntaxHighlight('js', this.jsEditor.value);
+        // Initialize syntax highlighting and line numbers for all editors
+        if (this.htmlEditor) {
+            this.updateSyntaxHighlight('html', this.htmlEditor.value);
+            this.updateLineNumbers('html', this.htmlEditor.value);
+        }
+        if (this.cssEditor) {
+            this.updateSyntaxHighlight('css', this.cssEditor.value);
+            this.updateLineNumbers('css', this.cssEditor.value);
+        }
+        if (this.jsEditor) {
+            this.updateSyntaxHighlight('js', this.jsEditor.value);
+            this.updateLineNumbers('js', this.jsEditor.value);
+        }
     }
 
     debouncePreview() {
