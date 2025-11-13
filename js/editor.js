@@ -1,11 +1,17 @@
-// Code Editor JavaScript
+// Code Editor JavaScript with Syntax Highlighting
 class CodeEditor {
     constructor() {
         this.htmlEditor = document.getElementById('html-editor');
         this.cssEditor = document.getElementById('css-editor');
         this.jsEditor = document.getElementById('js-editor');
-        this.preview = document.getElementById('preview');
-        this.console = document.getElementById('console-output');
+        this.preview = document.getElementById('preview-frame');
+        this.console = document.getElementById('error-console');
+        
+        this.highlightElements = {
+            html: document.getElementById('html-highlight'),
+            css: document.getElementById('css-highlight'),
+            js: document.getElementById('js-highlight')
+        };
         
         this.init();
     }
@@ -13,15 +19,27 @@ class CodeEditor {
     init() {
         this.setupEventListeners();
         this.loadSavedCode();
+        this.initSyntaxHighlighting();
         this.updatePreview();
     }
 
     setupEventListeners() {
-        [this.htmlEditor, this.cssEditor, this.jsEditor].forEach(editor => {
+        [this.htmlEditor, this.cssEditor, this.jsEditor].forEach((editor, index) => {
             if (editor) {
+                const lang = ['html', 'css', 'js'][index];
                 editor.addEventListener('input', () => {
+                    this.updateSyntaxHighlight(lang, editor.value);
                     this.updatePreview();
                     this.autoSave();
+                });
+                
+                // Sync scroll between editor and highlight
+                editor.addEventListener('scroll', () => {
+                    const highlight = this.highlightElements[lang];
+                    if (highlight) {
+                        highlight.parentElement.scrollTop = editor.scrollTop;
+                        highlight.parentElement.scrollLeft = editor.scrollLeft;
+                    }
                 });
             }
         });
@@ -118,6 +136,21 @@ class CodeEditor {
 
     formatCSS(css) {
         return css.replace(/;/g, ';\n').replace(/{/g, ' {\n').replace(/}/g, '\n}\n');
+    }
+
+    updateSyntaxHighlight(lang, code) {
+        const highlight = this.highlightElements[lang];
+        if (highlight && window.Prism) {
+            highlight.textContent = code;
+            Prism.highlightElement(highlight);
+        }
+    }
+
+    initSyntaxHighlighting() {
+        // Initialize syntax highlighting for all editors
+        if (this.htmlEditor) this.updateSyntaxHighlight('html', this.htmlEditor.value);
+        if (this.cssEditor) this.updateSyntaxHighlight('css', this.cssEditor.value);
+        if (this.jsEditor) this.updateSyntaxHighlight('js', this.jsEditor.value);
     }
 
     showMessage(text, type = 'info') {
