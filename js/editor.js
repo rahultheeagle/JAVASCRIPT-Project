@@ -29,7 +29,7 @@ class CodeEditor {
                 const lang = ['html', 'css', 'js'][index];
                 editor.addEventListener('input', () => {
                     this.updateSyntaxHighlight(lang, editor.value);
-                    this.updatePreview();
+                    this.debouncePreview();
                     this.autoSave();
                 });
                 
@@ -42,6 +42,23 @@ class CodeEditor {
                     }
                 });
             }
+        });
+
+        // Listen for console messages from iframe
+        window.addEventListener('message', (e) => {
+            if (e.data.type === 'log' || e.data.type === 'error') {
+                this.addConsoleMessage(e.data.type, e.data.data.join(' '));
+            }
+        });
+
+        // Manual refresh button
+        document.getElementById('refresh-preview')?.addEventListener('click', () => {
+            this.updatePreview();
+        });
+
+        // Clear console button
+        document.getElementById('clear-console')?.addEventListener('click', () => {
+            this.clearConsole();
         });
 
         // Toolbar buttons
@@ -60,15 +77,37 @@ class CodeEditor {
             <!DOCTYPE html>
             <html>
             <head>
-                <style>${css}</style>
+                <meta charset="UTF-8">
+                <style>
+                    body { margin: 0; padding: 10px; font-family: Arial, sans-serif; }
+                    ${css}
+                </style>
             </head>
             <body>
                 ${html}
                 <script>
+                    // Capture console logs and errors
+                    const originalLog = console.log;
+                    const originalError = console.error;
+                    
+                    console.log = function(...args) {
+                        parent.postMessage({type: 'log', data: args}, '*');
+                        originalLog.apply(console, args);
+                    };
+                    
+                    console.error = function(...args) {
+                        parent.postMessage({type: 'error', data: args}, '*');
+                        originalError.apply(console, args);
+                    };
+                    
+                    window.onerror = function(msg, url, line, col, error) {
+                        parent.postMessage({type: 'error', data: [msg + ' (Line: ' + line + ')']}, '*');
+                    };
+                    
                     try {
                         ${js}
                     } catch (error) {
-                        console.error('Error:', error.message);
+                        console.error('Runtime Error:', error.message);
                     }
                 </script>
             </body>
@@ -77,6 +116,7 @@ class CodeEditor {
 
         if (this.preview) {
             this.preview.srcdoc = previewContent;
+            this.updateStatus('✓ Preview Updated');
         }
     }
 
@@ -151,6 +191,47 @@ class CodeEditor {
         if (this.htmlEditor) this.updateSyntaxHighlight('html', this.htmlEditor.value);
         if (this.cssEditor) this.updateSyntaxHighlight('css', this.cssEditor.value);
         if (this.jsEditor) this.updateSyntaxHighlight('js', this.jsEditor.value);
+    }
+
+    debouncePreview() {
+        clearTimeout(this.previewTimer);
+        this.updateStatus('⏳ Updating...');
+        this.previewTimer = setTimeout(() => {
+            this.updatePreview();
+        }, 300);
+    }
+
+    updateStatus(text) {
+        const status = document.getElementById('execution-status');
+        if (status) status.textContent = text;
+    }
+
+    addConsoleMessage(type, message) {
+        const console = this.console;
+        if (!console) return;
+
+        const messageEl = document.createElement('div');
+        messageEl.className = `console-message ${type}`;
+        
+        const timestamp = new Date().toLocaleTimeString();
+        messageEl.innerHTML = `
+            <span class="timestamp">[${timestamp}]</span>
+            <span class="message">${message}</span>
+        `;
+        
+        console.appendChild(messageEl);
+        console.scrollTop = console.scrollHeight;
+    }
+
+    clearConsole() {
+        if (this.console) {
+            this.console.innerHTML = `
+                <div class="console-message info">
+                    <span class="timestamp">[${new Date().toLocaleTimeString()}]</span>
+                    <span class="message">Console cleared</span>
+                </div>
+            `;
+        }
     }
 
     showMessage(text, type = 'info') {

@@ -88,9 +88,89 @@
 
 .preview-frame {
     width: 100%;
-    height: 100%;
+    height: 70%;
     border: none;
     background: white;
+    border-radius: 8px;
+}
+
+.console-section {
+    height: 30%;
+    border-top: 1px solid #e2e8f0;
+    display: flex;
+    flex-direction: column;
+}
+
+.console-header {
+    background: #f7fafc;
+    padding: 10px 15px;
+    border-bottom: 1px solid #e2e8f0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 600;
+}
+
+.console-controls {
+    display: flex;
+    gap: 10px;
+}
+
+.console-btn {
+    padding: 5px 10px;
+    font-size: 0.8rem;
+    background: #e2e8f0;
+    color: #4a5568;
+}
+
+.error-console {
+    flex: 1;
+    background: #1a202c;
+    color: #e2e8f0;
+    padding: 10px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.9rem;
+    overflow-y: auto;
+}
+
+.console-message {
+    margin-bottom: 5px;
+    display: flex;
+    gap: 10px;
+}
+
+.console-message.error {
+    color: #fc8181;
+}
+
+.console-message.log {
+    color: #68d391;
+}
+
+.console-message.info {
+    color: #63b3ed;
+}
+
+.timestamp {
+    color: #a0aec0;
+    font-size: 0.8rem;
+}
+
+.status-indicator {
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    background: #48bb78;
+    color: white;
+}
+
+.refresh-btn {
+    padding: 5px 10px;
+    background: #667eea;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
 }
 
 .editor-toolbar {
