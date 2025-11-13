@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Achievements - CodeQuest</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/components.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🏆 Achievements</h1>
+            <nav>
+                <a href="index.html">← Dashboard</a>
+            </nav>
+        </header>
+
+        <div class="achievements-container">
+            <div class="achievements-overview">
+                <h3>Achievement Progress</h3>
+                
+                <div class="achievement-stats">
+                    <div class="stat-card">
+                        <div class="stat-value" id="unlocked-count">0</div>
+                        <div class="stat-label">Unlocked</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-value" id="total-count">6</div>
+                        <div class="stat-label">Total</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-value" id="progress-percentage">0%</div>
+                        <div class="stat-label">Progress</div>
+                    </div>
+                </div>
+
+                <div class="progress-bar">
+                    <div class="progress-fill" id="achievement-progress"></div>
+                </div>
+            </div>
+
+            <div class="achievements-grid">
+                <h3>All Achievements</h3>
+                <div id="achievements-container" class="achievements-list">
+                    <!-- Achievements will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <div class="achievement-actions">
+                <button id="check-achievements" class="btn primary-btn">🔍 Check Progress</button>
+                <button id="simulate-unlock" class="btn secondary-btn">🎯 Simulate Unlock</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/storage.js"></script>
+    <script src="js/achievements.js"></script>
+    
+    <script>
+        // Update achievement display when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                if (window.achievementSystem) {
+                    window.achievementSystem.updateAchievementDisplay();
+                    updateAchievementStats();
+                }
+            }, 100);
+        });
+
+        function updateAchievementStats() {
+            if (!window.achievementSystem) return;
+            
+            const unlocked = window.achievementSystem.getUnlockedCount();
+            const total = window.achievementSystem.getTotalCount();
+            const percentage = window.achievementSystem.getProgressPercentage();
+            
+            document.getElementById('unlocked-count').textContent = unlocked;
+            document.getElementById('total-count').textContent = total;
+            document.getElementById('progress-percentage').textContent = percentage + '%';
+            document.getElementById('achievement-progress').style.width = percentage + '%';
+        }
+
+        // Event listeners for buttons
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('check-achievements').addEventListener('click', () => {
+                if (window.achievementSystem) {
+                    window.achievementSystem.checkAchievements();
+                    updateAchievementStats();
+                }
+            });
+
+            document.getElementById('simulate-unlock').addEventListener('click', () => {
+                if (window.achievementSystem) {
+                    // Simulate unlocking first achievement for demo
+                    window.achievementSystem.unlockAchievement('first-steps');
+                    updateAchievementStats();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
