@@ -303,6 +303,10 @@ class ProgressTracker {
             timestamp: Date.now()
         });
         
+        // Update best times and attempts
+        this.updateBestTimes(challengeName, timeSpent);
+        this.updateAttempts(challengeName);
+        
         // Update total time
         this.timeTracking.totalTime += timeSpent;
         
@@ -356,8 +360,8 @@ class ProgressTracker {
         const timeEntries = [];
         Object.entries(this.timeTracking.challengeTimes).forEach(([challenge, times]) => {
             const totalTime = times.reduce((sum, time) => sum + time.duration, 0);
-            const bestTime = Math.min(...times.map(time => time.duration));
-            const attempts = times.length;
+            const bestTime = this.getBestTime(challenge) || Math.min(...times.map(time => time.duration));
+            const attempts = this.getAttempts(challenge) || times.length;
             
             timeEntries.push({
                 challenge,
@@ -375,7 +379,7 @@ class ProgressTracker {
                     <span class="attempts-count">${entry.attempts} attempt${entry.attempts > 1 ? 's' : ''}</span>
                 </div>
                 <div class="time-entry-stats">
-                    <span class="time-stat">
+                    <span class="time-stat best-time">
                         <label>Best:</label> ${this.formatTime(entry.bestTime)}
                     </span>
                     <span class="time-stat">
@@ -401,6 +405,32 @@ class ProgressTracker {
         } else {
             return `${seconds}s`;
         }
+    }
+
+    updateBestTimes(challengeName, duration) {
+        if (!this.timeTracking.bestTimes) {
+            this.timeTracking.bestTimes = {};
+        }
+        
+        if (!this.timeTracking.bestTimes[challengeName] || duration < this.timeTracking.bestTimes[challengeName]) {
+            this.timeTracking.bestTimes[challengeName] = duration;
+        }
+    }
+
+    updateAttempts(challengeName) {
+        if (!this.timeTracking.attempts) {
+            this.timeTracking.attempts = {};
+        }
+        
+        this.timeTracking.attempts[challengeName] = (this.timeTracking.attempts[challengeName] || 0) + 1;
+    }
+
+    getBestTime(challengeName) {
+        return this.timeTracking.bestTimes?.[challengeName] || null;
+    }
+
+    getAttempts(challengeName) {
+        return this.timeTracking.attempts?.[challengeName] || 0;
     }
 }
 
