@@ -35,6 +35,11 @@
                         <div class="stat-value" id="progress-percentage">0%</div>
                         <div class="stat-label">Progress</div>
                     </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-value" id="total-xp">0</div>
+                        <div class="stat-label">Total XP</div>
+                    </div>
                 </div>
 
                 <div class="progress-bar">
@@ -54,6 +59,7 @@
                 <button id="simulate-unlock" class="btn secondary-btn">🎯 Simulate Unlock</button>
                 <button id="trigger-challenge" class="btn secondary-btn">🏆 Trigger Challenge</button>
                 <button id="trigger-streak" class="btn secondary-btn">🔥 Trigger Streak</button>
+                <button id="award-xp" class="btn secondary-btn">⭐ Award XP</button>
             </div>
         </div>
     </div>
@@ -78,10 +84,12 @@
             const unlocked = window.achievementSystem.getUnlockedCount();
             const total = window.achievementSystem.getTotalCount();
             const percentage = window.achievementSystem.getProgressPercentage();
+            const totalXP = window.achievementSystem.getTotalXP();
             
             document.getElementById('unlocked-count').textContent = unlocked;
             document.getElementById('total-count').textContent = total;
             document.getElementById('progress-percentage').textContent = percentage + '%';
+            document.getElementById('total-xp').textContent = totalXP;
             document.getElementById('achievement-progress').style.width = percentage + '%';
         }
 
@@ -118,6 +126,14 @@
                     current: 7, // 7-day streak
                     longest: 10
                 });
+            });
+
+            document.getElementById('award-xp').addEventListener('click', () => {
+                if (window.achievementSystem) {
+                    // Award test XP
+                    window.achievementSystem.awardXP(100, 'Test XP Award');
+                    updateAchievementStats();
+                }
             });
         });
     </script>

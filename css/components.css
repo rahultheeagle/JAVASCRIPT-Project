@@ -1306,6 +1306,114 @@
     opacity: 0.9;
 }
 
+.xp-reward {
+    color: #ffd700 !important;
+    font-weight: bold !important;
+    font-size: 1rem !important;
+    margin-top: 5px !important;
+}
+
+.xp-value {
+    display: inline-block;
+    background: #ffd700;
+    color: #2d3748;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    margin-left: 8px;
+}
+
+/* XP Notification Styles */
+.xp-notification {
+    position: fixed;
+    top: 80px;
+    right: 20px;
+    z-index: 1000;
+    opacity: 0;
+    transform: translateX(100%);
+    transition: all 0.3s ease;
+}
+
+.xp-notification.show {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.xp-popup {
+    display: flex;
+    align-items: center;
+    background: linear-gradient(135deg, #ffd700, #ffed4e);
+    color: #2d3748;
+    padding: 15px;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    min-width: 200px;
+}
+
+.xp-icon {
+    font-size: 2rem;
+    margin-right: 10px;
+}
+
+.xp-info h4 {
+    margin-bottom: 2px;
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+
+.xp-info p {
+    margin: 0;
+    font-size: 0.8rem;
+    opacity: 0.8;
+}
+
+/* Level Up Notification Styles */
+.level-up-notification {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    z-index: 1001;
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.level-up-notification.show {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+.level-up-popup {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+    text-align: center;
+    min-width: 250px;
+}
+
+.level-icon {
+    font-size: 4rem;
+    margin-bottom: 15px;
+}
+
+.level-info h4 {
+    margin-bottom: 8px;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.level-info p {
+    margin: 0;
+    font-size: 1rem;
+    opacity: 0.9;
+}
+
 @media (max-width: 768px) {
     .achievement-stats {
         grid-template-columns: 1fr;

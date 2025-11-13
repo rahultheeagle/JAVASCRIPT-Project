@@ -20,6 +20,7 @@ class AchievementSystem {
                 description: 'Complete your first challenge',
                 icon: '🎯',
                 category: 'progress',
+                xpReward: 50,
                 condition: { type: 'challenges_completed', value: 1 }
             },
             'speed-demon': {
@@ -28,6 +29,7 @@ class AchievementSystem {
                 description: 'Complete a challenge in under 2 minutes',
                 icon: '⚡',
                 category: 'performance',
+                xpReward: 100,
                 condition: { type: 'fast_completion', value: 120000 }
             },
             'persistent': {
@@ -36,6 +38,7 @@ class AchievementSystem {
                 description: 'Complete 10 challenges',
                 icon: '🔥',
                 category: 'progress',
+                xpReward: 200,
                 condition: { type: 'challenges_completed', value: 10 }
             },
             'perfectionist': {
@@ -44,6 +47,7 @@ class AchievementSystem {
                 description: 'Complete 5 challenges on first attempt',
                 icon: '💎',
                 category: 'performance',
+                xpReward: 150,
                 condition: { type: 'first_attempt_streak', value: 5 }
             },
             'time-master': {
@@ -52,6 +56,7 @@ class AchievementSystem {
                 description: 'Spend 2+ hours learning',
                 icon: '⏰',
                 category: 'dedication',
+                xpReward: 300,
                 condition: { type: 'total_time', value: 7200000 }
             },
             'streak-warrior': {
@@ -60,6 +65,7 @@ class AchievementSystem {
                 description: 'Maintain a 7-day learning streak',
                 icon: '🔥',
                 category: 'consistency',
+                xpReward: 250,
                 condition: { type: 'learning_streak', value: 7 }
             }
         };
@@ -189,10 +195,19 @@ class AchievementSystem {
     unlockAchievement(achievementId) {
         if (this.isUnlocked(achievementId)) return;
 
+        const achievement = this.achievements[achievementId];
+        if (!achievement) return;
+
         this.unlockedAchievements.push({
             id: achievementId,
             unlockedAt: Date.now()
         });
+
+        // Award XP for the achievement
+        this.awardXP(achievement.xpReward, `Achievement: ${achievement.title}`);
+        
+        // Award badge
+        this.awardBadge(achievementId);
 
         this.saveUnlockedAchievements();
         this.showAchievementNotification(achievementId);
@@ -216,6 +231,7 @@ class AchievementSystem {
                     <h4>Achievement Unlocked!</h4>
                     <p><strong>${achievement.title}</strong></p>
                     <p>${achievement.description}</p>
+                    <p class="xp-reward">+${achievement.xpReward} XP</p>
                 </div>
             </div>
         `;
@@ -247,6 +263,7 @@ class AchievementSystem {
                         <h4>${achievement.title}</h4>
                         <p>${achievement.description}</p>
                         <span class="achievement-category">${achievement.category}</span>
+                        <span class="xp-value">+${achievement.xpReward} XP</span>
                         ${isUnlocked ? `<span class="unlock-date">Unlocked: ${new Date(unlockedData.unlockedAt).toLocaleDateString()}</span>` : ''}
                     </div>
                 </div>
@@ -375,6 +392,108 @@ class AchievementSystem {
             }
         });
         document.dispatchEvent(event);
+    }
+
+    awardXP(amount, source) {
+        if (!this.storageManager) return;
+        
+        const currentXP = this.storageManager.get('totalXP') || 0;
+        const newXP = currentXP + amount;
+        
+        this.storageManager.set('totalXP', newXP);
+        
+        // Trigger XP gained event
+        AchievementSystem.triggerXpGained({
+            amount: amount,
+            source: source,
+            total: newXP
+        });
+        
+        // Show XP notification
+        this.showXPNotification(amount, source);
+        
+        // Check for level up
+        this.checkLevelUp(currentXP, newXP);
+    }
+
+    awardBadge(achievementId) {
+        const badges = this.storageManager?.get('badges') || [];
+        
+        if (!badges.includes(achievementId)) {
+            badges.push(achievementId);
+            this.storageManager?.set('badges', badges);
+        }
+    }
+
+    showXPNotification(amount, source) {
+        const notification = document.createElement('div');
+        notification.className = 'xp-notification';
+        notification.innerHTML = `
+            <div class="xp-popup">
+                <div class="xp-icon">⭐</div>
+                <div class="xp-info">
+                    <h4>+${amount} XP</h4>
+                    <p>${source}</p>
+                </div>
+            </div>
+        `;
+
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            notification.classList.add('show');
+        }, 100);
+
+        setTimeout(() => {
+            notification.classList.remove('show');
+            setTimeout(() => notification.remove(), 300);
+        }, 2000);
+    }
+
+    checkLevelUp(oldXP, newXP) {
+        const oldLevel = this.calculateLevel(oldXP);
+        const newLevel = this.calculateLevel(newXP);
+        
+        if (newLevel > oldLevel) {
+            this.showLevelUpNotification(newLevel);
+        }
+    }
+
+    calculateLevel(xp) {
+        return Math.floor(xp / 100) + 1;
+    }
+
+    showLevelUpNotification(level) {
+        const notification = document.createElement('div');
+        notification.className = 'level-up-notification';
+        notification.innerHTML = `
+            <div class="level-up-popup">
+                <div class="level-icon">🎉</div>
+                <div class="level-info">
+                    <h4>Level Up!</h4>
+                    <p>You reached Level ${level}!</p>
+                </div>
+            </div>
+        `;
+
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            notification.classList.add('show');
+        }, 100);
+
+        setTimeout(() => {
+            notification.classList.remove('show');
+            setTimeout(() => notification.remove(), 300);
+        }, 3000);
+    }
+
+    getTotalXP() {
+        return this.storageManager?.get('totalXP') || 0;
+    }
+
+    getBadges() {
+        return this.storageManager?.get('badges') || [];
     }
 }
 
