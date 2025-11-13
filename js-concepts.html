@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript Concepts - CodeQuest</title>
+    <link rel="stylesheet" href="js-concepts-styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🚀 Must-Use JavaScript Concepts</h1>
+            <nav>
+                <a href="index.html">← Dashboard</a>
+            </nav>
+        </header>
+
+        <div class="concepts-grid">
+            <div class="concept-card" data-concept="localStorage">
+                <h3>📦 Local Storage API</h3>
+                <div class="code-example">
+                    <pre><code>// Store data
+localStorage.setItem('user', JSON.stringify({name: 'John'}));
+
+// Retrieve data
+const user = JSON.parse(localStorage.getItem('user'));
+
+// Remove data
+localStorage.removeItem('user');</code></pre>
+                </div>
+                <button onclick="testLocalStorage()">Test</button>
+                <div class="result" id="localStorage-result"></div>
+            </div>
+
+            <div class="concept-card" data-concept="arrayMethods">
+                <h3>🔄 Array Methods</h3>
+                <div class="code-example">
+                    <pre><code>const nums = [1, 2, 3, 4, 5];
+
+// map - transform each element
+const doubled = nums.map(n => n * 2);
+
+// filter - select elements
+const evens = nums.filter(n => n % 2 === 0);
+
+// reduce - accumulate values
+const sum = nums.reduce((acc, n) => acc + n, 0);</code></pre>
+                </div>
+                <button onclick="testArrayMethods()">Test</button>
+                <div class="result" id="arrayMethods-result"></div>
+            </div>
+
+            <div class="concept-card" data-concept="templateLiterals">
+                <h3>📝 Template Literals</h3>
+                <div class="code-example">
+                    <pre><code>const name = 'Alice';
+const age = 25;
+
+// Template literal with variables
+const message = `Hello ${name}, you are ${age} years old!`;
+
+// Multi-line strings
+const html = `
+  &lt;div&gt;
+    &lt;h1&gt;${name}&lt;/h1&gt;
+    &lt;p&gt;Age: ${age}&lt;/p&gt;
+  &lt;/div&gt;
+`;</code></pre>
+                </div>
+                <button onclick="testTemplateLiterals()">Test</button>
+                <div class="result" id="templateLiterals-result"></div>
+            </div>
+
+            <div class="concept-card" data-concept="eventDelegation">
+                <h3>🎯 Event Delegation</h3>
+                <div class="code-example">
+                    <pre><code>// Single listener for multiple elements
+document.addEventListener('click', (e) => {
+  if (e.target.matches('.btn')) {
+    console.log('Button clicked:', e.target.textContent);
+  }
+});</code></pre>
+                </div>
+                <div class="demo-area">
+                    <button class="btn">Button 1</button>
+                    <button class="btn">Button 2</button>
+                    <button class="btn">Button 3</button>
+                </div>
+                <div class="result" id="eventDelegation-result"></div>
+            </div>
+
+            <div class="concept-card" data-concept="promises">
+                <h3>⏳ Promises & Async/Await</h3>
+                <div class="code-example">
+                    <pre><code>// Promise
+const fetchData = () => new Promise(resolve => 
+  setTimeout(() => resolve('Data loaded!'), 1000)
+);
+
+// Async/Await
+async function loadData() {
+  const result = await fetchData();
+  return result;
+}</code></pre>
+                </div>
+                <button onclick="testPromises()">Test</button>
+                <div class="result" id="promises-result"></div>
+            </div>
+
+            <div class="concept-card" data-concept="json">
+                <h3>📋 JSON Operations</h3>
+                <div class="code-example">
+                    <pre><code>const obj = { name: 'John', age: 30 };
+
+// Object to JSON string
+const jsonString = JSON.stringify(obj);
+
+// JSON string to object
+const parsedObj = JSON.parse(jsonString);</code></pre>
+                </div>
+                <button onclick="testJSON()">Test</button>
+                <div class="result" id="json-result"></div>
+            </div>
+
+            <div class="concept-card" data-concept="dateTime">
+                <h3>📅 Date & Time</h3>
+                <div class="code-example">
+                    <pre><code>const now = new Date();
+const formatted = now.toLocaleDateString();
+const timestamp = Date.now();
+
+// Add days
+const future = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);</code></pre>
+                </div>
+                <button onclick="testDateTime()">Test</button>
+                <div class="result" id="dateTime-result"></div>
+            </div>
+
+            <div class="concept-card" data-concept="regex">
+                <h3>🔍 Regular Expressions</h3>
+                <div class="code-example">
+                    <pre><code>const email = 'user@example.com';
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+const isValid = emailRegex.test(email);
+const match = email.match(emailRegex);</code></pre>
+                </div>
+                <input type="text" id="email-input" placeholder="Enter email to validate">
+                <button onclick="testRegex()">Validate</button>
+                <div class="result" id="regex-result"></div>
+            </div>
+
+            <div class="concept-card" data-concept="customEvents">
+                <h3>🎪 Custom Events</h3>
+                <div class="code-example">
+                    <pre><code>// Create custom event
+const customEvent = new CustomEvent('userLogin', {
+  detail: { username: 'john', timestamp: Date.now() }
+});
+
+// Listen for custom event
+document.addEventListener('userLogin', (e) => {
+  console.log('User logged in:', e.detail);
+});
+
+// Dispatch event
+document.dispatchEvent(customEvent);</code></pre>
+                </div>
+                <button onclick="testCustomEvents()">Test</button>
+                <div class="result" id="customEvents-result"></div>
+            </div>
+
+            <div class="concept-card" data-concept="classes">
+                <h3>🏗️ Classes & Modules</h3>
+                <div class="code-example">
+                    <pre><code>class User {
+  constructor(name, email) {
+    this.name = name;
+    this.email = email;
+  }
+  
+  greet() {
+    return `Hello, I'm ${this.name}`;
+  }
+  
+  static create(data) {
+    return new User(data.name, data.email);
+  }
+}</code></pre>
+                </div>
+                <button onclick="testClasses()">Test</button>
+                <div class="result" id="classes-result"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js-concepts.js"></script>
+</body>
+</html>
