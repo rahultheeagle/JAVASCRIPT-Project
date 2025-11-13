@@ -50,7 +50,7 @@
                             <span class="xp-text" id="xp-text">0 / 100 XP</span>
                         </div>
                     </div>
-                    <button id="edit-profile-btn">Edit Profile</button>
+                    <button id="edit-profile-btn" class="btn-primary btn-sm">Edit Profile</button>
                 </div>
             </section>
         </header>
@@ -69,7 +69,7 @@
                     <label for="avatar-url">Avatar URL:</label>
                     <input type="url" id="avatar-url" placeholder="https://example.com/avatar.jpg">
                     
-                    <button type="submit">Save Profile</button>
+                    <button type="submit" class="btn-success">Save Profile</button>
                 </form>
             </div>
         </div>
@@ -682,7 +682,7 @@
                                 </div>
                                 <span class="progress-text" id="daily-progress-text">0/1</span>
                             </div>
-                            <button class="challenge-btn" id="daily-challenge-btn">Start Challenge</button>
+                            <button class="challenge-btn btn-primary" id="daily-challenge-btn">Start Challenge</button>
                         </div>
                         <div class="challenge-timer">
                             <span>⏰ Resets in: <span id="challenge-timer">--:--:--</span></span>
@@ -706,7 +706,7 @@
                                     <p>2x XP for 1 hour</p>
                                     <span class="power-up-cost">200 XP</span>
                                 </div>
-                                <button class="power-up-btn">Activate</button>
+                                <button class="power-up-btn btn-secondary btn-sm">Activate</button>
                             </div>
                             <div class="power-up" data-powerup="hint-master">
                                 <div class="power-up-icon">💡</div>
@@ -715,7 +715,7 @@
                                     <p>Free hints for 30 min</p>
                                     <span class="power-up-cost">150 XP</span>
                                 </div>
-                                <button class="power-up-btn">Activate</button>
+                                <button class="power-up-btn btn-secondary btn-sm">Activate</button>
                             </div>
                             <div class="power-up" data-powerup="streak-shield">
                                 <div class="power-up-icon">🛡️</div>
@@ -724,7 +724,7 @@
                                     <p>Protect 1-day streak loss</p>
                                     <span class="power-up-cost">100 XP</span>
                                 </div>
-                                <button class="power-up-btn">Activate</button>
+                                <button class="power-up-btn btn-secondary btn-sm">Activate</button>
                             </div>
                             <div class="power-up" data-powerup="dark-theme">
                                 <div class="power-up-icon">🌙</div>
@@ -733,7 +733,7 @@
                                     <p>Unlock dark mode theme</p>
                                     <span class="power-up-cost">50 XP</span>
                                 </div>
-                                <button class="power-up-btn">Unlock</button>
+                                <button class="power-up-btn btn-warning btn-sm">Unlock</button>
                             </div>
                             <div class="power-up" data-powerup="skip-challenge">
                                 <div class="power-up-icon">⏭️</div>
@@ -742,7 +742,7 @@
                                     <p>Skip any challenge once</p>
                                     <span class="power-up-cost">75 XP</span>
                                 </div>
-                                <button class="power-up-btn">Buy</button>
+                                <button class="power-up-btn btn-success btn-sm">Buy</button>
                             </div>
                         </div>
                     </section>
@@ -750,9 +750,9 @@
                     <section class="leaderboard-section" aria-labelledby="leaderboard-heading">
                         <h3 id="leaderboard-heading">Leaderboard 🏆</h3>
                         <div class="leaderboard-tabs">
-                            <button class="tab-btn active" data-tab="weekly">Weekly</button>
-                            <button class="tab-btn" data-tab="monthly">Monthly</button>
-                            <button class="tab-btn" data-tab="alltime">All Time</button>
+                            <button class="tab-btn btn-outline btn-sm active" data-tab="weekly">Weekly</button>
+                            <button class="tab-btn btn-outline btn-sm" data-tab="monthly">Monthly</button>
+                            <button class="tab-btn btn-outline btn-sm" data-tab="alltime">All Time</button>
                         </div>
                         <div class="leaderboard-content" id="leaderboard-content">
                             <!-- Leaderboard will be populated by JavaScript -->
@@ -942,6 +942,7 @@
     <script defer src="js/pwa.js"></script>
     <script defer src="js/certificates.js"></script>
     <link rel="stylesheet" href="css/evaluation-styles.css">
+    <link rel="stylesheet" href="css/button-styles.css">
     <link rel="stylesheet" href="toast-system.css">
     <link rel="stylesheet" href="progress-bars.css">
     <link rel="stylesheet" href="modal-system.css">

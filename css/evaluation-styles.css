@@ -339,9 +339,17 @@
 
 /* Dark Theme Enhancements */
 .dark-theme {
-    --bg-color: #1a202c;
-    --text-color: #e2e8f0;
-    --card-bg: rgba(45, 55, 72, 0.95);
+    --primary-color: #60a5fa;
+    --secondary-color: #3b82f6;
+    --success-color: #34d399;
+    --warning-color: #fbbf24;
+    --error-color: #f87171;
+    --bg-color: #0f172a;
+    --text-color: #f1f5f9;
+    --card-bg: rgba(30, 41, 59, 0.95);
+    --border-color: #334155;
+    --light-gray: #1e293b;
+    --neutral-color: #94a3b8;
 }
 
 .dark-theme .command-palette {

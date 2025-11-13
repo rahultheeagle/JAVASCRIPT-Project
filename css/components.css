@@ -1,40 +1,50 @@
 /* Components CSS - Reusable UI components */
 
-/* Action Buttons - Optimized for 60fps */
+/* Action Buttons - Modern Design */
 .action-btn {
     display: flex;
     align-items: center;
-    padding: 20px;
+    padding: 24px;
     background: var(--card-bg);
     border-radius: var(--border-radius);
     text-decoration: none;
     color: var(--text-color);
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-                box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     box-shadow: var(--shadow);
+    border: 1px solid var(--border-color);
     will-change: transform;
     transform: translateZ(0);
     contain: layout style paint;
 }
 
 .action-btn:hover {
-    transform: translateY(-2px) translateZ(0);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    transform: translateY(-3px) translateZ(0);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+    border-color: var(--primary-color);
+}
+
+.action-btn:active {
+    transform: translateY(-1px) translateZ(0);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
 }
 
 .btn-icon {
-    font-size: 2rem;
-    margin-right: 15px;
+    font-size: 2.5rem;
+    margin-right: 20px;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
 }
 
 .btn-content h4 {
-    margin-bottom: 5px;
+    margin-bottom: 8px;
     color: var(--text-color);
+    font-weight: 700;
+    font-size: 1.1rem;
 }
 
 .btn-content p {
-    color: #718096;
-    font-size: 0.9rem;
+    color: var(--neutral-color);
+    font-size: 0.95rem;
+    line-height: 1.4;
 }
 
 /* Modal - Performance Optimized */
