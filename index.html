@@ -36,7 +36,15 @@
         .section-subtitle{color:var(--neutral-color);font-size:0.95rem;margin:0;opacity:0.8}
         .theme-toggle{position:fixed;top:20px;right:20px;z-index:1000;background:var(--card-bg);border:2px solid var(--border-color);border-radius:50%;width:50px;height:50px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.3s ease;box-shadow:var(--shadow)}
         .theme-toggle:hover{transform:translateY(-2px) scale(1.05);border-color:var(--primary-color);box-shadow:0 8px 25px rgba(59,130,246,0.2)}
-        @media (max-width:768px){.quick-actions-grid{grid-template-columns:1fr;gap:15px}.dashboard-section{padding:20px;margin-bottom:20px}.action-btn{padding:16px}.btn-icon{font-size:2.2rem;margin-right:15px}}
+        .featured-section{background:linear-gradient(135deg,var(--primary-color),var(--accent-color));border-radius:var(--border-radius);padding:30px;margin:30px 0;color:white}
+        .featured-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;margin-top:20px}
+        .featured-card{display:flex;align-items:center;padding:25px;background:rgba(255,255,255,0.15);border-radius:var(--border-radius);text-decoration:none;color:white;transition:all 0.3s ease;border:2px solid rgba(255,255,255,0.2);backdrop-filter:blur(10px)}
+        .featured-card:hover{transform:translateY(-5px);background:rgba(255,255,255,0.25);border-color:rgba(255,255,255,0.4);box-shadow:0 20px 40px rgba(0,0,0,0.2)}
+        .featured-icon{font-size:3.5rem;margin-right:20px;filter:drop-shadow(0 4px 8px rgba(0,0,0,0.3))}
+        .featured-content h4{margin:0 0 8px 0;font-size:1.3rem;font-weight:700}
+        .featured-content p{margin:0 0 10px 0;opacity:0.9;line-height:1.4}
+        .featured-badge{display:inline-block;background:rgba(255,255,255,0.3);padding:4px 12px;border-radius:20px;font-size:0.8rem;font-weight:600;text-transform:uppercase;letter-spacing:0.5px}
+        @media (max-width:768px){.quick-actions-grid{grid-template-columns:1fr;gap:15px}.dashboard-section{padding:20px;margin-bottom:20px}.action-btn{padding:16px}.btn-icon{font-size:2.2rem;margin-right:15px}.featured-grid{grid-template-columns:1fr}.featured-card{flex-direction:column;text-align:center;padding:20px}.featured-icon{margin-right:0;margin-bottom:15px;font-size:3rem}}
     </style>
     <link rel="preload" href="css/main.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <link rel="preload" href="css/components.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
@@ -93,6 +101,32 @@
                     <h2>Welcome to your Dashboard</h2>
                     <p>Start your coding journey!</p>
                 </header>
+                
+                <!-- Featured Section -->
+                <section class="featured-section">
+                    <div class="section-header">
+                        <h3>🌟 Featured</h3>
+                        <p class="section-subtitle">Essential tools for your learning journey</p>
+                    </div>
+                    <div class="featured-grid">
+                        <a href="#" class="featured-card pwa-card" id="install-app">
+                            <div class="featured-icon">📱</div>
+                            <div class="featured-content">
+                                <h4>Install Mobile App</h4>
+                                <p>Get CodeQuest on your phone for learning anywhere</p>
+                                <span class="featured-badge">PWA Ready</span>
+                            </div>
+                        </a>
+                        <a href="#" class="featured-card certificate-card" id="view-certificates">
+                            <div class="featured-icon">🏆</div>
+                            <div class="featured-content">
+                                <h4>Your Certificates</h4>
+                                <p>View and download your earned certificates</p>
+                                <span class="featured-badge">Achievement</span>
+                            </div>
+                        </a>
+                    </div>
+                </section>
                 
                 <nav class="quick-actions-grid" aria-label="Quick access to learning tools">
                     <a href="editor.html" class="action-btn editor-btn">
@@ -972,6 +1006,7 @@
     <script defer src="js/utils.js"></script>
     <script defer src="js/pwa.js"></script>
     <script defer src="js/certificates.js"></script>
+    <script defer src="js/featured-actions.js"></script>
     <link rel="stylesheet" href="css/evaluation-styles.css">
     <link rel="stylesheet" href="css/button-styles.css">
     <link rel="stylesheet" href="css/dashboard-styles.css">
