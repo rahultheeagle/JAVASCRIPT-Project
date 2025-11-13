@@ -1,4 +1,147 @@
-// Validation JavaScript
+// Output Validator - Compare user output with expected output
+class OutputValidator {
+    constructor(testCases = []) {
+        this.testCases = testCases;
+        this.results = [];
+    }
+
+    validateCode(userCode) {
+        this.results = [];
+        
+        try {
+            // Create function from user code
+            const userFunction = new Function('return ' + userCode)();
+            
+            // Run all test cases
+            this.testCases.forEach((testCase, index) => {
+                const result = this.runTestCase(userFunction, testCase, index);
+                this.results.push(result);
+            });
+            
+            this.displayResults();
+            return this.results;
+            
+        } catch (error) {
+            this.displayError(error.message);
+            return [];
+        }
+    }
+
+    runTestCase(userFunction, testCase, index) {
+        try {
+            const actual = Array.isArray(testCase.input) ? 
+                userFunction(...testCase.input) : 
+                userFunction(testCase.input);
+            
+            const passed = this.compareOutputs(actual, testCase.expected);
+            
+            return {
+                index: index + 1,
+                description: testCase.description,
+                input: testCase.input,
+                expected: testCase.expected,
+                actual: actual,
+                passed: passed,
+                error: null
+            };
+        } catch (error) {
+            return {
+                index: index + 1,
+                description: testCase.description,
+                input: testCase.input,
+                expected: testCase.expected,
+                actual: null,
+                passed: false,
+                error: error.message
+            };
+        }
+    }
+
+    compareOutputs(actual, expected) {
+        // Deep comparison for different data types
+        if (actual === expected) return true;
+        
+        // Handle arrays
+        if (Array.isArray(actual) && Array.isArray(expected)) {
+            return actual.length === expected.length && 
+                   actual.every((val, i) => this.compareOutputs(val, expected[i]));
+        }
+        
+        // Handle objects
+        if (typeof actual === 'object' && typeof expected === 'object' && 
+            actual !== null && expected !== null) {
+            const actualKeys = Object.keys(actual);
+            const expectedKeys = Object.keys(expected);
+            
+            return actualKeys.length === expectedKeys.length &&
+                   actualKeys.every(key => this.compareOutputs(actual[key], expected[key]));
+        }
+        
+        return false;
+    }
+
+    displayResults() {
+        const resultsContainer = document.getElementById('test-results');
+        const expectedDisplay = document.getElementById('expected-display');
+        const actualDisplay = document.getElementById('actual-display');
+        
+        if (!resultsContainer) return;
+        
+        const passedCount = this.results.filter(r => r.passed).length;
+        const totalCount = this.results.length;
+        
+        resultsContainer.innerHTML = `
+            <div class="results-summary ${passedCount === totalCount ? 'success' : 'failure'}">
+                <h4>${passedCount}/${totalCount} Tests Passed</h4>
+            </div>
+            ${this.results.map(result => this.renderTestResult(result)).join('')}
+        `;
+        
+        // Display comparison for first failed test or last test
+        const displayResult = this.results.find(r => !r.passed) || this.results[this.results.length - 1];
+        if (displayResult && expectedDisplay && actualDisplay) {
+            expectedDisplay.innerHTML = `<pre>${JSON.stringify(displayResult.expected, null, 2)}</pre>`;
+            actualDisplay.innerHTML = `<pre>${displayResult.error ? 
+                `Error: ${displayResult.error}` : 
+                JSON.stringify(displayResult.actual, null, 2)}</pre>`;
+        }
+    }
+
+    renderTestResult(result) {
+        const statusIcon = result.passed ? '✅' : '❌';
+        const statusClass = result.passed ? 'passed' : 'failed';
+        
+        return `
+            <div class="test-result ${statusClass}">
+                <div class="test-header">
+                    <span class="test-status">${statusIcon}</span>
+                    <span class="test-description">${result.description}</span>
+                </div>
+                <div class="test-details">
+                    <div class="test-input">Input: ${JSON.stringify(result.input)}</div>
+                    <div class="test-expected">Expected: ${JSON.stringify(result.expected)}</div>
+                    <div class="test-actual">Got: ${result.error ? 
+                        `Error: ${result.error}` : 
+                        JSON.stringify(result.actual)}</div>
+                </div>
+            </div>
+        `;
+    }
+
+    displayError(message) {
+        const resultsContainer = document.getElementById('test-results');
+        if (resultsContainer) {
+            resultsContainer.innerHTML = `
+                <div class="validation-error">
+                    <h4>❌ Code Error</h4>
+                    <p>${message}</p>
+                </div>
+            `;
+        }
+    }
+}
+
+// Legacy ValidationSystem class for backward compatibility
 class ValidationSystem {
     constructor() {
         this.patterns = {
@@ -117,3 +260,4 @@ class ValidationSystem {
 
 // Export for use in other modules
 window.ValidationSystem = ValidationSystem;
+window.OutputValidator = OutputValidator;

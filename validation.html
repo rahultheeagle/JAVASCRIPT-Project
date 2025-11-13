@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Validation System - CodeQuest</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/animations.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🔍 Validation System</h1>
+            <nav>
+                <a href="index.html">← Dashboard</a>
+            </nav>
+        </header>
+
+        <div class="validation-container">
+            <div class="challenge-section">
+                <h3>Challenge: Sum Function</h3>
+                <p>Create a function that adds two numbers and returns the result.</p>
+                
+                <div class="code-input">
+                    <label for="user-code">Your Code:</label>
+                    <textarea id="user-code" placeholder="function sum(a, b) {
+  // Your code here
+}">function sum(a, b) {
+  return a + b;
+}</textarea>
+                </div>
+
+                <button id="validate-btn" class="validate-btn">🔍 Validate Output</button>
+            </div>
+
+            <div class="results-section">
+                <div class="test-cases">
+                    <h4>Test Cases:</h4>
+                    <div id="test-results"></div>
+                </div>
+
+                <div class="comparison-panel">
+                    <div class="output-comparison">
+                        <div class="expected-output">
+                            <h5>Expected Output</h5>
+                            <div id="expected-display"></div>
+                        </div>
+                        <div class="actual-output">
+                            <h5>Your Output</h5>
+                            <div id="actual-display"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/validation.js"></script>
+    <script>
+        // Test cases for sum function
+        const testCases = [
+            { input: [2, 3], expected: 5, description: "sum(2, 3)" },
+            { input: [10, 15], expected: 25, description: "sum(10, 15)" },
+            { input: [-5, 5], expected: 0, description: "sum(-5, 5)" },
+            { input: [0, 0], expected: 0, description: "sum(0, 0)" }
+        ];
+
+        const validator = new OutputValidator(testCases);
+        
+        document.getElementById('validate-btn').addEventListener('click', () => {
+            const code = document.getElementById('user-code').value;
+            validator.validateCode(code);
+        });
+    </script>
+</body>
+</html>
