@@ -33,7 +33,9 @@
     <link rel="stylesheet" href="theme-styles.css">
 </head>
 <body>
-    <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark theme">🌙</button>
+    <button class="theme-toggle btn-icon" id="theme-toggle" aria-label="Toggle dark theme">
+        <span class="theme-icon">🌙</span>
+    </button>
     <div class="container">
         <header role="banner">
             <h1>CodeQuest</h1>
@@ -81,7 +83,7 @@
                     <p>Start your coding journey!</p>
                 </header>
                 
-                <nav class="quick-actions" aria-label="Quick access to learning tools">
+                <nav class="quick-actions-grid" aria-label="Quick access to learning tools">
                     <a href="editor.html" class="action-btn editor-btn">
                         <span class="btn-icon">💻</span>
                         <div class="btn-content">
@@ -511,8 +513,11 @@
                     </a>
                 </div>
                 
-                <section class="progress-section" aria-labelledby="progress-heading">
-                    <h3 id="progress-heading">Learning Progress</h3>
+                <section class="dashboard-section progress-section" aria-labelledby="progress-heading">
+                    <div class="section-header">
+                        <h3 id="progress-heading">📊 Learning Progress</h3>
+                        <p class="section-subtitle">Track your coding journey and achievements</p>
+                    </div>
                     <div class="progress-overview">
                         <div class="progress-stat">
                             <span class="stat-number" id="completed-lessons">0</span>
@@ -668,8 +673,11 @@
                         </div>
                     </section>
                     
-                    <section class="daily-challenges-section" aria-labelledby="daily-challenge-heading">
-                        <h3 id="daily-challenge-heading">Daily Challenge 🌟</h3>
+                    <section class="dashboard-section daily-challenges-section" aria-labelledby="daily-challenge-heading">
+                        <div class="section-header">
+                            <h3 id="daily-challenge-heading">🌟 Daily Challenge</h3>
+                            <p class="section-subtitle">Complete today's challenge for bonus XP</p>
+                        </div>
                         <div class="daily-challenge-card" id="daily-challenge">
                             <div class="challenge-header">
                                 <div class="challenge-title">Loading...</div>
@@ -689,15 +697,21 @@
                         </div>
                     </section>
 
-                    <section class="missions-section" aria-labelledby="missions-heading">
-                        <h3 id="missions-heading">Active Missions 🎯</h3>
+                    <section class="dashboard-section missions-section" aria-labelledby="missions-heading">
+                        <div class="section-header">
+                            <h3 id="missions-heading">🎯 Active Missions</h3>
+                            <p class="section-subtitle">Complete missions to unlock special rewards</p>
+                        </div>
                         <div class="missions-container" id="missions-container">
                             <!-- Missions will be populated by JavaScript -->
                         </div>
                     </section>
 
-                    <section class="power-ups-section" aria-labelledby="powerups-heading">
-                        <h3 id="powerups-heading">Power-ups ⚡</h3>
+                    <section class="dashboard-section power-ups-section" aria-labelledby="powerups-heading">
+                        <div class="section-header">
+                            <h3 id="powerups-heading">⚡ Power-ups</h3>
+                            <p class="section-subtitle">Boost your learning with special abilities</p>
+                        </div>
                         <div class="power-ups-container">
                             <div class="power-up" data-powerup="double-xp">
                                 <div class="power-up-icon">⚡</div>
@@ -747,8 +761,11 @@
                         </div>
                     </section>
 
-                    <section class="leaderboard-section" aria-labelledby="leaderboard-heading">
-                        <h3 id="leaderboard-heading">Leaderboard 🏆</h3>
+                    <section class="dashboard-section leaderboard-section" aria-labelledby="leaderboard-heading">
+                        <div class="section-header">
+                            <h3 id="leaderboard-heading">🏆 Leaderboard</h3>
+                            <p class="section-subtitle">See how you rank against other learners</p>
+                        </div>
                         <div class="leaderboard-tabs">
                             <button class="tab-btn btn-outline btn-sm active" data-tab="weekly">Weekly</button>
                             <button class="tab-btn btn-outline btn-sm" data-tab="monthly">Monthly</button>
@@ -759,8 +776,11 @@
                         </div>
                     </section>
 
-                    <section class="achievements-section" aria-labelledby="achievements-heading">
-                        <h3 id="achievements-heading">Achievement Badges</h3>
+                    <section class="dashboard-section achievements-section" aria-labelledby="achievements-heading">
+                        <div class="section-header">
+                            <h3 id="achievements-heading">🏅 Achievement Badges</h3>
+                            <p class="section-subtitle">Unlock badges by completing challenges and milestones</p>
+                        </div>
                         <div class="badges-container">
                             <div class="badge" data-badge="first-lesson">
                                 <div class="badge-icon">🎯</div>
@@ -943,11 +963,14 @@
     <script defer src="js/certificates.js"></script>
     <link rel="stylesheet" href="css/evaluation-styles.css">
     <link rel="stylesheet" href="css/button-styles.css">
+    <link rel="stylesheet" href="css/dashboard-styles.css">
+    <link rel="stylesheet" href="css/theme-toggle.css">
     <link rel="stylesheet" href="toast-system.css">
     <link rel="stylesheet" href="progress-bars.css">
     <link rel="stylesheet" href="modal-system.css">
     <link rel="stylesheet" href="reset-system.css">
     <link rel="stylesheet" href="version-control.css">
     <link rel="stylesheet" href="statistics-dashboard.css">
+    <link rel="stylesheet" href="css/dashboard-styles.css">
 </body>
 </html>
