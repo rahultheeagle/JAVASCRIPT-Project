@@ -8,8 +8,10 @@ class AchievementSystem {
     }
 
     init() {
+        this.loadAchievementData();
         this.setupEventListeners();
         this.checkAchievements();
+        this.startAutoSave();
     }
 
     initializeAchievements() {
@@ -77,6 +79,29 @@ class AchievementSystem {
 
     saveUnlockedAchievements() {
         this.storageManager?.set('unlocked_achievements', this.unlockedAchievements);
+        this.saveAchievementData();
+    }
+
+    saveAchievementData() {
+        const achievementData = {
+            unlockedAchievements: this.unlockedAchievements,
+            totalXP: this.getTotalXP(),
+            badges: this.getBadges(),
+            achievementStats: this.getAchievementStats(),
+            lastUpdated: Date.now()
+        };
+        
+        this.storageManager?.set('achievement_data', achievementData);
+    }
+
+    loadAchievementData() {
+        const data = this.storageManager?.get('achievement_data');
+        if (data) {
+            this.unlockedAchievements = data.unlockedAchievements || [];
+            if (data.totalXP) this.storageManager?.set('totalXP', data.totalXP);
+            if (data.badges) this.storageManager?.set('badges', data.badges);
+        }
+        return data;
     }
 
     setupEventListeners() {
@@ -405,6 +430,9 @@ class AchievementSystem {
         
         this.storageManager.set('totalXP', newXP);
         
+        // Save XP transaction
+        this.saveXPTransaction(amount, source, newXP);
+        
         // Trigger XP gained event
         AchievementSystem.triggerXpGained({
             amount: amount,
@@ -417,6 +445,8 @@ class AchievementSystem {
         
         // Check for level up
         this.checkLevelUp(currentXP, newXP);
+        
+        this.saveAchievementData();
     }
 
     awardBadge(achievementId) {
@@ -425,6 +455,7 @@ class AchievementSystem {
         if (!badges.includes(achievementId)) {
             badges.push(achievementId);
             this.storageManager?.set('badges', badges);
+            this.saveAchievementData();
         }
     }
 
@@ -497,6 +528,107 @@ class AchievementSystem {
 
     getBadges() {
         return this.storageManager?.get('badges') || [];
+    }
+
+    saveXPTransaction(amount, source, totalXP) {
+        const transactions = this.storageManager?.get('xp_transactions') || [];
+        transactions.push({
+            amount,
+            source,
+            totalXP,
+            timestamp: Date.now()
+        });
+        
+        // Keep only last 100 transactions
+        if (transactions.length > 100) {
+            transactions.splice(0, transactions.length - 100);
+        }
+        
+        this.storageManager?.set('xp_transactions', transactions);
+    }
+
+    getAchievementStats() {
+        return {
+            totalUnlocked: this.getUnlockedCount(),
+            totalPossible: this.getTotalCount(),
+            completionPercentage: this.getProgressPercentage(),
+            categoriesCompleted: this.getCategoriesCompleted(),
+            lastUnlocked: this.getLastUnlockedAchievement()
+        };
+    }
+
+    getCategoriesCompleted() {
+        const categories = {};
+        this.unlockedAchievements.forEach(unlocked => {
+            const achievement = this.achievements[unlocked.id];
+            if (achievement) {
+                categories[achievement.category] = (categories[achievement.category] || 0) + 1;
+            }
+        });
+        return categories;
+    }
+
+    getLastUnlockedAchievement() {
+        if (this.unlockedAchievements.length === 0) return null;
+        
+        const latest = this.unlockedAchievements.reduce((latest, current) => 
+            current.unlockedAt > latest.unlockedAt ? current : latest
+        );
+        
+        return {
+            ...latest,
+            achievement: this.achievements[latest.id]
+        };
+    }
+
+    startAutoSave() {
+        // Auto-save every 30 seconds
+        setInterval(() => {
+            this.saveAchievementData();
+        }, 30000);
+    }
+
+    exportAchievementData() {
+        const data = {
+            achievements: this.loadAchievementData(),
+            xpTransactions: this.storageManager?.get('xp_transactions') || [],
+            exportDate: new Date().toISOString(),
+            version: '1.0'
+        };
+        
+        return JSON.stringify(data, null, 2);
+    }
+
+    importAchievementData(jsonData) {
+        try {
+            const data = JSON.parse(jsonData);
+            
+            if (data.achievements) {
+                this.storageManager?.set('achievement_data', data.achievements);
+                this.loadAchievementData();
+            }
+            
+            if (data.xpTransactions) {
+                this.storageManager?.set('xp_transactions', data.xpTransactions);
+            }
+            
+            this.updateAchievementDisplay();
+            return true;
+        } catch (error) {
+            console.error('Failed to import achievement data:', error);
+            return false;
+        }
+    }
+
+    resetAchievementData() {
+        this.storageManager?.remove('achievement_data');
+        this.storageManager?.remove('unlocked_achievements');
+        this.storageManager?.remove('totalXP');
+        this.storageManager?.remove('badges');
+        this.storageManager?.remove('xp_transactions');
+        
+        this.unlockedAchievements = [];
+        this.updateAchievementDisplay();
     }
 
     createConfetti() {

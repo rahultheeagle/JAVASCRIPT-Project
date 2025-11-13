@@ -60,6 +60,13 @@
                 <button id="trigger-challenge" class="btn secondary-btn">🏆 Trigger Challenge</button>
                 <button id="trigger-streak" class="btn secondary-btn">🔥 Trigger Streak</button>
                 <button id="award-xp" class="btn secondary-btn">⭐ Award XP</button>
+                <button id="export-data" class="btn secondary-btn">💾 Export Data</button>
+                <button id="import-data" class="btn secondary-btn">📁 Import Data</button>
+                <button id="reset-data" class="btn secondary-btn">🔄 Reset Data</button>
+            </div>
+            
+            <div class="data-management" style="margin-top: 20px;">
+                <input type="file" id="import-file" accept=".json" style="display: none;">
             </div>
         </div>
     </div>
@@ -133,6 +140,46 @@
                     // Award test XP
                     window.achievementSystem.awardXP(100, 'Test XP Award');
                     updateAchievementStats();
+                }
+            });
+
+            document.getElementById('export-data').addEventListener('click', () => {
+                if (window.achievementSystem) {
+                    const data = window.achievementSystem.exportAchievementData();
+                    const blob = new Blob([data], { type: 'application/json' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `achievements_${new Date().toISOString().split('T')[0]}.json`;
+                    a.click();
+                    URL.revokeObjectURL(url);
+                }
+            });
+
+            document.getElementById('import-data').addEventListener('click', () => {
+                document.getElementById('import-file').click();
+            });
+
+            document.getElementById('import-file').addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (file && window.achievementSystem) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        const success = window.achievementSystem.importAchievementData(e.target.result);
+                        alert(success ? 'Data imported successfully!' : 'Failed to import data.');
+                        if (success) updateAchievementStats();
+                    };
+                    reader.readAsText(file);
+                }
+            });
+
+            document.getElementById('reset-data').addEventListener('click', () => {
+                if (confirm('Are you sure you want to reset all achievement data? This cannot be undone.')) {
+                    if (window.achievementSystem) {
+                        window.achievementSystem.resetAchievementData();
+                        updateAchievementStats();
+                        alert('Achievement data reset successfully!');
+                    }
                 }
             });
         });
