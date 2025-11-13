@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Partial Credit System - CodeQuest</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/components.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📊 Partial Credit System</h1>
+            <nav>
+                <a href="index.html">← Dashboard</a>
+            </nav>
+        </header>
+
+        <div class="credit-container">
+            <div class="challenge-section">
+                <h3>Challenge: Array Processing Function</h3>
+                <p>Create a function that filters even numbers and doubles them.</p>
+                
+                <div class="scoring-criteria">
+                    <h4>Scoring Criteria (100 points total):</h4>
+                    <ul>
+                        <li>Function declaration (20 points)</li>
+                        <li>Array filtering (30 points)</li>
+                        <li>Number doubling (30 points)</li>
+                        <li>Correct return (20 points)</li>
+                    </ul>
+                </div>
+
+                <div class="code-input">
+                    <label for="solution-code">Your Solution:</label>
+                    <textarea id="solution-code" placeholder="function processArray(arr) {
+  // Your code here
+}">function processArray(arr) {
+  return arr.filter(x => x % 2 === 0);
+}</textarea>
+                </div>
+
+                <button id="grade-solution" class="validate-btn">📊 Grade Solution</button>
+            </div>
+
+            <div class="grading-section">
+                <div class="score-display">
+                    <div class="total-score" id="total-score">
+                        <span class="score-value">0</span>
+                        <span class="score-max">/100</span>
+                    </div>
+                    <div class="score-percentage" id="score-percentage">0%</div>
+                </div>
+
+                <div class="criteria-breakdown" id="criteria-breakdown">
+                    <h4>Detailed Breakdown:</h4>
+                    <div class="criteria-list">
+                        <!-- Criteria will be populated by JavaScript -->
+                    </div>
+                </div>
+
+                <div class="feedback-section" id="feedback-section">
+                    <h4>Feedback & Suggestions:</h4>
+                    <div class="feedback-list">
+                        <!-- Feedback will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/partial-credit.js"></script>
+</body>
+</html>

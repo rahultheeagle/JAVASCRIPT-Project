@@ -450,6 +450,156 @@
     font-weight: 600;
 }
 
+/* Partial Credit System Styles */
+.credit-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    margin-top: 20px;
+}
+
+.challenge-section {
+    background: var(--card-bg);
+    padding: 20px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+}
+
+.scoring-criteria {
+    background: #f7fafc;
+    padding: 15px;
+    border-radius: 8px;
+    margin: 20px 0;
+}
+
+.scoring-criteria ul {
+    margin: 10px 0;
+    padding-left: 20px;
+}
+
+.scoring-criteria li {
+    margin-bottom: 5px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.9rem;
+}
+
+.grading-section {
+    background: var(--card-bg);
+    padding: 20px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+}
+
+.score-display {
+    text-align: center;
+    padding: 20px;
+    background: #f7fafc;
+    border-radius: 12px;
+    margin-bottom: 25px;
+}
+
+.total-score {
+    font-size: 3rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.total-score.excellent { color: #22543d; }
+.total-score.good { color: #2d3748; }
+.total-score.fair { color: #744210; }
+.total-score.poor { color: #c05621; }
+.total-score.failing { color: #742a2a; }
+
+.score-percentage {
+    font-size: 1.5rem;
+    color: #4a5568;
+}
+
+.criteria-breakdown {
+    margin-bottom: 25px;
+}
+
+.criteria-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.criterion-item {
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid;
+}
+
+.criterion-item.passed {
+    background: #f0fff4;
+    border-left-color: var(--success-color);
+}
+
+.criterion-item.partial {
+    background: #fef5e7;
+    border-left-color: #ed8936;
+}
+
+.criterion-item.failed {
+    background: #fff5f5;
+    border-left-color: var(--error-color);
+}
+
+.criterion-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+.criterion-points {
+    margin-left: auto;
+    font-family: 'Courier New', monospace;
+    background: rgba(0,0,0,0.1);
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.9rem;
+}
+
+.criterion-feedback {
+    font-size: 0.9rem;
+    color: #4a5568;
+    font-style: italic;
+}
+
+.feedback-section {
+    background: #f7fafc;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.feedback-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.feedback-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    background: white;
+    border-radius: 6px;
+    border-left: 3px solid #667eea;
+}
+
+.feedback-icon {
+    font-size: 1.2rem;
+}
+
+.feedback-text {
+    font-family: 'Courier New', monospace;
+    font-size: 0.9rem;
+}
+
 @media (max-width: 768px) {
     .validation-container {
         grid-template-columns: 1fr;
@@ -463,7 +613,15 @@
         grid-template-columns: 1fr;
     }
     
+    .credit-container {
+        grid-template-columns: 1fr;
+    }
+    
     .code-tabs {
         flex-wrap: wrap;
+    }
+    
+    .total-score {
+        font-size: 2rem;
     }
 }
