@@ -14,6 +14,14 @@ class ProgressTracker {
             tutorials: 8
         };
         
+        this.timeTracking = {
+            challengeTimes: {},
+            sessionStart: null,
+            currentChallenge: null,
+            challengeStart: null,
+            totalTime: 0
+        };
+        
         this.init();
     }
 
@@ -21,6 +29,8 @@ class ProgressTracker {
         this.loadProgress();
         this.setupEventListeners();
         this.calculateAllProgress();
+        this.startSessionTimer();
+        this.updateTimeDisplay();
     }
 
     setupEventListeners() {
@@ -34,6 +44,15 @@ class ProgressTracker {
 
         document.getElementById('calculate-progress').addEventListener('click', () => {
             this.calculateAllProgress();
+        });
+
+        // Time tracking event listeners
+        document.getElementById('start-timer').addEventListener('click', () => {
+            this.startChallengeTimer();
+        });
+
+        document.getElementById('stop-timer').addEventListener('click', () => {
+            this.stopChallengeTimer();
         });
     }
 
@@ -54,6 +73,16 @@ class ProgressTracker {
             challenges: savedProgress.challengesCompleted || 0,
             tutorials: savedProgress.tutorialsCompleted || 0
         };
+
+        // Load time tracking data
+        if (savedProgress.timeTracking) {
+            this.timeTracking = {
+                ...this.timeTracking,
+                ...savedProgress.timeTracking,
+                sessionStart: null, // Reset session on page load
+                challengeStart: null
+            };
+        }
     }
 
     saveProgress() {
@@ -62,6 +91,7 @@ class ProgressTracker {
             lessonsCompleted: this.completedCounts.lessons,
             challengesCompleted: this.completedCounts.challenges,
             tutorialsCompleted: this.completedCounts.tutorials,
+            timeTracking: this.timeTracking,
             lastUpdated: Date.now()
         };
 
@@ -223,6 +253,154 @@ class ProgressTracker {
         }
         
         this.calculateAllProgress();
+    }
+
+    // Time tracking methods
+    startSessionTimer() {
+        this.timeTracking.sessionStart = Date.now();
+        
+        // Update session time every minute
+        setInterval(() => {
+            this.updateTimeDisplay();
+        }, 60000);
+    }
+
+    startChallengeTimer() {
+        const challengeSelect = document.getElementById('challenge-selector');
+        const selectedChallenge = challengeSelect.value;
+        
+        if (!selectedChallenge) {
+            this.showMessage('Please select a challenge first!', 'error');
+            return;
+        }
+
+        this.timeTracking.currentChallenge = selectedChallenge;
+        this.timeTracking.challengeStart = Date.now();
+        
+        // Update UI
+        document.getElementById('start-timer').disabled = true;
+        document.getElementById('stop-timer').disabled = false;
+        challengeSelect.disabled = true;
+        
+        this.showMessage(`Timer started for ${selectedChallenge}`, 'success');
+    }
+
+    stopChallengeTimer() {
+        if (!this.timeTracking.challengeStart || !this.timeTracking.currentChallenge) {
+            return;
+        }
+
+        const timeSpent = Date.now() - this.timeTracking.challengeStart;
+        const challengeName = this.timeTracking.currentChallenge;
+        
+        // Store time for this challenge
+        if (!this.timeTracking.challengeTimes[challengeName]) {
+            this.timeTracking.challengeTimes[challengeName] = [];
+        }
+        
+        this.timeTracking.challengeTimes[challengeName].push({
+            duration: timeSpent,
+            timestamp: Date.now()
+        });
+        
+        // Update total time
+        this.timeTracking.totalTime += timeSpent;
+        
+        // Reset challenge timer
+        this.timeTracking.challengeStart = null;
+        this.timeTracking.currentChallenge = null;
+        
+        // Update UI
+        document.getElementById('start-timer').disabled = false;
+        document.getElementById('stop-timer').disabled = true;
+        document.getElementById('challenge-selector').disabled = false;
+        
+        this.updateTimeDisplay();
+        this.saveProgress();
+        
+        const timeStr = this.formatTime(timeSpent);
+        this.showMessage(`Challenge completed in ${timeStr}!`, 'success');
+    }
+
+    updateTimeDisplay() {
+        // Update total time
+        const totalTimeStr = this.formatTime(this.timeTracking.totalTime);
+        document.getElementById('total-time').textContent = totalTimeStr;
+        
+        // Update session time
+        const sessionTime = this.timeTracking.sessionStart ? 
+            Date.now() - this.timeTracking.sessionStart : 0;
+        const sessionTimeStr = this.formatTime(sessionTime);
+        document.getElementById('session-time').textContent = sessionTimeStr;
+        
+        // Update average time
+        const totalChallenges = Object.values(this.timeTracking.challengeTimes)
+            .reduce((sum, times) => sum + times.length, 0);
+        const averageTime = totalChallenges > 0 ? 
+            this.timeTracking.totalTime / totalChallenges : 0;
+        const averageTimeStr = this.formatTime(averageTime);
+        document.getElementById('average-time').textContent = averageTimeStr;
+        
+        // Update challenge time list
+        this.updateChallengeTimeList();
+    }
+
+    updateChallengeTimeList() {
+        const container = document.getElementById('challenge-time-list');
+        
+        if (Object.keys(this.timeTracking.challengeTimes).length === 0) {
+            container.innerHTML = '<p class="no-times">No challenge times recorded yet.</p>';
+            return;
+        }
+        
+        const timeEntries = [];
+        Object.entries(this.timeTracking.challengeTimes).forEach(([challenge, times]) => {
+            const totalTime = times.reduce((sum, time) => sum + time.duration, 0);
+            const bestTime = Math.min(...times.map(time => time.duration));
+            const attempts = times.length;
+            
+            timeEntries.push({
+                challenge,
+                totalTime,
+                bestTime,
+                attempts,
+                averageTime: totalTime / attempts
+            });
+        });
+        
+        container.innerHTML = timeEntries.map(entry => `
+            <div class="time-entry">
+                <div class="time-entry-header">
+                    <span class="challenge-name">${entry.challenge}</span>
+                    <span class="attempts-count">${entry.attempts} attempt${entry.attempts > 1 ? 's' : ''}</span>
+                </div>
+                <div class="time-entry-stats">
+                    <span class="time-stat">
+                        <label>Best:</label> ${this.formatTime(entry.bestTime)}
+                    </span>
+                    <span class="time-stat">
+                        <label>Average:</label> ${this.formatTime(entry.averageTime)}
+                    </span>
+                    <span class="time-stat">
+                        <label>Total:</label> ${this.formatTime(entry.totalTime)}
+                    </span>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    formatTime(milliseconds) {
+        const seconds = Math.floor(milliseconds / 1000);
+        const minutes = Math.floor(seconds / 60);
+        const hours = Math.floor(minutes / 60);
+        
+        if (hours > 0) {
+            return `${hours}h ${minutes % 60}m`;
+        } else if (minutes > 0) {
+            return `${minutes}m ${seconds % 60}s`;
+        } else {
+            return `${seconds}s`;
+        }
     }
 }
 

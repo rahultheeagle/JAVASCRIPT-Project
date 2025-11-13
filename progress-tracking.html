@@ -107,6 +107,47 @@
                 </div>
             </div>
 
+            <div class="time-tracking-section">
+                <h3>Time Tracking</h3>
+                
+                <div class="time-stats">
+                    <div class="time-card">
+                        <div class="time-value" id="total-time">0h 0m</div>
+                        <div class="time-label">Total Time Spent</div>
+                    </div>
+                    
+                    <div class="time-card">
+                        <div class="time-value" id="average-time">0m</div>
+                        <div class="time-label">Average per Challenge</div>
+                    </div>
+                    
+                    <div class="time-card">
+                        <div class="time-value" id="session-time">0m</div>
+                        <div class="time-label">Current Session</div>
+                    </div>
+                </div>
+
+                <div class="challenge-times">
+                    <h4>Challenge Time Records</h4>
+                    <div class="time-list" id="challenge-time-list">
+                        <!-- Challenge times will be populated -->
+                    </div>
+                </div>
+
+                <div class="timer-controls">
+                    <button id="start-timer" class="validate-btn">⏱️ Start Challenge Timer</button>
+                    <button id="stop-timer" class="secondary-btn" disabled>⏹️ Stop Timer</button>
+                    <select id="challenge-selector">
+                        <option value="">Select Challenge</option>
+                        <option value="sum-function">Sum Function</option>
+                        <option value="factorial">Factorial</option>
+                        <option value="palindrome">Palindrome Check</option>
+                        <option value="fibonacci">Fibonacci</option>
+                        <option value="array-filter">Array Filter</option>
+                    </select>
+                </div>
+            </div>
+
             <div class="actions-section">
                 <button id="simulate-progress" class="validate-btn">🎯 Simulate Progress</button>
                 <button id="reset-progress" class="secondary-btn">🔄 Reset Progress</button>

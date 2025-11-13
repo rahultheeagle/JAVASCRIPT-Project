@@ -925,6 +925,120 @@
     transform: translateY(-2px);
 }
 
+/* Time Tracking Styles */
+.time-tracking-section {
+    background: var(--card-bg);
+    padding: 25px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    margin-bottom: 30px;
+}
+
+.time-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 15px;
+    margin: 20px 0;
+}
+
+.time-card {
+    background: #f7fafc;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    border-left: 4px solid var(--primary-color);
+}
+
+.time-value {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: var(--primary-color);
+    margin-bottom: 5px;
+}
+
+.time-label {
+    font-size: 0.9rem;
+    color: #4a5568;
+    font-weight: 600;
+}
+
+.challenge-times {
+    margin: 25px 0;
+}
+
+.time-list {
+    max-height: 300px;
+    overflow-y: auto;
+    margin-top: 15px;
+}
+
+.time-entry {
+    background: #f7fafc;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    border-left: 3px solid var(--success-color);
+}
+
+.time-entry-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.challenge-name {
+    font-weight: 600;
+    color: var(--text-color);
+    text-transform: capitalize;
+}
+
+.attempts-count {
+    font-size: 0.8rem;
+    color: #718096;
+    background: #e2e8f0;
+    padding: 2px 8px;
+    border-radius: 12px;
+}
+
+.time-entry-stats {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.time-stat {
+    font-size: 0.9rem;
+}
+
+.time-stat label {
+    color: #4a5568;
+    font-weight: 600;
+}
+
+.timer-controls {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+.timer-controls select {
+    padding: 10px;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 1rem;
+    min-width: 200px;
+}
+
+.no-times {
+    text-align: center;
+    color: #718096;
+    font-style: italic;
+    padding: 20px;
+}
+
 @media (max-width: 768px) {
     .validation-container {
         grid-template-columns: 1fr;
