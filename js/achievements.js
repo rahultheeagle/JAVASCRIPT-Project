@@ -79,9 +79,34 @@ class AchievementSystem {
             this.onChallengeCompleted(event.detail);
         });
 
+        // Listen for lesson completion events
+        document.addEventListener('lessonCompleted', (event) => {
+            this.onLessonCompleted(event.detail);
+        });
+
+        // Listen for streak events
+        document.addEventListener('streakUpdated', (event) => {
+            this.onStreakUpdated(event.detail);
+        });
+
+        // Listen for fast completion events
+        document.addEventListener('fastCompletion', (event) => {
+            this.onFastCompletion(event.detail);
+        });
+
+        // Listen for first attempt success
+        document.addEventListener('firstAttemptSuccess', (event) => {
+            this.onFirstAttemptSuccess(event.detail);
+        });
+
         // Listen for time tracking events
         document.addEventListener('timeTracked', (event) => {
             this.onTimeTracked(event.detail);
+        });
+
+        // Listen for XP gained events
+        document.addEventListener('xpGained', (event) => {
+            this.onXpGained(event.detail);
         });
     }
 
@@ -230,13 +255,54 @@ class AchievementSystem {
     }
 
     onChallengeCompleted(data) {
-        // Trigger achievement checks when challenges are completed
-        setTimeout(() => this.checkAchievements(), 100);
+        console.log('Challenge completed:', data);
+        
+        // Check for fast completion
+        if (data.completionTime && data.completionTime <= 120000) { // 2 minutes
+            this.dispatchEvent('fastCompletion', data);
+        }
+        
+        // Check for first attempt
+        if (data.attempts === 1) {
+            this.dispatchEvent('firstAttemptSuccess', data);
+        }
+        
+        this.checkAchievements();
+    }
+
+    onLessonCompleted(data) {
+        console.log('Lesson completed:', data);
+        this.checkAchievements();
+    }
+
+    onStreakUpdated(data) {
+        console.log('Streak updated:', data);
+        this.checkAchievements();
+    }
+
+    onFastCompletion(data) {
+        console.log('Fast completion detected:', data);
+        this.checkAchievements();
+    }
+
+    onFirstAttemptSuccess(data) {
+        console.log('First attempt success:', data);
+        this.checkAchievements();
     }
 
     onTimeTracked(data) {
-        // Trigger achievement checks when time is tracked
-        setTimeout(() => this.checkAchievements(), 100);
+        console.log('Time tracked:', data);
+        this.checkAchievements();
+    }
+
+    onXpGained(data) {
+        console.log('XP gained:', data);
+        this.checkAchievements();
+    }
+
+    dispatchEvent(eventType, data) {
+        const event = new CustomEvent(eventType, { detail: data });
+        document.dispatchEvent(event);
     }
 
     getUnlockedCount() {
@@ -249,6 +315,66 @@ class AchievementSystem {
 
     getProgressPercentage() {
         return Math.round((this.getUnlockedCount() / this.getTotalCount()) * 100);
+    }
+
+    // Helper methods to trigger events from other parts of the app
+    static triggerChallengeCompleted(challengeData) {
+        const event = new CustomEvent('challengeCompleted', { 
+            detail: {
+                challengeId: challengeData.id,
+                completionTime: challengeData.time,
+                attempts: challengeData.attempts,
+                score: challengeData.score,
+                timestamp: Date.now()
+            }
+        });
+        document.dispatchEvent(event);
+    }
+
+    static triggerLessonCompleted(lessonData) {
+        const event = new CustomEvent('lessonCompleted', { 
+            detail: {
+                lessonId: lessonData.id,
+                category: lessonData.category,
+                timestamp: Date.now()
+            }
+        });
+        document.dispatchEvent(event);
+    }
+
+    static triggerStreakUpdated(streakData) {
+        const event = new CustomEvent('streakUpdated', { 
+            detail: {
+                currentStreak: streakData.current,
+                longestStreak: streakData.longest,
+                timestamp: Date.now()
+            }
+        });
+        document.dispatchEvent(event);
+    }
+
+    static triggerTimeTracked(timeData) {
+        const event = new CustomEvent('timeTracked', { 
+            detail: {
+                sessionTime: timeData.session,
+                totalTime: timeData.total,
+                challengeTime: timeData.challenge,
+                timestamp: Date.now()
+            }
+        });
+        document.dispatchEvent(event);
+    }
+
+    static triggerXpGained(xpData) {
+        const event = new CustomEvent('xpGained', { 
+            detail: {
+                amount: xpData.amount,
+                source: xpData.source,
+                totalXp: xpData.total,
+                timestamp: Date.now()
+            }
+        });
+        document.dispatchEvent(event);
     }
 }
 

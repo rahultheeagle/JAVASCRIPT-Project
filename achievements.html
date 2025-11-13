@@ -52,6 +52,8 @@
             <div class="achievement-actions">
                 <button id="check-achievements" class="btn primary-btn">🔍 Check Progress</button>
                 <button id="simulate-unlock" class="btn secondary-btn">🎯 Simulate Unlock</button>
+                <button id="trigger-challenge" class="btn secondary-btn">🏆 Trigger Challenge</button>
+                <button id="trigger-streak" class="btn secondary-btn">🔥 Trigger Streak</button>
             </div>
         </div>
     </div>
@@ -98,6 +100,24 @@
                     window.achievementSystem.unlockAchievement('first-steps');
                     updateAchievementStats();
                 }
+            });
+
+            document.getElementById('trigger-challenge').addEventListener('click', () => {
+                // Trigger a challenge completion event
+                AchievementSystem.triggerChallengeCompleted({
+                    id: 'test-challenge',
+                    time: 90000, // 1.5 minutes (fast completion)
+                    attempts: 1, // First attempt
+                    score: 100
+                });
+            });
+
+            document.getElementById('trigger-streak').addEventListener('click', () => {
+                // Trigger a streak update event
+                AchievementSystem.triggerStreakUpdated({
+                    current: 7, // 7-day streak
+                    longest: 10
+                });
             });
         });
     </script>
