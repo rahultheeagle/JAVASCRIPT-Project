@@ -87,11 +87,48 @@ class SimpleCodeEditor {
         const css = this.cssEditor?.value || '';
         const js = this.jsEditor?.value || '';
 
+        // Show empty state if no code
+        if (!html && !css && !js) {
+            const emptyContent = `
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <meta charset="UTF-8">
+                    <style>
+                        body { 
+                            margin: 0; 
+                            padding: 40px; 
+                            font-family: Arial, sans-serif; 
+                            text-align: center;
+                            color: #666;
+                            background: #f9f9f9;
+                        }
+                        .empty-state {
+                            margin-top: 50px;
+                            font-size: 18px;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div class="empty-state">
+                        <h2>🚀 Start Coding!</h2>
+                        <p>Write HTML, CSS, or JavaScript in the editor to see live results here.</p>
+                    </div>
+                </body>
+                </html>
+            `;
+            if (this.preview) {
+                this.preview.srcdoc = emptyContent;
+            }
+            return;
+        }
+
         const previewContent = `
             <!DOCTYPE html>
             <html>
             <head>
                 <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
                 <style>
                     body { margin: 0; padding: 20px; font-family: Arial, sans-serif; }
                     ${css}
@@ -101,24 +138,47 @@ class SimpleCodeEditor {
                 ${html}
                 <script>
                     // Capture console logs
-                    const originalLog = console.log;
-                    const originalError = console.error;
+                    (function() {
+                        const originalLog = console.log;
+                        const originalError = console.error;
+                        const originalWarn = console.warn;
+                        
+                        console.log = function(...args) {
+                            try {
+                                parent.postMessage({type: 'log', data: args.map(String)}, '*');
+                            } catch(e) {}
+                            originalLog.apply(console, args);
+                        };
+                        
+                        console.error = function(...args) {
+                            try {
+                                parent.postMessage({type: 'error', data: args.map(String)}, '*');
+                            } catch(e) {}
+                            originalError.apply(console, args);
+                        };
+                        
+                        console.warn = function(...args) {
+                            try {
+                                parent.postMessage({type: 'warn', data: args.map(String)}, '*');
+                            } catch(e) {}
+                            originalWarn.apply(console, args);
+                        };
+                        
+                        window.onerror = function(msg, url, line, col, error) {
+                            try {
+                                parent.postMessage({type: 'error', data: [msg + ' (Line: ' + line + ')']}, '*');
+                            } catch(e) {}
+                            return true;
+                        };
+                        
+                        window.addEventListener('unhandledrejection', function(event) {
+                            try {
+                                parent.postMessage({type: 'error', data: ['Promise rejected: ' + event.reason]}, '*');
+                            } catch(e) {}
+                        });
+                    })();
                     
-                    console.log = function(...args) {
-                        parent.postMessage({type: 'log', data: args}, '*');
-                        originalLog.apply(console, args);
-                    };
-                    
-                    console.error = function(...args) {
-                        parent.postMessage({type: 'error', data: args}, '*');
-                        originalError.apply(console, args);
-                    };
-                    
-                    window.onerror = function(msg, url, line, col, error) {
-                        parent.postMessage({type: 'error', data: [msg + ' (Line: ' + line + ')']}, '*');
-                        return true;
-                    };
-                    
+                    // Execute user JavaScript
                     try {
                         ${js}
                     } catch (error) {
@@ -150,9 +210,9 @@ class SimpleCodeEditor {
 
     resetCode() {
         if (confirm('Reset all code? This cannot be undone.')) {
-            if (this.htmlEditor) this.htmlEditor.value = '<!DOCTYPE html>\n<html>\n<head>\n    <title>My Project</title>\n</head>\n<body>\n    <h1>Hello CodeQuest!</h1>\n    <p>Start coding here...</p>\n</body>\n</html>';
-            if (this.cssEditor) this.cssEditor.value = 'body {\n    font-family: Arial, sans-serif;\n    margin: 20px;\n    background: #f0f0f0;\n}\n\nh1 {\n    color: #333;\n    text-align: center;\n}';
-            if (this.jsEditor) this.jsEditor.value = 'console.log(\'Welcome to CodeQuest!\');\n\n// Your JavaScript code here';
+            if (this.htmlEditor) this.htmlEditor.value = '';
+            if (this.cssEditor) this.cssEditor.value = '';
+            if (this.jsEditor) this.jsEditor.value = '';
             
             this.updatePreview();
             this.showMessage('Code reset successfully!', 'info');
