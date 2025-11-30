@@ -6,32 +6,189 @@
     <title>CodeQuest - Interactive Code Editor</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: Arial, sans-serif; background: #f5f5f5; height: 100vh; overflow: hidden; }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+            height: 100vh; 
+            overflow: hidden; 
+        }
         .editor-container { height: 100vh; display: flex; flex-direction: column; }
-        .editor-header { background: #2d3748; color: white; padding: 15px; display: flex; justify-content: space-between; align-items: center; }
-        .editor-title h1 { margin: 0; font-size: 1.5rem; }
-        .editor-controls { display: flex; gap: 10px; }
-        .btn { background: #48bb78; color: white; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer; text-decoration: none; }
-        .btn:hover { opacity: 0.9; }
-        .split-container { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; height: calc(100vh - 80px); padding: 20px; }
-        .editor-pane, .preview-pane { background: white; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; }
-        .pane-header { background: #4a5568; color: white; padding: 15px; display: flex; justify-content: space-between; align-items: center; }
-        .pane-header h3 { margin: 0; }
-        .editor-tabs { display: flex; gap: 5px; }
-        .tab { background: #4a5568; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; }
-        .tab.active { background: #667eea; }
+        .editor-header { 
+            background: linear-gradient(135deg, #1e3a8a 0%, #3730a3 100%); 
+            color: white; 
+            padding: 20px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        }
+        .editor-title h1 { 
+            margin: 0; 
+            font-size: 1.8rem; 
+            font-weight: 700;
+            background: linear-gradient(45deg, #fbbf24, #f59e0b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .editor-controls { display: flex; gap: 12px; }
+        .btn { 
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%); 
+            color: white; 
+            padding: 12px 20px; 
+            border: none; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+        }
+        .btn:hover { 
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+        }
+        .btn.save-btn { 
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+        }
+        .btn.reset-btn { 
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+        }
+        .btn.dashboard-btn { 
+            background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
+            box-shadow: 0 4px 15px rgba(107, 114, 128, 0.3);
+        }
+        .split-container { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 25px; 
+            height: calc(100vh - 100px); 
+            padding: 25px; 
+        }
+        .editor-pane, .preview-pane { 
+            background: rgba(255, 255, 255, 0.95); 
+            border-radius: 16px; 
+            overflow: hidden; 
+            display: flex; 
+            flex-direction: column;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+        }
+        .pane-header { 
+            background: linear-gradient(135deg, #1f2937 0%, #111827 100%); 
+            color: white; 
+            padding: 18px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+        }
+        .pane-header h3 { 
+            margin: 0; 
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        .editor-tabs { display: flex; gap: 8px; }
+        .tab { 
+            background: rgba(75, 85, 99, 0.8); 
+            color: white; 
+            border: none; 
+            padding: 8px 16px; 
+            border-radius: 8px; 
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .tab.active { 
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
+        }
+        .tab:hover:not(.active) {
+            background: rgba(107, 114, 128, 0.9);
+        }
         .editor-content { flex: 1; position: relative; }
         .editor-wrapper { height: 100%; display: none; }
         .editor-wrapper.active { display: flex; }
-        .code-editor { width: 100%; height: 100%; border: none; font-family: 'Courier New', monospace; font-size: 14px; padding: 15px; resize: none; outline: none; }
+        .code-editor { 
+            width: 100%; 
+            height: 100%; 
+            border: none; 
+            font-family: 'Fira Code', 'Courier New', monospace; 
+            font-size: 14px; 
+            padding: 20px; 
+            resize: none; 
+            outline: none;
+            background: #f8fafc;
+            color: #1e293b;
+            line-height: 1.6;
+        }
+        .code-editor:focus {
+            background: #ffffff;
+        }
         .preview-content { flex: 1; display: flex; flex-direction: column; }
-        .preview-frame { flex: 1; border: none; background: white; width: 100%; height: 100%; }
-        .console-section { height: 150px; border-top: 1px solid #e2e8f0; display: flex; flex-direction: column; }
-        .console-header { background: #f7fafc; padding: 10px 15px; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; font-weight: 600; }
-        .console-btn { padding: 5px 10px; font-size: 0.8rem; background: #e2e8f0; color: #4a5568; border: none; border-radius: 4px; cursor: pointer; }
-        .error-console { flex: 1; background: #1a202c; color: #e2e8f0; padding: 10px; font-family: 'Courier New', monospace; font-size: 0.9rem; overflow-y: auto; }
-        .timestamp { color: #a0aec0; font-size: 0.8rem; }
-        .refresh-btn { background: #667eea; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; }
+        .preview-frame { 
+            flex: 1; 
+            border: none; 
+            background: white; 
+            width: 100%; 
+            height: 100%;
+        }
+        .console-section { 
+            height: 160px; 
+            border-top: 2px solid #e5e7eb; 
+            display: flex; 
+            flex-direction: column; 
+        }
+        .console-header { 
+            background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%); 
+            padding: 12px 18px; 
+            border-bottom: 1px solid #d1d5db; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            font-weight: 600;
+            color: #374151;
+        }
+        .console-btn { 
+            padding: 6px 12px; 
+            font-size: 0.85rem; 
+            background: linear-gradient(135deg, #e5e7eb 0%, #d1d5db 100%); 
+            color: #374151; 
+            border: none; 
+            border-radius: 6px; 
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+        .console-btn:hover {
+            background: linear-gradient(135deg, #d1d5db 0%, #9ca3af 100%);
+        }
+        .error-console { 
+            flex: 1; 
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); 
+            color: #e2e8f0; 
+            padding: 15px; 
+            font-family: 'Fira Code', 'Courier New', monospace; 
+            font-size: 0.9rem; 
+            overflow-y: auto;
+            line-height: 1.5;
+        }
+        .timestamp { color: #94a3b8; font-size: 0.8rem; }
+        .refresh-btn { 
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); 
+            color: white; 
+            border: none; 
+            padding: 8px 14px; 
+            border-radius: 6px; 
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+        .refresh-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+        }
     </style>
 </head>
 <body>
@@ -42,9 +199,9 @@
             </div>
             <div class="editor-controls">
                 <button id="run-code" class="btn">▶ Run Code</button>
-                <button id="save-code" class="btn" style="background: #667eea;">💾 Save</button>
-                <button id="reset-code" class="btn" style="background: #e53e3e;">🔄 Reset</button>
-                <a href="index.html" class="btn" style="background: #4a5568;">← Dashboard</a>
+                <button id="save-code" class="btn save-btn">💾 Save</button>
+                <button id="reset-code" class="btn reset-btn">🔄 Reset</button>
+                <a href="index.html" class="btn dashboard-btn">← Dashboard</a>
             </div>
         </header>
 

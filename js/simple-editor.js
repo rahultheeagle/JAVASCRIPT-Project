@@ -97,15 +97,35 @@ class SimpleCodeEditor {
                     <style>
                         body { 
                             margin: 0; 
-                            padding: 40px; 
-                            font-family: Arial, sans-serif; 
-                            text-align: center;
-                            color: #666;
-                            background: #f9f9f9;
+                            padding: 0;
+                            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+                            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                            min-height: 100vh;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
                         }
                         .empty-state {
-                            margin-top: 50px;
-                            font-size: 18px;
+                            text-align: center;
+                            color: white;
+                            padding: 40px;
+                            background: rgba(255, 255, 255, 0.1);
+                            border-radius: 20px;
+                            backdrop-filter: blur(10px);
+                            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+                        }
+                        .empty-state h2 {
+                            font-size: 2.5rem;
+                            margin-bottom: 20px;
+                            background: linear-gradient(45deg, #fbbf24, #f59e0b);
+                            -webkit-background-clip: text;
+                            -webkit-text-fill-color: transparent;
+                            background-clip: text;
+                        }
+                        .empty-state p {
+                            font-size: 1.2rem;
+                            opacity: 0.9;
+                            line-height: 1.6;
                         }
                     </style>
                 </head>
@@ -113,6 +133,7 @@ class SimpleCodeEditor {
                     <div class="empty-state">
                         <h2>🚀 Start Coding!</h2>
                         <p>Write HTML, CSS, or JavaScript in the editor to see live results here.</p>
+                        <p style="font-size: 1rem; margin-top: 20px; opacity: 0.7;">Your code will appear instantly as you type</p>
                     </div>
                 </body>
                 </html>
@@ -209,13 +230,33 @@ class SimpleCodeEditor {
     }
 
     resetCode() {
-        if (confirm('Reset all code? This cannot be undone.')) {
-            if (this.htmlEditor) this.htmlEditor.value = '';
-            if (this.cssEditor) this.cssEditor.value = '';
-            if (this.jsEditor) this.jsEditor.value = '';
+        if (confirm('Reset all code? This will clear HTML, CSS, and JavaScript sections.')) {
+            // Clear all editors completely
+            if (this.htmlEditor) {
+                this.htmlEditor.value = '';
+                this.htmlEditor.placeholder = 'Write your HTML code here...';
+            }
+            if (this.cssEditor) {
+                this.cssEditor.value = '';
+                this.cssEditor.placeholder = 'Write your CSS code here...';
+            }
+            if (this.jsEditor) {
+                this.jsEditor.value = '';
+                this.jsEditor.placeholder = 'Write your JavaScript code here...';
+            }
             
+            // Clear console
+            this.clearConsole();
+            
+            // Update preview to show empty state
             this.updatePreview();
-            this.showMessage('Code reset successfully!', 'info');
+            
+            // Remove any saved code
+            if (window.StorageManager) {
+                StorageManager.remove('savedCode');
+            }
+            
+            this.showMessage('All code sections cleared successfully!', 'success');
         }
     }
 
@@ -223,8 +264,8 @@ class SimpleCodeEditor {
         if (this.console) {
             this.console.innerHTML = `
                 <div class="console-message info">
-                    <span class="timestamp" style="color: #a0aec0; font-size: 0.8rem;">[${new Date().toLocaleTimeString()}]</span>
-                    <span class="message">Console cleared</span>
+                    <span class="timestamp" style="color: #94a3b8; font-size: 0.8rem;">[${new Date().toLocaleTimeString()}]</span>
+                    <span class="message" style="color: #10b981;">Console cleared - Ready for new output</span>
                 </div>
             `;
         }
@@ -235,14 +276,16 @@ class SimpleCodeEditor {
         message.textContent = text;
         message.style.cssText = `
             position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 15px 20px;
-            border-radius: 8px;
+            top: 30px;
+            right: 30px;
+            padding: 16px 24px;
+            border-radius: 12px;
             color: white;
-            background: ${type === 'success' ? '#48bb78' : '#667eea'};
+            background: ${type === 'success' ? 'linear-gradient(135deg, #10b981 0%, #059669 100%)' : 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)'};
             z-index: 1000;
-            font-weight: bold;
+            font-weight: 600;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            backdrop-filter: blur(10px);
         `;
         
         document.body.appendChild(message);
@@ -262,8 +305,8 @@ window.addEventListener('message', (e) => {
             const message = e.data.data.join(' ');
             
             messageEl.innerHTML = `
-                <span class="timestamp" style="color: #a0aec0; font-size: 0.8rem;">[${timestamp}]</span>
-                <span class="message" style="color: ${e.data.type === 'error' ? '#fc8181' : '#68d391'};">${message}</span>
+                <span class="timestamp" style="color: #94a3b8; font-size: 0.8rem;">[${timestamp}]</span>
+                <span class="message" style="color: ${e.data.type === 'error' ? '#f87171' : '#34d399'};">${message}</span>
             `;
             
             console.appendChild(messageEl);
