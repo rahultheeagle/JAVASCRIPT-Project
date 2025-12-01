@@ -7,105 +7,108 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; 
+            background: #f8fafc; 
             height: 100vh; 
             overflow: hidden; 
         }
         .editor-container { height: 100vh; display: flex; flex-direction: column; }
         .editor-header { 
-            background: linear-gradient(135deg, #1e3a8a 0%, #3730a3 100%); 
-            color: white; 
-            padding: 20px; 
+            background: #ffffff; 
+            color: #1e293b; 
+            padding: 16px 24px; 
             display: flex; 
             justify-content: space-between; 
             align-items: center;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            border-bottom: 1px solid #e2e8f0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
+        .editor-title { display: flex; align-items: center; gap: 12px; }
+        .editor-title svg { width: 32px; height: 32px; color: #3b82f6; }
         .editor-title h1 { 
             margin: 0; 
-            font-size: 1.8rem; 
-            font-weight: 700;
-            background: linear-gradient(45deg, #fbbf24, #f59e0b);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            font-size: 1.5rem; 
+            font-weight: 600;
+            color: #1e293b;
         }
-        .editor-controls { display: flex; gap: 12px; }
+        .editor-controls { display: flex; gap: 8px; }
         .btn { 
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%); 
+            background: #3b82f6; 
             color: white; 
-            padding: 12px 20px; 
+            padding: 8px 16px; 
             border: none; 
-            border-radius: 8px; 
+            border-radius: 6px; 
             cursor: pointer; 
             text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+            font-weight: 500;
+            font-size: 14px;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
-        .btn:hover { 
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
-        }
-        .btn.save-btn { 
-            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
-            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
-        }
-        .btn.reset-btn { 
-            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
-        }
-        .btn.dashboard-btn { 
-            background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
-            box-shadow: 0 4px 15px rgba(107, 114, 128, 0.3);
-        }
+        .btn:hover { background: #2563eb; }
+        .btn.save-btn { background: #10b981; }
+        .btn.save-btn:hover { background: #059669; }
+        .btn.reset-btn { background: #ef4444; }
+        .btn.reset-btn:hover { background: #dc2626; }
+        .btn.dashboard-btn { background: #6b7280; }
+        .btn.dashboard-btn:hover { background: #4b5563; }
+        .btn svg { width: 16px; height: 16px; }
         .split-container { 
             display: grid; 
             grid-template-columns: 1fr 1fr; 
-            gap: 25px; 
-            height: calc(100vh - 100px); 
-            padding: 25px; 
+            height: calc(100vh - 73px); 
         }
         .editor-pane, .preview-pane { 
-            background: rgba(255, 255, 255, 0.95); 
-            border-radius: 16px; 
-            overflow: hidden; 
+            background: #ffffff; 
             display: flex; 
             flex-direction: column;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-            backdrop-filter: blur(10px);
+            border-right: 1px solid #e2e8f0;
         }
+        .preview-pane { border-right: none; }
         .pane-header { 
-            background: linear-gradient(135deg, #1f2937 0%, #111827 100%); 
-            color: white; 
-            padding: 18px; 
+            background: #f8fafc; 
+            color: #374151; 
+            padding: 12px 16px; 
             display: flex; 
             justify-content: space-between; 
             align-items: center;
+            border-bottom: 1px solid #e2e8f0;
         }
         .pane-header h3 { 
             margin: 0; 
-            font-size: 1.2rem;
+            font-size: 14px;
             font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
-        .editor-tabs { display: flex; gap: 8px; }
+        .pane-header svg { width: 16px; height: 16px; }
+        .editor-tabs { display: flex; }
         .tab { 
-            background: rgba(75, 85, 99, 0.8); 
-            color: white; 
+            background: transparent; 
+            color: #6b7280; 
             border: none; 
             padding: 8px 16px; 
-            border-radius: 8px; 
             cursor: pointer;
             font-weight: 500;
-            transition: all 0.3s ease;
+            font-size: 13px;
+            transition: all 0.2s ease;
+            border-bottom: 2px solid transparent;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
+        .tab svg { width: 14px; height: 14px; }
         .tab.active { 
-            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
-            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
+            color: #3b82f6;
+            border-bottom-color: #3b82f6;
+            background: #f8fafc;
         }
         .tab:hover:not(.active) {
-            background: rgba(107, 114, 128, 0.9);
+            color: #374151;
+            background: #f1f5f9;
         }
         .editor-content { flex: 1; position: relative; }
         .editor-wrapper { height: 100%; display: none; }
@@ -114,17 +117,14 @@
             width: 100%; 
             height: 100%; 
             border: none; 
-            font-family: 'Fira Code', 'Courier New', monospace; 
+            font-family: 'JetBrains Mono', 'Fira Code', monospace; 
             font-size: 14px; 
-            padding: 20px; 
+            padding: 16px; 
             resize: none; 
             outline: none;
-            background: #f8fafc;
-            color: #1e293b;
-            line-height: 1.6;
-        }
-        .code-editor:focus {
             background: #ffffff;
+            color: #1e293b;
+            line-height: 1.5;
         }
         .preview-content { flex: 1; display: flex; flex-direction: column; }
         .preview-frame { 
@@ -135,84 +135,130 @@
             height: 100%;
         }
         .console-section { 
-            height: 160px; 
-            border-top: 2px solid #e5e7eb; 
+            height: 140px; 
+            border-top: 1px solid #e2e8f0; 
             display: flex; 
             flex-direction: column; 
         }
         .console-header { 
-            background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%); 
-            padding: 12px 18px; 
-            border-bottom: 1px solid #d1d5db; 
+            background: #f8fafc; 
+            padding: 8px 16px; 
+            border-bottom: 1px solid #e2e8f0; 
             display: flex; 
             justify-content: space-between; 
             align-items: center; 
-            font-weight: 600;
+            font-weight: 500;
+            font-size: 13px;
             color: #374151;
         }
+        .console-header-left { display: flex; align-items: center; gap: 6px; }
+        .console-header svg { width: 14px; height: 14px; }
         .console-btn { 
-            padding: 6px 12px; 
-            font-size: 0.85rem; 
-            background: linear-gradient(135deg, #e5e7eb 0%, #d1d5db 100%); 
+            padding: 4px 8px; 
+            font-size: 12px; 
+            background: #e2e8f0; 
             color: #374151; 
             border: none; 
-            border-radius: 6px; 
+            border-radius: 4px; 
             cursor: pointer;
             font-weight: 500;
             transition: all 0.2s ease;
         }
-        .console-btn:hover {
-            background: linear-gradient(135deg, #d1d5db 0%, #9ca3af 100%);
-        }
+        .console-btn:hover { background: #d1d5db; }
         .error-console { 
             flex: 1; 
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); 
+            background: #1e293b; 
             color: #e2e8f0; 
-            padding: 15px; 
-            font-family: 'Fira Code', 'Courier New', monospace; 
-            font-size: 0.9rem; 
+            padding: 12px; 
+            font-family: 'JetBrains Mono', monospace; 
+            font-size: 12px; 
             overflow-y: auto;
-            line-height: 1.5;
+            line-height: 1.4;
         }
-        .timestamp { color: #94a3b8; font-size: 0.8rem; }
+        .timestamp { color: #94a3b8; font-size: 11px; }
         .refresh-btn { 
-            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); 
+            background: #3b82f6; 
             color: white; 
             border: none; 
-            padding: 8px 14px; 
-            border-radius: 6px; 
+            padding: 4px 8px; 
+            border-radius: 4px; 
             cursor: pointer;
             font-weight: 500;
+            font-size: 12px;
             transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 4px;
         }
-        .refresh-btn:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
-        }
+        .refresh-btn:hover { background: #2563eb; }
+        .refresh-btn svg { width: 12px; height: 12px; }
     </style>
 </head>
 <body>
     <div class="editor-container">
         <header class="editor-header">
             <div class="editor-title">
-                <h1>CodeQuest Code Editor</h1>
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0L19.2 12l-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"/>
+                </svg>
+                <h1>Code Editor</h1>
             </div>
             <div class="editor-controls">
-                <button id="run-code" class="btn">▶ Run Code</button>
-                <button id="save-code" class="btn save-btn">💾 Save</button>
-                <button id="reset-code" class="btn reset-btn">🔄 Reset</button>
-                <a href="index.html" class="btn dashboard-btn">← Dashboard</a>
+                <button id="run-code" class="btn">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M8 5v14l11-7z"/>
+                    </svg>
+                    Run
+                </button>
+                <button id="save-code" class="btn save-btn">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z"/>
+                    </svg>
+                    Save
+                </button>
+                <button id="reset-code" class="btn reset-btn">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
+                    </svg>
+                    Reset
+                </button>
+                <a href="index.html" class="btn dashboard-btn">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+                    </svg>
+                    Dashboard
+                </a>
             </div>
         </header>
 
         <div class="split-container">
             <div class="editor-pane">
                 <div class="pane-header">
-                    <h3>Code Editor</h3>
+                    <h3>
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0L19.2 12l-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"/>
+                        </svg>
+                        Editor
+                    </h3>
                     <div class="editor-tabs">
-                        <button class="tab active" data-lang="html">HTML</button>
-                        <button class="tab" data-lang="css">CSS</button>
-                        <button class="tab" data-lang="js">JavaScript</button>
+                        <button class="tab active" data-lang="html">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 17.56l4.07-1.13.55-6.1H9.38L9.2 8.3h7.6l.2-2.27H6l.6 6.8h7.1l-.2 2.28L12 15.7l-1.5-.4-.1-1.14H8.1l.2 2.27L12 17.56z"/>
+                            </svg>
+                            HTML
+                        </button>
+                        <button class="tab" data-lang="css">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M5 3l-.65 3.34h13.59L17.5 8.5H3.92l-.66 3.33h13.59l-.76 3.81-5.48 1.81-4.75-1.81.33-1.64H2.85l-.79 4 7.85 3 9.05-3 1.2-6.03.24-1.21L21.94 3z"/>
+                            </svg>
+                            CSS
+                        </button>
+                        <button class="tab" data-lang="js">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M3 3h18v18H3V3zm16.525 13.707c-.131-.821-.666-1.511-2.252-2.155-.552-.259-1.165-.438-1.349-.854-.068-.248-.078-.382-.034-.529.113-.484.687-.629 1.137-.495.293.09.563.315.732.676.775-.507.775-.507 1.316-.844-.203-.314-.304-.451-.439-.586-.473-.528-1.103-.798-2.126-.77l-.528.067c-.507.124-.991.395-1.283.754-.855.968-.608 2.655.427 3.354 1.023.765 2.521.933 2.712 1.653.18.878-.652 1.159-1.475 1.058-.607-.136-.945-.439-1.316-1.002l-1.372.788c.157.359.337.517.607.832 1.305 1.316 4.568 1.249 5.153-.754.021-.067.18-.528.056-1.237l.034.049zm-6.737-5.434h-1.686c0 1.453-.007 2.898-.007 4.354 0 .924.047 1.772-.104 2.033-.247.517-.886.451-1.175.359-.297-.146-.448-.349-.623-.641-.047-.078-.082-.146-.095-.146l-1.368.844c.229.473.563.879.994 1.137.641.383 1.502.507 2.404.305.588-.17 1.095-.519 1.358-1.059.384-.697.302-1.553.299-2.509.008-1.541 0-3.083 0-4.635l.003-.042z"/>
+                            </svg>
+                            JS
+                        </button>
                     </div>
                 </div>
                 <div class="editor-content">
@@ -230,14 +276,29 @@
 
             <div class="preview-pane">
                 <div class="pane-header">
-                    <h3>Live Preview</h3>
-                    <button id="refresh-preview" class="refresh-btn">🔄 Refresh</button>
+                    <h3>
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
+                        </svg>
+                        Preview
+                    </h3>
+                    <button id="refresh-preview" class="refresh-btn">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
+                        </svg>
+                        Refresh
+                    </button>
                 </div>
                 <div class="preview-content">
                     <iframe id="preview-frame" class="preview-frame" sandbox="allow-scripts allow-same-origin"></iframe>
                     <div class="console-section">
                         <div class="console-header">
-                            <span>Console</span>
+                            <div class="console-header-left">
+                                <svg viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M20 3H4c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h3l1 1h8l1-1h3c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM7 15l-3-3 3-3v2h4v2H7v2zm10-4h-4v-2h4V7l3 3-3 3v-2z"/>
+                                </svg>
+                                Console
+                            </div>
                             <button id="clear-console" class="console-btn">Clear</button>
                         </div>
                         <div id="error-console" class="error-console">
