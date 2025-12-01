@@ -168,21 +168,89 @@
                             categoryTitle.textContent = categoryNames[category] || 'Challenges';
                         }
                         
-                        // Show sample challenges
+                        // Show real challenges
                         const challengesGrid = document.getElementById('challenges-grid');
                         if (challengesGrid) {
-                            challengesGrid.innerHTML = `
-                                <div style="text-align: center; padding: 40px; color: #666;">
-                                    <h3>🚧 Challenges Coming Soon!</h3>
-                                    <p>We're working hard to bring you amazing ${categoryNames[category].toLowerCase()}.</p>
-                                    <p>Check back soon for interactive coding challenges!</p>
+                            const challenges = this.getChallengesForCategory(category);
+                            challengesGrid.innerHTML = challenges.map(challenge => `
+                                <div class="challenge-card" onclick="completeChallenge('${challenge.id}', ${challenge.xp})">
+                                    <div class="challenge-header">
+                                        <h4>${challenge.title}</h4>
+                                        <span class="difficulty ${challenge.difficulty}">${challenge.difficulty}</span>
+                                    </div>
+                                    <p>${challenge.description}</p>
+                                    <div class="challenge-footer">
+                                        <span class="xp">+${challenge.xp} XP</span>
+                                        <button class="start-btn">Start Challenge</button>
+                                    </div>
                                 </div>
-                            `;
+                            `).join('');
                         }
+                    }
+                    
+                    getChallengesForCategory(category) {
+                        const allChallenges = {
+                            'html-basics': [
+                                { id: 'html-1', title: 'Basic HTML Structure', description: 'Create a simple HTML document', difficulty: 'easy', xp: 10 },
+                                { id: 'html-2', title: 'HTML Forms', description: 'Build a contact form', difficulty: 'medium', xp: 20 },
+                                { id: 'html-3', title: 'Semantic HTML', description: 'Use semantic elements', difficulty: 'hard', xp: 30 }
+                            ],
+                            'css-styling': [
+                                { id: 'css-1', title: 'CSS Basics', description: 'Style your first webpage', difficulty: 'easy', xp: 10 },
+                                { id: 'css-2', title: 'Flexbox Layout', description: 'Create flexible layouts', difficulty: 'medium', xp: 20 },
+                                { id: 'css-3', title: 'CSS Grid', description: 'Master grid layouts', difficulty: 'hard', xp: 30 }
+                            ],
+                            'js-fundamentals': [
+                                { id: 'js-1', title: 'Variables & Functions', description: 'Learn JS basics', difficulty: 'easy', xp: 10 },
+                                { id: 'js-2', title: 'DOM Manipulation', description: 'Control webpage elements', difficulty: 'medium', xp: 20 },
+                                { id: 'js-3', title: 'Event Handling', description: 'Handle user interactions', difficulty: 'hard', xp: 30 }
+                            ],
+                            'mini-projects': [
+                                { id: 'project-1', title: 'Todo List', description: 'Build a todo application', difficulty: 'medium', xp: 50 },
+                                { id: 'project-2', title: 'Calculator', description: 'Create a working calculator', difficulty: 'hard', xp: 75 }
+                            ]
+                        };
+                        return allChallenges[category] || [];
+                    }
                     }
                 });
             });
         });
+        
+        // Challenge completion function
+        function completeChallenge(challengeId, xpEarned) {
+            // Simulate challenge completion
+            if (confirm(`Complete challenge: ${challengeId}?\nYou will earn ${xpEarned} XP!`)) {
+                // Update progress if progressTracker exists (from main page)
+                if (window.parent && window.parent.progressTracker) {
+                    window.parent.progressTracker.completeChallenge(challengeId, xpEarned);
+                } else {
+                    // Update localStorage directly
+                    const userData = JSON.parse(localStorage.getItem('codequest_user_data')) || {
+                        completedChallenges: 0, totalXP: 0, currentStreak: 0, badgesEarned: 0,
+                        challengesCompleted: [], lastVisit: Date.now(), startDate: Date.now(), timeSpent: 0
+                    };
+                    
+                    if (!userData.challengesCompleted.includes(challengeId)) {
+                        userData.challengesCompleted.push(challengeId);
+                        userData.completedChallenges += 1;
+                        userData.totalXP += xpEarned;
+                        
+                        // Award badges
+                        const oldBadges = userData.badgesEarned;
+                        if (userData.completedChallenges >= 1 && oldBadges === 0) userData.badgesEarned = 1;
+                        if (userData.completedChallenges >= 5 && oldBadges === 1) userData.badgesEarned = 2;
+                        if (userData.completedChallenges >= 10 && oldBadges === 2) userData.badgesEarned = 3;
+                        
+                        localStorage.setItem('codequest_user_data', JSON.stringify(userData));
+                        
+                        alert(`Challenge completed! 🎉\n+${xpEarned} XP earned\nTotal XP: ${userData.totalXP}`);
+                    } else {
+                        alert('Challenge already completed!');
+                    }
+                }
+            }
+        }
     </script>
 </body>
 </html>

@@ -685,8 +685,9 @@
                 </div>
             </div>
             <div class="progress-bar">
-                <div class="progress-fill" id="overall-progress"></div>
+                <div class="progress-fill" id="overall-progress" style="width: 0%;"></div>
             </div>
+            <p style="text-align: center; margin-top: 15px; opacity: 0.8;">Complete challenges to increase your progress!</p>
         </section>
 
         <!-- Achievements -->
@@ -733,27 +734,105 @@
             }
         });
 
-        // Animate progress numbers
-        function animateNumbers() {
-            const numbers = document.querySelectorAll('.progress-number');
-            numbers.forEach(num => {
-                const target = parseInt(num.textContent) || Math.floor(Math.random() * 100);
-                let current = 0;
-                const increment = target / 50;
-                const timer = setInterval(() => {
-                    current += increment;
-                    if (current >= target) {
-                        current = target;
-                        clearInterval(timer);
+        // Real Progress Tracking System
+        class ProgressTracker {
+            constructor() {
+                this.initializeProgress();
+                this.loadProgress();
+            }
+
+            initializeProgress() {
+                // Initialize user data if first visit
+                if (!localStorage.getItem('codequest_user_data')) {
+                    const userData = {
+                        completedChallenges: 0,
+                        totalXP: 0,
+                        currentStreak: 0,
+                        badgesEarned: 0,
+                        lastVisit: Date.now(),
+                        startDate: Date.now(),
+                        challengesCompleted: [],
+                        timeSpent: 0
+                    };
+                    localStorage.setItem('codequest_user_data', JSON.stringify(userData));
+                }
+            }
+
+            loadProgress() {
+                const userData = JSON.parse(localStorage.getItem('codequest_user_data'));
+                
+                // Update progress display
+                document.getElementById('completed-challenges').textContent = userData.completedChallenges;
+                document.getElementById('total-xp').textContent = userData.totalXP;
+                document.getElementById('current-streak').textContent = userData.currentStreak;
+                document.getElementById('badges-earned').textContent = userData.badgesEarned;
+                
+                // Update progress bar
+                const progressPercentage = Math.min((userData.completedChallenges / 30) * 100, 100);
+                document.getElementById('overall-progress').style.width = progressPercentage + '%';
+                
+                // Update streak
+                this.updateStreak();
+            }
+
+            updateStreak() {
+                const userData = JSON.parse(localStorage.getItem('codequest_user_data'));
+                const today = new Date().toDateString();
+                const lastVisit = new Date(userData.lastVisit).toDateString();
+                
+                if (today !== lastVisit) {
+                    const yesterday = new Date();
+                    yesterday.setDate(yesterday.getDate() - 1);
+                    
+                    if (lastVisit === yesterday.toDateString()) {
+                        userData.currentStreak += 1;
+                    } else if (lastVisit !== today) {
+                        userData.currentStreak = 1;
                     }
-                    num.textContent = Math.floor(current);
-                }, 50);
-            });
+                    
+                    userData.lastVisit = Date.now();
+                    localStorage.setItem('codequest_user_data', JSON.stringify(userData));
+                    document.getElementById('current-streak').textContent = userData.currentStreak;
+                }
+            }
+
+            completeChallenge(challengeId, xpEarned = 10) {
+                const userData = JSON.parse(localStorage.getItem('codequest_user_data'));
+                
+                if (!userData.challengesCompleted.includes(challengeId)) {
+                    userData.challengesCompleted.push(challengeId);
+                    userData.completedChallenges += 1;
+                    userData.totalXP += xpEarned;
+                    
+                    // Award badges based on milestones
+                    const oldBadges = userData.badgesEarned;
+                    if (userData.completedChallenges >= 1 && oldBadges === 0) userData.badgesEarned = 1;
+                    if (userData.completedChallenges >= 5 && oldBadges === 1) userData.badgesEarned = 2;
+                    if (userData.completedChallenges >= 10 && oldBadges === 2) userData.badgesEarned = 3;
+                    if (userData.completedChallenges >= 20 && oldBadges === 3) userData.badgesEarned = 4;
+                    if (userData.completedChallenges >= 30 && oldBadges === 4) userData.badgesEarned = 5;
+                    
+                    localStorage.setItem('codequest_user_data', JSON.stringify(userData));
+                    this.loadProgress();
+                }
+            }
+
+            addTimeSpent(minutes) {
+                const userData = JSON.parse(localStorage.getItem('codequest_user_data'));
+                userData.timeSpent += minutes;
+                localStorage.setItem('codequest_user_data', JSON.stringify(userData));
+            }
         }
 
-        // Initialize animations when page loads
-        window.addEventListener('load', () => {
-            setTimeout(animateNumbers, 1000);
+        // Initialize progress tracker
+        const progressTracker = new ProgressTracker();
+        window.progressTracker = progressTracker;
+
+        // Track time spent on site
+        let startTime = Date.now();
+        window.addEventListener('beforeunload', () => {
+            const timeSpent = Math.floor((Date.now() - startTime) / 60000); // minutes
+            progressTracker.addTimeSpent(timeSpent);
         });
 
         // Add click animations
