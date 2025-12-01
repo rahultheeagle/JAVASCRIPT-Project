@@ -20,7 +20,7 @@
 
         <div class="challenges-content">
             <div class="categories-grid">
-                <div class="category-card" data-category="html-basics">
+                <div class="category-card" data-category="html-basics" style="cursor: pointer;">
                     <div class="category-icon">🏗️</div>
                     <h3>HTML Basics</h3>
                     <p>Learn the fundamentals of HTML structure and elements</p>
@@ -37,7 +37,7 @@
                     </div>
                 </div>
 
-                <div class="category-card" data-category="css-styling">
+                <div class="category-card" data-category="css-styling" style="cursor: pointer;">
                     <div class="category-icon">🎨</div>
                     <h3>CSS Styling</h3>
                     <p>Master CSS properties, layouts, and visual design</p>
@@ -54,7 +54,7 @@
                     </div>
                 </div>
 
-                <div class="category-card" data-category="js-fundamentals">
+                <div class="category-card" data-category="js-fundamentals" style="cursor: pointer;">
                     <div class="category-icon">⚡</div>
                     <h3>JavaScript Fundamentals</h3>
                     <p>Build interactive functionality with JavaScript</p>
@@ -71,7 +71,7 @@
                     </div>
                 </div>
 
-                <div class="category-card" data-category="mini-projects">
+                <div class="category-card" data-category="mini-projects" style="cursor: pointer;">
                     <div class="category-icon">🚀</div>
                     <h3>Mini-Projects</h3>
                     <p>Complete projects combining HTML, CSS, and JavaScript</p>
@@ -140,5 +140,51 @@
     <script src="timer-ui.js"></script>
     <script src="search-filter-system.js"></script>
     <script src="challenges.js"></script>
+    <script>
+        // Ensure category cards are clickable
+        document.addEventListener('DOMContentLoaded', function() {
+            const categoryCards = document.querySelectorAll('.category-card');
+            categoryCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    const category = this.dataset.category;
+                    console.log('Category clicked:', category);
+                    
+                    // Show challenges for this category
+                    const categoriesGrid = document.querySelector('.categories-grid').parentElement;
+                    const challengesList = document.getElementById('challenges-list');
+                    
+                    if (categoriesGrid && challengesList) {
+                        categoriesGrid.style.display = 'none';
+                        challengesList.style.display = 'block';
+                        
+                        // Update category title
+                        const categoryNames = {
+                            'html-basics': 'HTML Basics Challenges',
+                            'css-styling': 'CSS Styling Challenges', 
+                            'js-fundamentals': 'JavaScript Fundamentals',
+                            'mini-projects': 'Mini-Projects'
+                        };
+                        
+                        const categoryTitle = document.getElementById('category-title');
+                        if (categoryTitle) {
+                            categoryTitle.textContent = categoryNames[category] || 'Challenges';
+                        }
+                        
+                        // Show sample challenges
+                        const challengesGrid = document.getElementById('challenges-grid');
+                        if (challengesGrid) {
+                            challengesGrid.innerHTML = `
+                                <div style="text-align: center; padding: 40px; color: #666;">
+                                    <h3>🚧 Challenges Coming Soon!</h3>
+                                    <p>We're working hard to bring you amazing ${categoryNames[category].toLowerCase()}.</p>
+                                    <p>Check back soon for interactive coding challenges!</p>
+                                </div>
+                            `;
+                        }
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>
