@@ -163,6 +163,15 @@
                             'mini-projects': 'Mini-Projects'
                         };
                         
+                        // Add back to categories button functionality
+                        const backBtn = document.getElementById('back-to-categories');
+                        if (backBtn) {
+                            backBtn.onclick = function() {
+                                categoriesGrid.style.display = 'block';
+                                challengesList.style.display = 'none';
+                            };
+                        }
+                        
                         const categoryTitle = document.getElementById('category-title');
                         if (categoryTitle) {
                             categoryTitle.textContent = categoryNames[category] || 'Challenges';
@@ -171,7 +180,7 @@
                         // Show real challenges
                         const challengesGrid = document.getElementById('challenges-grid');
                         if (challengesGrid) {
-                            const challenges = this.getChallengesForCategory(category);
+                            const challenges = getChallengesForCategory(category);
                             challengesGrid.innerHTML = challenges.map(challenge => `
                                 <div class="challenge-card" onclick="completeChallenge('${challenge.id}', ${challenge.xp})">
                                     <div class="challenge-header">
@@ -187,36 +196,37 @@
                             `).join('');
                         }
                     }
-                    
-                    getChallengesForCategory(category) {
-                        const allChallenges = {
-                            'html-basics': [
-                                { id: 'html-1', title: 'Basic HTML Structure', description: 'Create a simple HTML document', difficulty: 'easy', xp: 10 },
-                                { id: 'html-2', title: 'HTML Forms', description: 'Build a contact form', difficulty: 'medium', xp: 20 },
-                                { id: 'html-3', title: 'Semantic HTML', description: 'Use semantic elements', difficulty: 'hard', xp: 30 }
-                            ],
-                            'css-styling': [
-                                { id: 'css-1', title: 'CSS Basics', description: 'Style your first webpage', difficulty: 'easy', xp: 10 },
-                                { id: 'css-2', title: 'Flexbox Layout', description: 'Create flexible layouts', difficulty: 'medium', xp: 20 },
-                                { id: 'css-3', title: 'CSS Grid', description: 'Master grid layouts', difficulty: 'hard', xp: 30 }
-                            ],
-                            'js-fundamentals': [
-                                { id: 'js-1', title: 'Variables & Functions', description: 'Learn JS basics', difficulty: 'easy', xp: 10 },
-                                { id: 'js-2', title: 'DOM Manipulation', description: 'Control webpage elements', difficulty: 'medium', xp: 20 },
-                                { id: 'js-3', title: 'Event Handling', description: 'Handle user interactions', difficulty: 'hard', xp: 30 }
-                            ],
-                            'mini-projects': [
-                                { id: 'project-1', title: 'Todo List', description: 'Build a todo application', difficulty: 'medium', xp: 50 },
-                                { id: 'project-2', title: 'Calculator', description: 'Create a working calculator', difficulty: 'hard', xp: 75 }
-                            ]
-                        };
-                        return allChallenges[category] || [];
-                    }
                     }
                 });
             });
         });
         
+        // Get challenges for category
+        function getChallengesForCategory(category) {
+            const allChallenges = {
+                'html-basics': [
+                    { id: 'html-1', title: 'Basic HTML Structure', description: 'Create a simple HTML document with head and body', difficulty: 'easy', xp: 10 },
+                    { id: 'html-2', title: 'HTML Forms', description: 'Build a contact form with inputs', difficulty: 'medium', xp: 20 },
+                    { id: 'html-3', title: 'Semantic HTML', description: 'Use semantic elements like header, nav, main', difficulty: 'hard', xp: 30 }
+                ],
+                'css-styling': [
+                    { id: 'css-1', title: 'CSS Basics', description: 'Style your first webpage with colors and fonts', difficulty: 'easy', xp: 10 },
+                    { id: 'css-2', title: 'Flexbox Layout', description: 'Create flexible responsive layouts', difficulty: 'medium', xp: 20 },
+                    { id: 'css-3', title: 'CSS Grid', description: 'Master advanced grid layouts', difficulty: 'hard', xp: 30 }
+                ],
+                'js-fundamentals': [
+                    { id: 'js-1', title: 'Variables & Functions', description: 'Learn JavaScript basics and syntax', difficulty: 'easy', xp: 10 },
+                    { id: 'js-2', title: 'DOM Manipulation', description: 'Control webpage elements with JavaScript', difficulty: 'medium', xp: 20 },
+                    { id: 'js-3', title: 'Event Handling', description: 'Handle user interactions and events', difficulty: 'hard', xp: 30 }
+                ],
+                'mini-projects': [
+                    { id: 'project-1', title: 'Todo List App', description: 'Build a complete todo application', difficulty: 'medium', xp: 50 },
+                    { id: 'project-2', title: 'Calculator', description: 'Create a working calculator app', difficulty: 'hard', xp: 75 }
+                ]
+            };
+            return allChallenges[category] || [];
+        }
+
         // Challenge completion function
         function completeChallenge(challengeId, xpEarned) {
             // Simulate challenge completion
