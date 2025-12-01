@@ -129,10 +129,11 @@
             </div>
         </div>
         
-        <footer class="challenges-footer">
+        <footer class="challenges-footer" onclick="showFirstCategory()" style="cursor: pointer;">
             <div class="footer-content">
                 <p>🚀 Ready to start your coding journey?</p>
                 <p>Complete challenges, earn XP, and become a web development master!</p>
+                <p style="font-size: 0.9rem; opacity: 0.7; margin-top: 10px;">Click here to start with HTML Basics!</p>
             </div>
         </footer>
     </div>
@@ -224,6 +225,14 @@
                 ]
             };
             return allChallenges[category] || [];
+        }
+
+        // Show first category when footer is clicked
+        function showFirstCategory() {
+            const htmlBasicsCard = document.querySelector('[data-category="html-basics"]');
+            if (htmlBasicsCard) {
+                htmlBasicsCard.click();
+            }
         }
 
         // Challenge completion function
