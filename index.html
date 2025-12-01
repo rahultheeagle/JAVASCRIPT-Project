@@ -56,10 +56,25 @@
             color: #ffffff;
             text-decoration: none;
             transition: color 0.3s ease;
+            cursor: pointer;
         }
 
         .nav-links a:hover {
             color: #e50914;
+        }
+
+        .mobile-menu {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .mobile-menu span {
+            width: 25px;
+            height: 3px;
+            background: white;
+            margin: 3px 0;
+            transition: 0.3s;
         }
 
         .profile {
@@ -388,7 +403,33 @@
             }
             
             .nav-links {
-                display: none;
+                position: fixed;
+                top: 70px;
+                right: -100%;
+                width: 100%;
+                height: calc(100vh - 70px);
+                background: #141414;
+                flex-direction: column;
+                justify-content: flex-start;
+                align-items: center;
+                padding-top: 50px;
+                transition: right 0.3s ease;
+            }
+            
+            .nav-links.active {
+                right: 0;
+            }
+            
+            .nav-links li {
+                margin: 20px 0;
+            }
+            
+            .nav-links a {
+                font-size: 1.5rem;
+            }
+            
+            .mobile-menu {
+                display: flex;
             }
             
             .card {
@@ -446,12 +487,17 @@
     <header class="header" id="header">
         <nav class="nav">
             <a href="#" class="logo">CodeQuest</a>
-            <ul class="nav-links">
-                <li><a href="#home">Home</a></li>
-                <li><a href="#challenges">Challenges</a></li>
-                <li><a href="#tutorials">Tutorials</a></li>
-                <li><a href="#progress">Progress</a></li>
+            <ul class="nav-links" id="nav-links">
+                <li><a href="#home" onclick="closeMenu()">Home</a></li>
+                <li><a href="challenges.html" onclick="closeMenu()">Challenges</a></li>
+                <li><a href="tutorials.html" onclick="closeMenu()">Tutorials</a></li>
+                <li><a href="#progress" onclick="closeMenu()">Progress</a></li>
             </ul>
+            <div class="mobile-menu" id="mobile-menu" onclick="toggleMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
             <div class="profile">
                 <span>Level 1</span>
                 <div class="profile-avatar"></div>
@@ -719,6 +765,17 @@
                 }, 150);
             });
         });
+
+        // Mobile menu toggle
+        function toggleMenu() {
+            const navLinks = document.getElementById('nav-links');
+            navLinks.classList.toggle('active');
+        }
+
+        function closeMenu() {
+            const navLinks = document.getElementById('nav-links');
+            navLinks.classList.remove('active');
+        }
 
         // Smooth scrolling for navigation
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {

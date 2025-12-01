@@ -118,7 +118,7 @@ class VoiceCommandsSystem {
                     <div class="last-command" id="last-command">Say a command...</div>
                 </div>
                 <div id="voice-display" class="voice-display">
-                    <p class="voice-intro">🗣️ Use voice commands to code faster! Click "Start Listening" and try saying commands like:</p>
+                    <p class="voice-intro">🗞️ Use voice commands to code faster! Click "Start Listening" and try saying commands like:</p>
                     <ul class="command-examples">
                         <li>"create div"</li>
                         <li>"add color"</li>
@@ -439,7 +439,7 @@ class VoiceCommandsSystem {
     showWelcome() {
         const display = document.getElementById('voice-display');
         display.innerHTML = `
-            <p class="voice-intro">🗣️ Use voice commands to code faster! Click "Start Listening" and try saying commands like:</p>
+            <p class="voice-intro">🗞️ Use voice commands to code faster! Click "Start Listening" and try saying commands like:</p>
             <ul class="command-examples">
                 <li>"create div"</li>
                 <li>"add color"</li>
