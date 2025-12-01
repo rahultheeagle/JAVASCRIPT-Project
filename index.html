@@ -632,28 +632,28 @@
         <section class="section">
             <h2 class="section-title">⚡ Advanced Features</h2>
             <div class="row">
-                <div class="card advanced">
+                <div class="card advanced" onclick="showFeature('ai')">
                     <div class="card-icon">🤖</div>
                     <div>
                         <div class="card-title">AI Assistant</div>
                         <div class="card-description">Smart code suggestions and help</div>
                     </div>
                 </div>
-                <div class="card advanced">
+                <div class="card advanced" onclick="showFeature('multiplayer')">
                     <div class="card-icon">🎮</div>
                     <div>
                         <div class="card-title">Multiplayer Mode</div>
                         <div class="card-description">Code with friends in real-time</div>
                     </div>
                 </div>
-                <div class="card advanced">
+                <div class="card advanced" onclick="showFeature('voice')">
                     <div class="card-icon">🎤</div>
                     <div>
                         <div class="card-title">Voice Commands</div>
                         <div class="card-description">Code using voice recognition</div>
                     </div>
                 </div>
-                <div class="card advanced">
+                <div class="card advanced" onclick="showFeature('pwa')">
                     <div class="card-icon">📱</div>
                     <div>
                         <div class="card-title">PWA Support</div>
@@ -835,8 +835,48 @@
             progressTracker.addTimeSpent(timeSpent);
         });
 
-        // Add click animations
-        document.querySelectorAll('.card').forEach(card => {
+        // Advanced Features Functions
+        function showFeature(feature) {
+            const features = {
+                ai: {
+                    title: '🤖 AI Assistant',
+                    content: 'AI Assistant helps you write better code with smart suggestions, error detection, and learning recommendations. Available in the code editor!',
+                    action: () => window.location.href = 'editor.html'
+                },
+                multiplayer: {
+                    title: '🎮 Multiplayer Mode', 
+                    content: 'Code with friends in real-time! Join coding sessions, compete in challenges, and learn together.',
+                    action: () => alert('Multiplayer mode coming soon! 🚀')
+                },
+                voice: {
+                    title: '🎤 Voice Commands',
+                    content: 'Code hands-free using voice commands. Say "create function", "add variable", or "run code" to control the editor.',
+                    action: () => window.location.href = 'editor.html'
+                },
+                pwa: {
+                    title: '📱 PWA Support',
+                    content: 'Install CodeQuest as a mobile app! Works offline and provides native app experience.',
+                    action: () => {
+                        if ('serviceWorker' in navigator) {
+                            alert('PWA installation available! Look for the install button in your browser.');
+                        } else {
+                            alert('PWA not supported in this browser.');
+                        }
+                    }
+                }
+            };
+
+            const featureData = features[feature];
+            if (featureData) {
+                const result = confirm(`${featureData.title}\n\n${featureData.content}\n\nWould you like to try it now?`);
+                if (result) {
+                    featureData.action();
+                }
+            }
+        }
+
+        // Add click animations (exclude advanced feature cards)
+        document.querySelectorAll('.card:not(.advanced)').forEach(card => {
             card.addEventListener('click', function() {
                 this.style.transform = 'scale(0.95)';
                 setTimeout(() => {
