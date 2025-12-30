@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Interactive Tutorials - CodeQuest</title>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <style>
         * {
             margin: 0;
@@ -12,20 +15,23 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #1e1e1e;
-            color: #d4d4d4;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+            background: #1e1e1e !important;
+            color: #d4d4d4 !important;
             line-height: 1.6;
+            min-height: 100vh;
         }
 
         /* Header */
         .header {
-            background: #2d2d30;
+            background: #2d2d30 !important;
             padding: 15px 20px;
             border-bottom: 1px solid #3e3e42;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            position: relative;
+            z-index: 1000;
         }
 
         .logo {
@@ -71,36 +77,38 @@
         }
 
         .category-card {
-            background: #252526;
-            border: 1px solid #3e3e42;
+            background: #252526 !important;
+            border: 1px solid #3e3e42 !important;
             border-radius: 8px;
             padding: 24px;
             cursor: pointer;
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
+            transform: translateZ(0);
         }
 
         .category-card::before {
-            content: '';
+            content: '' !important;
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
             height: 3px;
-            background: linear-gradient(90deg, #007acc, #00d4ff);
+            background: linear-gradient(90deg, #007acc, #00d4ff) !important;
             transform: scaleX(0);
             transition: transform 0.3s ease;
+            z-index: 1;
         }
 
         .category-card:hover::before {
-            transform: scaleX(1);
+            transform: scaleX(1) !important;
         }
 
         .category-card:hover {
-            transform: translateY(-4px);
-            border-color: #007acc;
-            box-shadow: 0 12px 40px rgba(0, 122, 204, 0.2);
+            transform: translateY(-4px) !important;
+            border-color: #007acc !important;
+            box-shadow: 0 12px 40px rgba(0, 122, 204, 0.2) !important;
         }
 
         .category-header {
