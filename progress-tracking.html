@@ -4,168 +4,501 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Progress Tracking - CodeQuest</title>
-    <link rel="stylesheet" href="css/main.css">
-    <link rel="stylesheet" href="css/components.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #1e1e1e;
+            color: #d4d4d4;
+            line-height: 1.6;
+        }
+
+        .header {
+            background: #2d2d30;
+            padding: 15px 20px;
+            border-bottom: 1px solid #3e3e42;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            color: #007acc;
+            font-size: 1.4rem;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .nav a {
+            color: #cccccc;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+
+        .nav a:hover {
+            background: #007acc;
+            color: white;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 32px 20px;
+        }
+
+        .page-title {
+            font-size: 2.2rem;
+            color: #ffffff;
+            font-weight: 300;
+            margin-bottom: 32px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: #252526;
+            border: 1px solid #3e3e42;
+            border-radius: 8px;
+            padding: 24px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 600;
+            color: #007acc;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            color: #cccccc;
+            font-size: 0.9rem;
+            margin-bottom: 16px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #3e3e42;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #007acc, #00d4ff);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        .categories-section {
+            background: #252526;
+            border: 1px solid #3e3e42;
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 32px;
+        }
+
+        .section-title {
+            font-size: 1.4rem;
+            color: #ffffff;
+            margin-bottom: 20px;
+        }
+
+        .category-item {
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #3e3e42;
+        }
+
+        .category-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        .category-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .category-name {
+            font-weight: 500;
+            color: #ffffff;
+        }
+
+        .category-percentage {
+            color: #007acc;
+            font-weight: 600;
+        }
+
+        .category-details {
+            font-size: 0.85rem;
+            color: #969696;
+            margin-top: 8px;
+        }
+
+        .time-section {
+            background: #252526;
+            border: 1px solid #3e3e42;
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 32px;
+        }
+
+        .time-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .time-card {
+            background: #1e1e1e;
+            border-radius: 6px;
+            padding: 16px;
+            text-align: center;
+        }
+
+        .time-value {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #4caf50;
+            margin-bottom: 4px;
+        }
+
+        .time-label {
+            font-size: 0.85rem;
+            color: #969696;
+        }
+
+        .actions {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-top: 32px;
+        }
+
+        .btn {
+            background: #007acc;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .btn:hover {
+            background: #005a9e;
+        }
+
+        .btn-secondary {
+            background: #3e3e42;
+        }
+
+        .btn-secondary:hover {
+            background: #4e4e52;
+        }
+
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .actions {
+                flex-direction: column;
+            }
+        }
+    </style>
 </head>
 <body>
+    <header class="header">
+        <a href="index.html" class="logo">CodeQuest</a>
+        <nav class="nav">
+            <a href="index.html">← Back to Dashboard</a>
+        </nav>
+    </header>
+
     <div class="container">
-        <header>
-            <h1>📊 Progress Tracking</h1>
-            <nav>
-                <a href="index.html">← Dashboard</a>
-            </nav>
-        </header>
+        <h1 class="page-title">📊 Progress Tracking</h1>
 
-        <div class="progress-container">
-            <div class="overview-section">
-                <h3>Learning Progress Overview</h3>
-                
-                <div class="completion-stats">
-                    <div class="stat-card">
-                        <div class="stat-value" id="overall-percentage">0%</div>
-                        <div class="stat-label">Overall Completion</div>
-                        <div class="progress-bar">
-                            <div class="progress-fill" id="overall-progress"></div>
-                        </div>
-                    </div>
-
-                    <div class="stat-card">
-                        <div class="stat-value" id="lessons-completed">0</div>
-                        <div class="stat-label">Lessons Completed</div>
-                        <div class="stat-sublabel" id="lessons-total">of 12 total</div>
-                    </div>
-
-                    <div class="stat-card">
-                        <div class="stat-value" id="challenges-completed">0</div>
-                        <div class="stat-label">Challenges Completed</div>
-                        <div class="stat-sublabel" id="challenges-total">of 25 total</div>
-                    </div>
-
-                    <div class="stat-card">
-                        <div class="stat-value" id="tutorials-completed">0</div>
-                        <div class="stat-label">Tutorials Completed</div>
-                        <div class="stat-sublabel" id="tutorials-total">of 8 total</div>
-                    </div>
+        <!-- Progress Stats -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <span class="stat-number" id="completed-challenges">0</span>
+                <span class="stat-label">Challenges Completed</span>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="challenges-progress" style="width: 0%"></div>
                 </div>
             </div>
-
-            <div class="category-breakdown">
-                <h3>Category Progress</h3>
-                
-                <div class="category-list">
-                    <div class="category-item">
-                        <div class="category-header">
-                            <span class="category-name">HTML Basics</span>
-                            <span class="category-percentage" id="html-percentage">0%</span>
-                        </div>
-                        <div class="progress-bar">
-                            <div class="progress-fill" id="html-progress"></div>
-                        </div>
-                        <div class="category-details">
-                            <span id="html-completed">0</span> of <span id="html-total">4</span> items completed
-                        </div>
-                    </div>
-
-                    <div class="category-item">
-                        <div class="category-header">
-                            <span class="category-name">CSS Styling</span>
-                            <span class="category-percentage" id="css-percentage">0%</span>
-                        </div>
-                        <div class="progress-bar">
-                            <div class="progress-fill" id="css-progress"></div>
-                        </div>
-                        <div class="category-details">
-                            <span id="css-completed">0</span> of <span id="css-total">5</span> items completed
-                        </div>
-                    </div>
-
-                    <div class="category-item">
-                        <div class="category-header">
-                            <span class="category-name">JavaScript Fundamentals</span>
-                            <span class="category-percentage" id="js-percentage">0%</span>
-                        </div>
-                        <div class="progress-bar">
-                            <div class="progress-fill" id="js-progress"></div>
-                        </div>
-                        <div class="category-details">
-                            <span id="js-completed">0</span> of <span id="js-total">8</span> items completed
-                        </div>
-                    </div>
-
-                    <div class="category-item">
-                        <div class="category-header">
-                            <span class="category-name">Advanced Topics</span>
-                            <span class="category-percentage" id="advanced-percentage">0%</span>
-                        </div>
-                        <div class="progress-bar">
-                            <div class="progress-fill" id="advanced-progress"></div>
-                        </div>
-                        <div class="category-details">
-                            <span id="advanced-completed">0</span> of <span id="advanced-total">6</span> items completed
-                        </div>
-                    </div>
+            <div class="stat-card">
+                <span class="stat-number" id="total-xp">0</span>
+                <span class="stat-label">Total XP Earned</span>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="xp-progress" style="width: 0%"></div>
                 </div>
             </div>
-
-            <div class="time-tracking-section">
-                <h3>Time Tracking</h3>
-                
-                <div class="time-stats">
-                    <div class="time-card">
-                        <div class="time-value" id="total-time">0h 0m</div>
-                        <div class="time-label">Total Time Spent</div>
-                    </div>
-                    
-                    <div class="time-card">
-                        <div class="time-value" id="average-time">0m</div>
-                        <div class="time-label">Average per Challenge</div>
-                    </div>
-                    
-                    <div class="time-card">
-                        <div class="time-value" id="session-time">0m</div>
-                        <div class="time-label">Current Session</div>
-                    </div>
-                </div>
-
-                <div class="challenge-times">
-                    <h4>Challenge Time Records</h4>
-                    <div class="time-list" id="challenge-time-list">
-                        <!-- Challenge times will be populated -->
-                    </div>
-                </div>
-
-                <div class="timer-controls">
-                    <button id="start-timer" class="validate-btn">⏱️ Start Challenge Timer</button>
-                    <button id="stop-timer" class="secondary-btn" disabled>⏹️ Stop Timer</button>
-                    <select id="challenge-selector">
-                        <option value="">Select Challenge</option>
-                        <option value="sum-function">Sum Function</option>
-                        <option value="factorial">Factorial</option>
-                        <option value="palindrome">Palindrome Check</option>
-                        <option value="fibonacci">Fibonacci</option>
-                        <option value="array-filter">Array Filter</option>
-                    </select>
-                    <button id="generate-stats" class="secondary-btn">📊 Generate Statistics</button>
+            <div class="stat-card">
+                <span class="stat-number" id="current-streak">0</span>
+                <span class="stat-label">Day Streak 🔥</span>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="streak-progress" style="width: 0%"></div>
                 </div>
             </div>
-
-            <div class="actions-section">
-                <button id="simulate-progress" class="validate-btn">🎯 Simulate Progress</button>
-                <button id="reset-progress" class="secondary-btn">🔄 Reset Progress</button>
-                <button id="calculate-progress" class="validate-btn">📊 Recalculate</button>
-            </div>
-
-            <!-- Learning Statistics Section -->
-            <div class="statistics-section">
-                <h3>📊 Learning Statistics</h3>
-                <div id="statistics-display" class="statistics-display">
-                    <p class="no-stats">Click "Generate Statistics" to view your learning analytics.</p>
+            <div class="stat-card">
+                <span class="stat-number" id="badges-earned">0</span>
+                <span class="stat-label">Badges Unlocked</span>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="badges-progress" style="width: 0%"></div>
                 </div>
             </div>
         </div>
+
+        <!-- Categories Progress -->
+        <div class="categories-section">
+            <h2 class="section-title">Category Progress</h2>
+            
+            <div class="category-item">
+                <div class="category-header">
+                    <span class="category-name">🏗️ HTML Projects</span>
+                    <span class="category-percentage" id="html-percentage">0%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="html-progress" style="width: 0%"></div>
+                </div>
+                <div class="category-details">
+                    <span id="html-completed">0</span> of 2 projects completed
+                </div>
+            </div>
+
+            <div class="category-item">
+                <div class="category-header">
+                    <span class="category-name">🎨 CSS Projects</span>
+                    <span class="category-percentage" id="css-percentage">0%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="css-progress" style="width: 0%"></div>
+                </div>
+                <div class="category-details">
+                    <span id="css-completed">0</span> of 2 projects completed
+                </div>
+            </div>
+
+            <div class="category-item">
+                <div class="category-header">
+                    <span class="category-name">⚡ JavaScript Projects</span>
+                    <span class="category-percentage" id="js-percentage">0%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="js-progress" style="width: 0%"></div>
+                </div>
+                <div class="category-details">
+                    <span id="js-completed">0</span> of 3 projects completed
+                </div>
+            </div>
+
+            <div class="category-item">
+                <div class="category-header">
+                    <span class="category-name">🚀 Full-Stack Projects</span>
+                    <span class="category-percentage" id="projects-percentage">0%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="projects-progress" style="width: 0%"></div>
+                </div>
+                <div class="category-details">
+                    <span id="projects-completed">0</span> of 2 projects completed
+                </div>
+            </div>
+        </div>
+
+        <!-- Time Tracking -->
+        <div class="time-section">
+            <h2 class="section-title">⏱️ Time Tracking</h2>
+            
+            <div class="time-grid">
+                <div class="time-card">
+                    <div class="time-value" id="total-time">0h 0m</div>
+                    <div class="time-label">Total Time Spent</div>
+                </div>
+                <div class="time-card">
+                    <div class="time-value" id="avg-time">0m</div>
+                    <div class="time-label">Average per Challenge</div>
+                </div>
+                <div class="time-card">
+                    <div class="time-value" id="session-time">0m</div>
+                    <div class="time-label">Current Session</div>
+                </div>
+                <div class="time-card">
+                    <div class="time-value" id="best-time">--</div>
+                    <div class="time-label">Best Challenge Time</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="actions">
+            <button class="btn" onclick="simulateProgress()">🎯 Simulate Progress</button>
+            <button class="btn btn-secondary" onclick="resetProgress()">🔄 Reset Progress</button>
+            <button class="btn" onclick="exportProgress()">📊 Export Data</button>
+        </div>
     </div>
 
-    <script src="js/certificates.js"></script>
-    <script src="js/progress-tracking.js"></script>
+    <script>
+        // Load and display progress
+        function loadProgress() {
+            const userData = JSON.parse(localStorage.getItem('codequest_user_data')) || {
+                completedChallenges: 0,
+                totalXP: 0,
+                currentStreak: 0,
+                badgesEarned: 0,
+                challengesCompleted: [],
+                timeSpent: 0,
+                sessionStart: Date.now()
+            };
+
+            // Update main stats
+            document.getElementById('completed-challenges').textContent = userData.completedChallenges;
+            document.getElementById('total-xp').textContent = userData.totalXP;
+            document.getElementById('current-streak').textContent = userData.currentStreak;
+            document.getElementById('badges-earned').textContent = userData.badgesEarned;
+
+            // Update progress bars
+            document.getElementById('challenges-progress').style.width = Math.min((userData.completedChallenges / 9) * 100, 100) + '%';
+            document.getElementById('xp-progress').style.width = Math.min((userData.totalXP / 2000) * 100, 100) + '%';
+            document.getElementById('streak-progress').style.width = Math.min((userData.currentStreak / 30) * 100, 100) + '%';
+            document.getElementById('badges-progress').style.width = Math.min((userData.badgesEarned / 5) * 100, 100) + '%';
+
+            // Update category progress
+            updateCategoryProgress(userData.challengesCompleted);
+
+            // Update time tracking
+            updateTimeTracking(userData);
+        }
+
+        function updateCategoryProgress(completed) {
+            const categories = {
+                html: completed.filter(id => id.includes('html')).length,
+                css: completed.filter(id => id.includes('css')).length,
+                js: completed.filter(id => id.includes('js')).length,
+                projects: completed.filter(id => id.includes('project')).length
+            };
+
+            // HTML Progress
+            document.getElementById('html-completed').textContent = categories.html;
+            document.getElementById('html-percentage').textContent = Math.round((categories.html / 2) * 100) + '%';
+            document.getElementById('html-progress').style.width = (categories.html / 2) * 100 + '%';
+
+            // CSS Progress
+            document.getElementById('css-completed').textContent = categories.css;
+            document.getElementById('css-percentage').textContent = Math.round((categories.css / 2) * 100) + '%';
+            document.getElementById('css-progress').style.width = (categories.css / 2) * 100 + '%';
+
+            // JavaScript Progress
+            document.getElementById('js-completed').textContent = categories.js;
+            document.getElementById('js-percentage').textContent = Math.round((categories.js / 3) * 100) + '%';
+            document.getElementById('js-progress').style.width = (categories.js / 3) * 100 + '%';
+
+            // Projects Progress
+            document.getElementById('projects-completed').textContent = categories.projects;
+            document.getElementById('projects-percentage').textContent = Math.round((categories.projects / 2) * 100) + '%';
+            document.getElementById('projects-progress').style.width = (categories.projects / 2) * 100 + '%';
+        }
+
+        function updateTimeTracking(userData) {
+            const totalMinutes = userData.timeSpent || 0;
+            const hours = Math.floor(totalMinutes / 60);
+            const minutes = totalMinutes % 60;
+            
+            document.getElementById('total-time').textContent = `${hours}h ${minutes}m`;
+            
+            const avgTime = userData.completedChallenges > 0 ? Math.round(totalMinutes / userData.completedChallenges) : 0;
+            document.getElementById('avg-time').textContent = `${avgTime}m`;
+            
+            const sessionTime = Math.floor((Date.now() - userData.sessionStart) / 60000);
+            document.getElementById('session-time').textContent = `${sessionTime}m`;
+            
+            document.getElementById('best-time').textContent = userData.bestTime ? `${userData.bestTime}m` : '--';
+        }
+
+        function simulateProgress() {
+            const userData = JSON.parse(localStorage.getItem('codequest_user_data')) || {
+                completedChallenges: 0,
+                totalXP: 0,
+                currentStreak: 0,
+                badgesEarned: 0,
+                challengesCompleted: [],
+                timeSpent: 0,
+                sessionStart: Date.now()
+            };
+
+            // Add random progress
+            const challenges = ['html-portfolio', 'css-netflix', 'js-todo', 'js-weather', 'project-blog'];
+            const randomChallenge = challenges[Math.floor(Math.random() * challenges.length)];
+            
+            if (!userData.challengesCompleted.includes(randomChallenge)) {
+                userData.challengesCompleted.push(randomChallenge);
+                userData.completedChallenges += 1;
+                userData.totalXP += Math.floor(Math.random() * 200) + 100;
+                userData.timeSpent += Math.floor(Math.random() * 60) + 30;
+                
+                if (userData.completedChallenges >= 1) userData.badgesEarned = Math.max(userData.badgesEarned, 1);
+                if (userData.completedChallenges >= 3) userData.badgesEarned = Math.max(userData.badgesEarned, 2);
+                if (userData.completedChallenges >= 5) userData.badgesEarned = Math.max(userData.badgesEarned, 3);
+                
+                localStorage.setItem('codequest_user_data', JSON.stringify(userData));
+                loadProgress();
+                
+                alert(`🎉 Progress simulated!\nCompleted: ${randomChallenge}\n+${userData.totalXP} XP earned`);
+            } else {
+                alert('All sample challenges completed! Reset to simulate more.');
+            }
+        }
+
+        function resetProgress() {
+            if (confirm('Are you sure you want to reset all progress? This cannot be undone.')) {
+                localStorage.removeItem('codequest_user_data');
+                loadProgress();
+                alert('Progress reset successfully!');
+            }
+        }
+
+        function exportProgress() {
+            const userData = JSON.parse(localStorage.getItem('codequest_user_data')) || {};
+            const dataStr = JSON.stringify(userData, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(dataBlob);
+            link.download = 'codequest-progress.json';
+            link.click();
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', loadProgress);
+        
+        // Update session time every minute
+        setInterval(() => {
+            const userData = JSON.parse(localStorage.getItem('codequest_user_data'));
+            if (userData) {
+                updateTimeTracking(userData);
+            }
+        }, 60000);
+    </script>
 </body>
 </html>
