@@ -266,6 +266,118 @@
             font-size: 0.9rem;
         }
 
+        /* Quick Start Grid */
+        .quick-start-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 24px;
+            margin-top: 30px;
+        }
+
+        .quick-card {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 12px;
+            padding: 28px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .quick-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #007acc, #00d4ff);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .quick-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .quick-card:hover {
+            transform: translateY(-4px);
+            border-color: #007acc;
+            box-shadow: 0 12px 40px rgba(0, 122, 204, 0.2);
+        }
+
+        .quick-card.primary:hover {
+            border-color: #007acc;
+        }
+
+        .quick-card.secondary:hover {
+            border-color: #28a745;
+        }
+
+        .quick-card.accent:hover {
+            border-color: #ffc107;
+        }
+
+        .quick-icon {
+            font-size: 3rem;
+            min-width: 60px;
+            text-align: center;
+        }
+
+        .quick-content h3 {
+            color: #ffffff;
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .quick-content p {
+            color: #cccccc;
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+
+        .quick-stats {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .quick-stats span {
+            background: rgba(0, 122, 204, 0.1);
+            color: #007acc;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .quick-card.secondary .quick-stats span {
+            background: rgba(40, 167, 69, 0.1);
+            color: #28a745;
+        }
+
+        .quick-card.accent .quick-stats span {
+            background: rgba(255, 193, 7, 0.1);
+            color: #ffc107;
+        }
+
+        .quick-arrow {
+            font-size: 1.5rem;
+            color: #666;
+            margin-left: auto;
+            transition: all 0.3s ease;
+        }
+
+        .quick-card:hover .quick-arrow {
+            color: #007acc;
+            transform: translateX(4px);
+        }
+
         /* Special Cards */
         .card.featured {
             background: linear-gradient(135deg, #e50914, #ff4757);
@@ -436,6 +548,21 @@
                 min-width: 250px;
             }
             
+            .quick-start-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .quick-card {
+                flex-direction: column;
+                text-align: center;
+                gap: 16px;
+            }
+            
+            .quick-arrow {
+                margin-left: 0;
+                transform: rotate(90deg);
+            }
+            
             .content {
                 padding: 60px 20px 40px;
             }
@@ -525,35 +652,45 @@
     <div class="content">
         <!-- Quick Start Section -->
         <section class="section">
-            <h2 class="section-title">🚀 Quick Start</h2>
-            <div class="row">
-                <div class="card featured" onclick="window.location.href='editor.html'">
-                    <div class="card-icon">💻</div>
-                    <div>
-                        <div class="card-title">Code Editor</div>
-                        <div class="card-description">Write and test your code with live preview</div>
+            <h2 class="section-title">⚡ Start Building</h2>
+            <div class="quick-start-grid">
+                <div class="quick-card primary" onclick="window.location.href='editor.html'">
+                    <div class="quick-icon">⚡</div>
+                    <div class="quick-content">
+                        <h3>Live Code Editor</h3>
+                        <p>VS Code-like editor with instant preview</p>
+                        <div class="quick-stats">
+                            <span>✨ Syntax highlighting</span>
+                            <span>🔄 Live reload</span>
+                        </div>
                     </div>
+                    <div class="quick-arrow">→</div>
                 </div>
-                <div class="card featured" onclick="window.location.href='challenges.html'">
-                    <div class="card-icon">🏆</div>
-                    <div>
-                        <div class="card-title">Challenges</div>
-                        <div class="card-description">30+ interactive coding challenges</div>
+                
+                <div class="quick-card secondary" onclick="window.location.href='challenges.html'">
+                    <div class="quick-icon">🎯</div>
+                    <div class="quick-content">
+                        <h3>Real Projects</h3>
+                        <p>Build Netflix, Todo apps, Weather apps</p>
+                        <div class="quick-stats">
+                            <span>🏗️ 8 projects</span>
+                            <span>💰 Earn XP</span>
+                        </div>
                     </div>
+                    <div class="quick-arrow">→</div>
                 </div>
-                <div class="card featured" onclick="window.location.href='tutorials.html'">
-                    <div class="card-icon">📚</div>
-                    <div>
-                        <div class="card-title">Tutorials</div>
-                        <div class="card-description">Step-by-step learning guides</div>
+                
+                <div class="quick-card accent" onclick="window.location.href='tutorials.html'">
+                    <div class="quick-icon">🚀</div>
+                    <div class="quick-content">
+                        <h3>Learn by Doing</h3>
+                        <p>Interactive tutorials with code examples</p>
+                        <div class="quick-stats">
+                            <span>📖 Step-by-step</span>
+                            <span>💡 Tips & tricks</span>
+                        </div>
                     </div>
-                </div>
-                <div class="card featured" onclick="window.location.href='achievements.html'">
-                    <div class="card-icon">🏅</div>
-                    <div>
-                        <div class="card-title">Achievements</div>
-                        <div class="card-description">Unlock badges and earn XP</div>
-                    </div>
+                    <div class="quick-arrow">→</div>
                 </div>
             </div>
         </section>
