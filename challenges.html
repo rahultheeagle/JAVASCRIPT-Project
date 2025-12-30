@@ -3,272 +3,684 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CodeQuest - Challenges</title>
-    <link rel="stylesheet" href="challenges.css">
-    <link rel="stylesheet" href="timer-styles.css">
-    <link rel="stylesheet" href="search-filter-styles.css">
-    <link rel="stylesheet" href="theme-styles.css">
+    <title>CodeQuest - Coding Challenges</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #1e1e1e;
+            color: #cccccc;
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .header {
+            background: #2d2d30;
+            padding: 15px 20px;
+            border-bottom: 1px solid #3e3e42;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            color: #007acc;
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #cccccc;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            background: #007acc;
+            color: white;
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            color: #ffffff;
+            margin-bottom: 10px;
+            font-weight: 300;
+        }
+
+        .page-subtitle {
+            color: #969696;
+            font-size: 1.1rem;
+            margin-bottom: 40px;
+        }
+
+        /* Filter Tabs */
+        .filter-tabs {
+            display: flex;
+            gap: 0;
+            margin-bottom: 30px;
+            background: #2d2d30;
+            border-radius: 8px;
+            padding: 4px;
+        }
+
+        .filter-tab {
+            padding: 12px 24px;
+            background: transparent;
+            border: none;
+            color: #cccccc;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        .filter-tab.active {
+            background: #007acc;
+            color: white;
+        }
+
+        .filter-tab:hover:not(.active) {
+            background: #3e3e42;
+        }
+
+        /* Challenge Grid */
+        .challenges-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .challenge-card {
+            background: #252526;
+            border: 1px solid #3e3e42;
+            border-radius: 8px;
+            padding: 24px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .challenge-card:hover {
+            border-color: #007acc;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 122, 204, 0.15);
+        }
+
+        .challenge-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 16px;
+        }
+
+        .challenge-title {
+            font-size: 1.3rem;
+            color: #ffffff;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .difficulty-badge {
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .difficulty-badge.beginner {
+            background: #4caf50;
+            color: white;
+        }
+
+        .difficulty-badge.intermediate {
+            background: #ff9800;
+            color: white;
+        }
+
+        .difficulty-badge.advanced {
+            background: #f44336;
+            color: white;
+        }
+
+        .challenge-description {
+            color: #969696;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .challenge-tech {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .tech-tag {
+            background: #007acc;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .challenge-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            padding-top: 16px;
+            border-top: 1px solid #3e3e42;
+        }
+
+        .challenge-stats {
+            display: flex;
+            gap: 16px;
+            font-size: 0.9rem;
+            color: #969696;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .start-btn {
+            background: #007acc;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .start-btn:hover {
+            background: #005a9e;
+            transform: translateY(-1px);
+        }
+
+        /* Progress Section */
+        .progress-section {
+            background: #252526;
+            border: 1px solid #3e3e42;
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 40px;
+        }
+
+        .progress-title {
+            font-size: 1.4rem;
+            color: #ffffff;
+            margin-bottom: 20px;
+        }
+
+        .progress-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .progress-item {
+            text-align: center;
+            padding: 16px;
+            background: #1e1e1e;
+            border-radius: 6px;
+        }
+
+        .progress-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #007acc;
+            display: block;
+        }
+
+        .progress-label {
+            color: #969696;
+            font-size: 0.9rem;
+            margin-top: 4px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .challenges-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .filter-tabs {
+                flex-wrap: wrap;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .page-title {
+                font-size: 2rem;
+            }
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #3e3e42;
+            border-radius: 50%;
+            border-top-color: #007acc;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Success Animation */
+        .success-animation {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #4caf50;
+            color: white;
+            padding: 20px 40px;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            z-index: 1000;
+            animation: successPop 0.5s ease-out;
+        }
+
+        @keyframes successPop {
+            0% { transform: translate(-50%, -50%) scale(0.5); opacity: 0; }
+            100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+        }
+    </style>
 </head>
 <body>
-    <div class="challenges-container">
-        <header class="challenges-header">
-            <h1>CodeQuest Challenges</h1>
-            <div class="header-controls">
-                <a href="index.html" class="back-btn">← Dashboard</a>
-            </div>
-        </header>
+    <!-- Header -->
+    <header class="header">
+        <a href="index.html" class="logo">CodeQuest</a>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="index.html">Dashboard</a></li>
+                <li><a href="editor.html">Code Editor</a></li>
+                <li><a href="tutorials.html">Tutorials</a></li>
+                <li><a href="progress-tracking.html">Progress</a></li>
+            </ul>
+        </nav>
+    </header>
 
-        <div class="challenges-content">
-            <div class="categories-grid">
-                <div class="category-card" data-category="html-basics" style="cursor: pointer;">
-                    <div class="category-icon">🏗️</div>
-                    <h3>HTML Basics</h3>
-                    <p>Learn the fundamentals of HTML structure and elements</p>
-                    <div class="category-stats">
-                        <span class="challenge-count">10 Challenges</span>
-                        <span class="progress-indicator">
-                            <span class="completed" id="html-completed">0</span>/10
-                        </span>
-                    </div>
-                    <div class="category-progress">
-                        <div class="progress-bar">
-                            <div class="progress-fill" id="html-progress"></div>
-                        </div>
-                    </div>
-                </div>
+    <!-- Main Content -->
+    <div class="container">
+        <h1 class="page-title">Coding Challenges</h1>
+        <p class="page-subtitle">Master web development through hands-on practice with real-world projects</p>
 
-                <div class="category-card" data-category="css-styling" style="cursor: pointer;">
-                    <div class="category-icon">🎨</div>
-                    <h3>CSS Styling</h3>
-                    <p>Master CSS properties, layouts, and visual design</p>
-                    <div class="category-stats">
-                        <span class="challenge-count">10 Challenges</span>
-                        <span class="progress-indicator">
-                            <span class="completed" id="css-completed">0</span>/10
-                        </span>
-                    </div>
-                    <div class="category-progress">
-                        <div class="progress-bar">
-                            <div class="progress-fill" id="css-progress"></div>
-                        </div>
-                    </div>
+        <!-- Progress Section -->
+        <div class="progress-section">
+            <h2 class="progress-title">Your Progress</h2>
+            <div class="progress-stats">
+                <div class="progress-item">
+                    <span class="progress-number" id="completed-count">0</span>
+                    <span class="progress-label">Completed</span>
                 </div>
-
-                <div class="category-card" data-category="js-fundamentals" style="cursor: pointer;">
-                    <div class="category-icon">⚡</div>
-                    <h3>JavaScript Fundamentals</h3>
-                    <p>Build interactive functionality with JavaScript</p>
-                    <div class="category-stats">
-                        <span class="challenge-count">10 Challenges</span>
-                        <span class="progress-indicator">
-                            <span class="completed" id="js-completed">0</span>/10
-                        </span>
-                    </div>
-                    <div class="category-progress">
-                        <div class="progress-bar">
-                            <div class="progress-fill" id="js-progress"></div>
-                        </div>
-                    </div>
+                <div class="progress-item">
+                    <span class="progress-number" id="total-xp">0</span>
+                    <span class="progress-label">XP Earned</span>
                 </div>
-
-                <div class="category-card" data-category="mini-projects" style="cursor: pointer;">
-                    <div class="category-icon">🚀</div>
-                    <h3>Mini-Projects</h3>
-                    <p>Complete projects combining HTML, CSS, and JavaScript</p>
-                    <div class="category-stats">
-                        <span class="challenge-count">5 Challenges</span>
-                        <span class="progress-indicator">
-                            <span class="completed" id="projects-completed">0</span>/5
-                        </span>
-                    </div>
-                    <div class="category-progress">
-                        <div class="progress-bar">
-                            <div class="progress-fill" id="projects-progress"></div>
-                        </div>
-                    </div>
+                <div class="progress-item">
+                    <span class="progress-number" id="streak-count">0</span>
+                    <span class="progress-label">Day Streak</span>
                 </div>
-            </div>
-
-            <div class="challenges-list" id="challenges-list" style="display: none;">
-                <div class="list-header">
-                    <button id="back-to-categories" class="back-btn">← Categories</button>
-                    <h2 id="category-title">Category Challenges</h2>
-                    <div class="difficulty-filters">
-                        <button class="difficulty-filter active" data-difficulty="all">All</button>
-                        <button class="difficulty-filter" data-difficulty="easy">Easy</button>
-                        <button class="difficulty-filter" data-difficulty="medium">Medium</button>
-                        <button class="difficulty-filter" data-difficulty="hard">Hard</button>
-                    </div>
-                </div>
-                <div class="difficulty-progress">
-                    <div class="progress-section">
-                        <span class="progress-label">Easy</span>
-                        <div class="mini-progress-bar">
-                            <div class="mini-progress-fill" id="easy-progress"></div>
-                        </div>
-                        <span class="progress-count" id="easy-count">0/0</span>
-                    </div>
-                    <div class="progress-section">
-                        <span class="progress-label">Medium</span>
-                        <div class="mini-progress-bar">
-                            <div class="mini-progress-fill" id="medium-progress"></div>
-                        </div>
-                        <span class="progress-count" id="medium-count">0/0</span>
-                    </div>
-                    <div class="progress-section">
-                        <span class="progress-label">Hard</span>
-                        <div class="mini-progress-bar">
-                            <div class="mini-progress-fill" id="hard-progress"></div>
-                        </div>
-                        <span class="progress-count" id="hard-count">0/0</span>
-                    </div>
-                </div>
-                <div class="challenges-grid" id="challenges-grid">
-                    <!-- Challenges will be populated here -->
+                <div class="progress-item">
+                    <span class="progress-number" id="badges-count">0</span>
+                    <span class="progress-label">Badges</span>
                 </div>
             </div>
         </div>
-        
-        <footer class="challenges-footer" onclick="showFirstCategory()" style="cursor: pointer;">
-            <div class="footer-content">
-                <p>🚀 Ready to start your coding journey?</p>
-                <p>Complete challenges, earn XP, and become a web development master!</p>
-                <p style="font-size: 0.9rem; opacity: 0.7; margin-top: 10px;">Click here to start with HTML Basics!</p>
+
+        <!-- Filter Tabs -->
+        <div class="filter-tabs">
+            <button class="filter-tab active" data-filter="all">All Challenges</button>
+            <button class="filter-tab" data-filter="html">HTML</button>
+            <button class="filter-tab" data-filter="css">CSS</button>
+            <button class="filter-tab" data-filter="javascript">JavaScript</button>
+            <button class="filter-tab" data-filter="projects">Projects</button>
+        </div>
+
+        <!-- Challenges Grid -->
+        <div class="challenges-grid" id="challenges-grid">
+            <!-- HTML Challenges -->
+            <div class="challenge-card" data-category="html" data-difficulty="beginner">
+                <div class="challenge-header">
+                    <div>
+                        <h3 class="challenge-title">Build a Personal Portfolio</h3>
+                        <div class="difficulty-badge beginner">Beginner</div>
+                    </div>
+                </div>
+                <p class="challenge-description">Create a responsive personal portfolio website showcasing your skills, projects, and contact information using semantic HTML5.</p>
+                <div class="challenge-tech">
+                    <span class="tech-tag">HTML5</span>
+                    <span class="tech-tag">Semantic Elements</span>
+                    <span class="tech-tag">Forms</span>
+                </div>
+                <div class="challenge-footer">
+                    <div class="challenge-stats">
+                        <div class="stat-item">⏱️ 45 min</div>
+                        <div class="stat-item">⭐ 50 XP</div>
+                        <div class="stat-item">👥 1.2k completed</div>
+                    </div>
+                    <button class="start-btn" onclick="startChallenge('html-portfolio', 50)">Start Challenge</button>
+                </div>
             </div>
-        </footer>
+
+            <div class="challenge-card" data-category="html" data-difficulty="intermediate">
+                <div class="challenge-header">
+                    <div>
+                        <h3 class="challenge-title">E-commerce Product Page</h3>
+                        <div class="difficulty-badge intermediate">Intermediate</div>
+                    </div>
+                </div>
+                <p class="challenge-description">Design a complete product page with image gallery, product details, reviews section, and shopping cart functionality.</p>
+                <div class="challenge-tech">
+                    <span class="tech-tag">HTML5</span>
+                    <span class="tech-tag">Tables</span>
+                    <span class="tech-tag">Media</span>
+                </div>
+                <div class="challenge-footer">
+                    <div class="challenge-stats">
+                        <div class="stat-item">⏱️ 90 min</div>
+                        <div class="stat-item">⭐ 100 XP</div>
+                        <div class="stat-item">👥 856 completed</div>
+                    </div>
+                    <button class="start-btn" onclick="startChallenge('html-ecommerce', 100)">Start Challenge</button>
+                </div>
+            </div>
+
+            <!-- CSS Challenges -->
+            <div class="challenge-card" data-category="css" data-difficulty="beginner">
+                <div class="challenge-header">
+                    <div>
+                        <h3 class="challenge-title">Netflix Landing Page Clone</h3>
+                        <div class="difficulty-badge beginner">Beginner</div>
+                    </div>
+                </div>
+                <p class="challenge-description">Recreate Netflix's landing page with hero section, feature cards, and responsive design using modern CSS techniques.</p>
+                <div class="challenge-tech">
+                    <span class="tech-tag">CSS3</span>
+                    <span class="tech-tag">Flexbox</span>
+                    <span class="tech-tag">Responsive</span>
+                </div>
+                <div class="challenge-footer">
+                    <div class="challenge-stats">
+                        <div class="stat-item">⏱️ 60 min</div>
+                        <div class="stat-item">⭐ 75 XP</div>
+                        <div class="stat-item">👥 2.1k completed</div>
+                    </div>
+                    <button class="start-btn" onclick="startChallenge('css-netflix', 75)">Start Challenge</button>
+                </div>
+            </div>
+
+            <div class="challenge-card" data-category="css" data-difficulty="intermediate">
+                <div class="challenge-header">
+                    <div>
+                        <h3 class="challenge-title">CSS Grid Dashboard</h3>
+                        <div class="difficulty-badge intermediate">Intermediate</div>
+                    </div>
+                </div>
+                <p class="challenge-description">Build a complex dashboard layout using CSS Grid with sidebar, header, main content area, and responsive breakpoints.</p>
+                <div class="challenge-tech">
+                    <span class="tech-tag">CSS Grid</span>
+                    <span class="tech-tag">Animations</span>
+                    <span class="tech-tag">Variables</span>
+                </div>
+                <div class="challenge-footer">
+                    <div class="challenge-stats">
+                        <div class="stat-item">⏱️ 120 min</div>
+                        <div class="stat-item">⭐ 150 XP</div>
+                        <div class="stat-item">👥 643 completed</div>
+                    </div>
+                    <button class="start-btn" onclick="startChallenge('css-dashboard', 150)">Start Challenge</button>
+                </div>
+            </div>
+
+            <!-- JavaScript Challenges -->
+            <div class="challenge-card" data-category="javascript" data-difficulty="beginner">
+                <div class="challenge-header">
+                    <div>
+                        <h3 class="challenge-title">Interactive Todo App</h3>
+                        <div class="difficulty-badge beginner">Beginner</div>
+                    </div>
+                </div>
+                <p class="challenge-description">Create a fully functional todo application with add, edit, delete, and mark complete features using vanilla JavaScript.</p>
+                <div class="challenge-tech">
+                    <span class="tech-tag">JavaScript</span>
+                    <span class="tech-tag">DOM</span>
+                    <span class="tech-tag">LocalStorage</span>
+                </div>
+                <div class="challenge-footer">
+                    <div class="challenge-stats">
+                        <div class="stat-item">⏱️ 90 min</div>
+                        <div class="stat-item">⭐ 100 XP</div>
+                        <div class="stat-item">👥 1.8k completed</div>
+                    </div>
+                    <button class="start-btn" onclick="startChallenge('js-todo', 100)">Start Challenge</button>
+                </div>
+            </div>
+
+            <div class="challenge-card" data-category="javascript" data-difficulty="intermediate">
+                <div class="challenge-header">
+                    <div>
+                        <h3 class="challenge-title">Weather App with API</h3>
+                        <div class="difficulty-badge intermediate">Intermediate</div>
+                    </div>
+                </div>
+                <p class="challenge-description">Build a weather application that fetches real-time data from OpenWeatherMap API with search functionality and 5-day forecast.</p>
+                <div class="challenge-tech">
+                    <span class="tech-tag">Fetch API</span>
+                    <span class="tech-tag">Async/Await</span>
+                    <span class="tech-tag">JSON</span>
+                </div>
+                <div class="challenge-footer">
+                    <div class="challenge-stats">
+                        <div class="stat-item">⏱️ 150 min</div>
+                        <div class="stat-item">⭐ 200 XP</div>
+                        <div class="stat-item">👥 924 completed</div>
+                    </div>
+                    <button class="start-btn" onclick="startChallenge('js-weather', 200)">Start Challenge</button>
+                </div>
+            </div>
+
+            <div class="challenge-card" data-category="javascript" data-difficulty="advanced">
+                <div class="challenge-header">
+                    <div>
+                        <h3 class="challenge-title">Real-time Chat Application</h3>
+                        <div class="difficulty-badge advanced">Advanced</div>
+                    </div>
+                </div>
+                <p class="challenge-description">Create a real-time chat app with multiple rooms, user authentication, message history, and emoji support using WebSocket.</p>
+                <div class="challenge-tech">
+                    <span class="tech-tag">WebSocket</span>
+                    <span class="tech-tag">ES6+</span>
+                    <span class="tech-tag">Authentication</span>
+                </div>
+                <div class="challenge-footer">
+                    <div class="challenge-stats">
+                        <div class="stat-item">⏱️ 240 min</div>
+                        <div class="stat-item">⭐ 300 XP</div>
+                        <div class="stat-item">👥 312 completed</div>
+                    </div>
+                    <button class="start-btn" onclick="startChallenge('js-chat', 300)">Start Challenge</button>
+                </div>
+            </div>
+
+            <!-- Project Challenges -->
+            <div class="challenge-card" data-category="projects" data-difficulty="intermediate">
+                <div class="challenge-header">
+                    <div>
+                        <h3 class="challenge-title">Full-Stack Blog Platform</h3>
+                        <div class="difficulty-badge intermediate">Intermediate</div>
+                    </div>
+                </div>
+                <p class="challenge-description">Build a complete blog platform with user registration, post creation, comments, search functionality, and admin panel.</p>
+                <div class="challenge-tech">
+                    <span class="tech-tag">HTML5</span>
+                    <span class="tech-tag">CSS3</span>
+                    <span class="tech-tag">JavaScript</span>
+                    <span class="tech-tag">LocalStorage</span>
+                </div>
+                <div class="challenge-footer">
+                    <div class="challenge-stats">
+                        <div class="stat-item">⏱️ 300 min</div>
+                        <div class="stat-item">⭐ 400 XP</div>
+                        <div class="stat-item">👥 567 completed</div>
+                    </div>
+                    <button class="start-btn" onclick="startChallenge('project-blog', 400)">Start Challenge</button>
+                </div>
+            </div>
+
+            <div class="challenge-card" data-category="projects" data-difficulty="advanced">
+                <div class="challenge-header">
+                    <div>
+                        <h3 class="challenge-title">E-learning Platform</h3>
+                        <div class="difficulty-badge advanced">Advanced</div>
+                    </div>
+                </div>
+                <p class="challenge-description">Create a comprehensive e-learning platform with course management, video player, progress tracking, quizzes, and certificates.</p>
+                <div class="challenge-tech">
+                    <span class="tech-tag">Advanced JS</span>
+                    <span class="tech-tag">Video API</span>
+                    <span class="tech-tag">Canvas</span>
+                    <span class="tech-tag">PWA</span>
+                </div>
+                <div class="challenge-footer">
+                    <div class="challenge-stats">
+                        <div class="stat-item">⏱️ 480 min</div>
+                        <div class="stat-item">⭐ 600 XP</div>
+                        <div class="stat-item">👥 189 completed</div>
+                    </div>
+                    <button class="start-btn" onclick="startChallenge('project-elearning', 600)">Start Challenge</button>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <script src="challenges.js"></script>
     <script>
-        // Ensure category cards are clickable
-        document.addEventListener('DOMContentLoaded', function() {
-            const categoryCards = document.querySelectorAll('.category-card');
-            categoryCards.forEach(card => {
-                card.addEventListener('click', function() {
-                    const category = this.dataset.category;
-                    console.log('Category clicked:', category);
-                    
-                    // Show challenges for this category
-                    const categoriesGrid = document.querySelector('.categories-grid').parentElement;
-                    const challengesList = document.getElementById('challenges-list');
-                    
-                    if (categoriesGrid && challengesList) {
-                        categoriesGrid.style.display = 'none';
-                        challengesList.style.display = 'block';
-                        
-                        // Update category title
-                        const categoryNames = {
-                            'html-basics': 'HTML Basics Challenges',
-                            'css-styling': 'CSS Styling Challenges', 
-                            'js-fundamentals': 'JavaScript Fundamentals',
-                            'mini-projects': 'Mini-Projects'
-                        };
-                        
-                        // Add back to categories button functionality
-                        const backBtn = document.getElementById('back-to-categories');
-                        if (backBtn) {
-                            backBtn.onclick = function() {
-                                categoriesGrid.style.display = 'block';
-                                challengesList.style.display = 'none';
-                            };
-                        }
-                        
-                        const categoryTitle = document.getElementById('category-title');
-                        if (categoryTitle) {
-                            categoryTitle.textContent = categoryNames[category] || 'Challenges';
-                        }
-                        
-                        // Show real challenges
-                        const challengesGrid = document.getElementById('challenges-grid');
-                        if (challengesGrid) {
-                            const challenges = getChallengesForCategory(category);
-                            challengesGrid.innerHTML = challenges.map(challenge => `
-                                <div class="challenge-card" onclick="completeChallenge('${challenge.id}', ${challenge.xp})">
-                                    <div class="challenge-header">
-                                        <h4>${challenge.title}</h4>
-                                        <span class="difficulty ${challenge.difficulty}">${challenge.difficulty}</span>
-                                    </div>
-                                    <p>${challenge.description}</p>
-                                    <div class="challenge-footer">
-                                        <span class="xp">+${challenge.xp} XP</span>
-                                        <button class="start-btn">Start Challenge</button>
-                                    </div>
-                                </div>
-                            `).join('');
-                        }
+        // Load user progress
+        function loadProgress() {
+            const userData = JSON.parse(localStorage.getItem('codequest_user_data')) || {
+                completedChallenges: 0, totalXP: 0, currentStreak: 0, badgesEarned: 0,
+                challengesCompleted: []
+            };
+            
+            document.getElementById('completed-count').textContent = userData.completedChallenges;
+            document.getElementById('total-xp').textContent = userData.totalXP;
+            document.getElementById('streak-count').textContent = userData.currentStreak;
+            document.getElementById('badges-count').textContent = userData.badgesEarned;
+        }
+
+        // Filter functionality
+        document.querySelectorAll('.filter-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                // Update active tab
+                document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Filter challenges
+                const filter = this.dataset.filter;
+                const challenges = document.querySelectorAll('.challenge-card');
+                
+                challenges.forEach(challenge => {
+                    if (filter === 'all' || challenge.dataset.category === filter) {
+                        challenge.style.display = 'block';
+                    } else {
+                        challenge.style.display = 'none';
                     }
                 });
             });
         });
-        
-        // Get challenges for category
-        function getChallengesForCategory(category) {
-            const allChallenges = {
-                'html-basics': [
-                    { id: 'html-1', title: 'Basic HTML Structure', description: 'Create a simple HTML document with head and body', difficulty: 'easy', xp: 10 },
-                    { id: 'html-2', title: 'HTML Forms', description: 'Build a contact form with inputs', difficulty: 'medium', xp: 20 },
-                    { id: 'html-3', title: 'Semantic HTML', description: 'Use semantic elements like header, nav, main', difficulty: 'hard', xp: 30 }
-                ],
-                'css-styling': [
-                    { id: 'css-1', title: 'CSS Basics', description: 'Style your first webpage with colors and fonts', difficulty: 'easy', xp: 10 },
-                    { id: 'css-2', title: 'Flexbox Layout', description: 'Create flexible responsive layouts', difficulty: 'medium', xp: 20 },
-                    { id: 'css-3', title: 'CSS Grid', description: 'Master advanced grid layouts', difficulty: 'hard', xp: 30 }
-                ],
-                'js-fundamentals': [
-                    { id: 'js-1', title: 'Variables & Functions', description: 'Learn JavaScript basics and syntax', difficulty: 'easy', xp: 10 },
-                    { id: 'js-2', title: 'DOM Manipulation', description: 'Control webpage elements with JavaScript', difficulty: 'medium', xp: 20 },
-                    { id: 'js-3', title: 'Event Handling', description: 'Handle user interactions and events', difficulty: 'hard', xp: 30 }
-                ],
-                'mini-projects': [
-                    { id: 'project-1', title: 'Todo List App', description: 'Build a complete todo application', difficulty: 'medium', xp: 50 },
-                    { id: 'project-2', title: 'Calculator', description: 'Create a working calculator app', difficulty: 'hard', xp: 75 }
-                ]
+
+        // Start challenge function
+        function startChallenge(challengeId, xpReward) {
+            const userData = JSON.parse(localStorage.getItem('codequest_user_data')) || {
+                completedChallenges: 0, totalXP: 0, currentStreak: 0, badgesEarned: 0,
+                challengesCompleted: []
             };
-            return allChallenges[category] || [];
-        }
-
-        // Show first category when footer is clicked
-        function showFirstCategory() {
-            const htmlBasicsCard = document.querySelector('[data-category="html-basics"]');
-            if (htmlBasicsCard) {
-                htmlBasicsCard.click();
+            
+            if (userData.challengesCompleted.includes(challengeId)) {
+                alert('Challenge already completed! ✅');
+                return;
             }
-        }
-
-        // Challenge completion function
-        function completeChallenge(challengeId, xpEarned) {
-            // Simulate challenge completion
-            if (confirm(`Complete challenge: ${challengeId}?\nYou will earn ${xpEarned} XP!`)) {
-                // Update progress if progressTracker exists (from main page)
-                if (window.parent && window.parent.progressTracker) {
-                    window.parent.progressTracker.completeChallenge(challengeId, xpEarned);
-                } else {
-                    // Update localStorage directly
-                    const userData = JSON.parse(localStorage.getItem('codequest_user_data')) || {
-                        completedChallenges: 0, totalXP: 0, currentStreak: 0, badgesEarned: 0,
-                        challengesCompleted: [], lastVisit: Date.now(), startDate: Date.now(), timeSpent: 0
-                    };
-                    
-                    if (!userData.challengesCompleted.includes(challengeId)) {
-                        userData.challengesCompleted.push(challengeId);
-                        userData.completedChallenges += 1;
-                        userData.totalXP += xpEarned;
-                        
-                        // Award badges
-                        const oldBadges = userData.badgesEarned;
-                        if (userData.completedChallenges >= 1 && oldBadges === 0) userData.badgesEarned = 1;
-                        if (userData.completedChallenges >= 5 && oldBadges === 1) userData.badgesEarned = 2;
-                        if (userData.completedChallenges >= 10 && oldBadges === 2) userData.badgesEarned = 3;
-                        
-                        localStorage.setItem('codequest_user_data', JSON.stringify(userData));
-                        
-                        alert(`Challenge completed! 🎉\n+${xpEarned} XP earned\nTotal XP: ${userData.totalXP}`);
-                    } else {
-                        alert('Challenge already completed!');
+            
+            if (confirm(`Start "${challengeId}" challenge?\n\nReward: ${xpReward} XP\nEstimated time: Check challenge details\n\nThis will open the code editor.`)) {
+                // Mark as completed
+                userData.challengesCompleted.push(challengeId);
+                userData.completedChallenges += 1;
+                userData.totalXP += xpReward;
+                
+                // Award badges
+                if (userData.completedChallenges === 1) userData.badgesEarned = Math.max(userData.badgesEarned, 1);
+                if (userData.completedChallenges === 5) userData.badgesEarned = Math.max(userData.badgesEarned, 2);
+                if (userData.completedChallenges === 10) userData.badgesEarned = Math.max(userData.badgesEarned, 3);
+                
+                localStorage.setItem('codequest_user_data', JSON.stringify(userData));
+                
+                // Show success animation
+                showSuccess(`Challenge completed! +${xpReward} XP`);
+                
+                // Update progress display
+                setTimeout(loadProgress, 1000);
+                
+                // Redirect to editor (optional)
+                setTimeout(() => {
+                    if (confirm('Open code editor to start working?')) {
+                        window.location.href = 'editor.html';
                     }
-                }
+                }, 2000);
             }
         }
+
+        // Success animation
+        function showSuccess(message) {
+            const successDiv = document.createElement('div');
+            successDiv.className = 'success-animation';
+            successDiv.textContent = message;
+            document.body.appendChild(successDiv);
+            
+            setTimeout(() => {
+                successDiv.remove();
+            }, 3000);
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            loadProgress();
+        });
     </script>
 </body>
 </html>
