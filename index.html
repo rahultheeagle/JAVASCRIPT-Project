@@ -266,7 +266,360 @@
             font-size: 0.9rem;
         }
 
-        /* Developer Tools Grid */
+        /* Advanced Features Grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .feature-card {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 12px;
+            padding: 24px;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 122, 204, 0.1), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .feature-card:hover::before {
+            left: 100%;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-6px) scale(1.02);
+            border-color: #007acc;
+            box-shadow: 0 15px 40px rgba(0, 122, 204, 0.2);
+        }
+
+        .feature-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+        }
+
+        .feature-status {
+            background: #007acc;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .feature-content h3 {
+            color: #ffffff;
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .feature-content p {
+            color: #cccccc;
+            margin-bottom: 16px;
+            line-height: 1.4;
+        }
+
+        .feature-tech {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .feature-tech span {
+            background: rgba(0, 122, 204, 0.1);
+            color: #007acc;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .feature-action {
+            color: #007acc;
+            font-weight: 600;
+            font-size: 0.9rem;
+            opacity: 0;
+            transform: translateX(-10px);
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover .feature-action {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* Progress Dashboard */
+        .progress-dashboard {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 40px;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
+        .main-progress {
+            text-align: center;
+        }
+
+        .progress-header {
+            margin-bottom: 20px;
+        }
+
+        .progress-header h3 {
+            color: #ffffff;
+            font-size: 1.4rem;
+            margin-bottom: 8px;
+        }
+
+        .progress-percentage {
+            color: #007acc;
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .circular-progress {
+            position: relative;
+            display: inline-block;
+        }
+
+        .progress-ring {
+            transform: rotate(-90deg);
+        }
+
+        .progress-ring-bg {
+            fill: none;
+            stroke: #333;
+            stroke-width: 8;
+        }
+
+        .progress-ring-fill {
+            fill: none;
+            stroke: #007acc;
+            stroke-width: 8;
+            stroke-linecap: round;
+            stroke-dasharray: 314;
+            stroke-dashoffset: 314;
+            transition: stroke-dashoffset 1s ease;
+        }
+
+        .progress-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .progress-level {
+            color: #ffffff;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .stats-mini-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+
+        .mini-stat {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .mini-stat:hover {
+            border-color: #007acc;
+            transform: translateY(-2px);
+        }
+
+        .mini-stat-icon {
+            font-size: 1.5rem;
+        }
+
+        .mini-stat-number {
+            color: #007acc;
+            font-size: 1.4rem;
+            font-weight: 700;
+            display: block;
+        }
+
+        .mini-stat-label {
+            color: #cccccc;
+            font-size: 0.8rem;
+        }
+
+        /* Skill Bars */
+        .skill-bars {
+            margin-top: 30px;
+        }
+
+        .skill-item {
+            margin-bottom: 20px;
+        }
+
+        .skill-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .skill-name {
+            color: #ffffff;
+            font-weight: 500;
+        }
+
+        .skill-percentage {
+            color: #007acc;
+            font-weight: 600;
+        }
+
+        .skill-bar {
+            width: 100%;
+            height: 8px;
+            background: #333;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .skill-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #007acc, #00d4ff);
+            border-radius: 4px;
+            width: 0%;
+            transition: width 1.5s ease;
+        }
+
+        /* Achievements Showcase */
+        .achievements-showcase {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .achievement-card {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 12px;
+            padding: 24px;
+            position: relative;
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        .achievement-card.earned {
+            border-color: #4caf50;
+            background: linear-gradient(135deg, #1a1a1a, rgba(76, 175, 80, 0.1));
+        }
+
+        .achievement-card.locked {
+            opacity: 0.6;
+        }
+
+        .achievement-glow {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #4caf50, #8bc34a);
+            opacity: 0;
+            animation: glow 2s ease-in-out infinite;
+        }
+
+        .achievement-card.earned .achievement-glow {
+            opacity: 1;
+        }
+
+        @keyframes glow {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        .achievement-card .achievement-icon {
+            font-size: 2.5rem;
+            margin-bottom: 16px;
+            display: block;
+        }
+
+        .achievement-content h4 {
+            color: #ffffff;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .achievement-content p {
+            color: #cccccc;
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+
+        .achievement-reward {
+            background: #4caf50;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .achievement-progress {
+            color: #007acc;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .achievement-check {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: #4caf50;
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .achievement-lock {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            font-size: 1.2rem;
+            opacity: 0.5;
+        }
         .tools-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -639,7 +992,21 @@
                 grid-template-columns: 1fr;
             }
             
-            .tools-grid {
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .progress-dashboard {
+                grid-template-columns: 1fr;
+                gap: 20px;
+                text-align: center;
+            }
+            
+            .stats-mini-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .achievements-showcase {
                 grid-template-columns: 1fr;
             }
             
@@ -894,34 +1261,69 @@
         <!-- Advanced Features -->
         <section class="section">
             <h2 class="section-title">⚡ Advanced Features</h2>
-            <div class="row">
-                <div class="card advanced" onclick="showFeature('ai')">
-                    <div class="card-icon">🤖</div>
-                    <div>
-                        <div class="card-title">AI Assistant</div>
-                        <div class="card-description">Smart code suggestions and help</div>
+            <div class="features-grid">
+                <div class="feature-card" onclick="showFeature('ai')">
+                    <div class="feature-header">
+                        <div class="feature-icon">🤖</div>
+                        <div class="feature-status">Beta</div>
                     </div>
+                    <div class="feature-content">
+                        <h3>AI Code Assistant</h3>
+                        <p>GitHub Copilot-style intelligent code completion</p>
+                        <div class="feature-tech">
+                            <span>GPT-powered</span>
+                            <span>Real-time</span>
+                        </div>
+                    </div>
+                    <div class="feature-action">Try Now →</div>
                 </div>
-                <div class="card advanced" onclick="showFeature('multiplayer')">
-                    <div class="card-icon">🎮</div>
-                    <div>
-                        <div class="card-title">Multiplayer Mode</div>
-                        <div class="card-description">Code with friends in real-time</div>
+                
+                <div class="feature-card" onclick="showFeature('multiplayer')">
+                    <div class="feature-header">
+                        <div class="feature-icon">👥</div>
+                        <div class="feature-status">Live</div>
                     </div>
+                    <div class="feature-content">
+                        <h3>Live Collaboration</h3>
+                        <p>VS Code Live Share for real-time pair programming</p>
+                        <div class="feature-tech">
+                            <span>WebSocket</span>
+                            <span>Multi-user</span>
+                        </div>
+                    </div>
+                    <div class="feature-action">Join Room →</div>
                 </div>
-                <div class="card advanced" onclick="showFeature('voice')">
-                    <div class="card-icon">🎤</div>
-                    <div>
-                        <div class="card-title">Voice Commands</div>
-                        <div class="card-description">Code using voice recognition</div>
+                
+                <div class="feature-card" onclick="showFeature('voice')">
+                    <div class="feature-header">
+                        <div class="feature-icon">🎤</div>
+                        <div class="feature-status">New</div>
                     </div>
+                    <div class="feature-content">
+                        <h3>Voice Coding</h3>
+                        <p>Talon Voice-inspired hands-free development</p>
+                        <div class="feature-tech">
+                            <span>Speech API</span>
+                            <span>40+ commands</span>
+                        </div>
+                    </div>
+                    <div class="feature-action">Enable →</div>
                 </div>
-                <div class="card advanced" onclick="showFeature('pwa')">
-                    <div class="card-icon">📱</div>
-                    <div>
-                        <div class="card-title">PWA Support</div>
-                        <div class="card-description">Install as mobile app</div>
+                
+                <div class="feature-card" onclick="showFeature('pwa')">
+                    <div class="feature-header">
+                        <div class="feature-icon">📱</div>
+                        <div class="feature-status">Ready</div>
                     </div>
+                    <div class="feature-content">
+                        <h3>Mobile App</h3>
+                        <p>Progressive Web App with offline capabilities</p>
+                        <div class="feature-tech">
+                            <span>Service Worker</span>
+                            <span>Offline mode</span>
+                        </div>
+                    </div>
+                    <div class="feature-action">Install →</div>
                 </div>
             </div>
         </section>
@@ -929,53 +1331,129 @@
         <!-- Progress Section -->
         <section class="progress-section" id="progress">
             <h2 class="section-title">📊 Your Progress</h2>
-            <div class="progress-grid">
-                <div class="progress-item">
-                    <span class="progress-number" id="completed-challenges">0</span>
-                    <span class="progress-label">Challenges Completed</span>
+            <div class="progress-dashboard">
+                <div class="progress-card main-progress">
+                    <div class="progress-header">
+                        <h3>Overall Progress</h3>
+                        <span class="progress-percentage" id="overall-percentage">0%</span>
+                    </div>
+                    <div class="circular-progress">
+                        <svg class="progress-ring" width="120" height="120">
+                            <circle class="progress-ring-bg" cx="60" cy="60" r="50"></circle>
+                            <circle class="progress-ring-fill" cx="60" cy="60" r="50" id="progress-circle"></circle>
+                        </svg>
+                        <div class="progress-center">
+                            <span class="progress-level" id="current-level">Level 1</span>
+                        </div>
+                    </div>
                 </div>
-                <div class="progress-item">
-                    <span class="progress-number" id="total-xp">0</span>
-                    <span class="progress-label">Total XP Earned</span>
-                </div>
-                <div class="progress-item">
-                    <span class="progress-number" id="current-streak">0</span>
-                    <span class="progress-label">Day Streak 🔥</span>
-                </div>
-                <div class="progress-item">
-                    <span class="progress-number" id="badges-earned">0</span>
-                    <span class="progress-label">Badges Unlocked</span>
+                
+                <div class="stats-mini-grid">
+                    <div class="mini-stat">
+                        <div class="mini-stat-icon">🎯</div>
+                        <div class="mini-stat-content">
+                            <span class="mini-stat-number" id="completed-challenges">0</span>
+                            <span class="mini-stat-label">Challenges</span>
+                        </div>
+                    </div>
+                    <div class="mini-stat">
+                        <div class="mini-stat-icon">⭐</div>
+                        <div class="mini-stat-content">
+                            <span class="mini-stat-number" id="total-xp">0</span>
+                            <span class="mini-stat-label">XP Earned</span>
+                        </div>
+                    </div>
+                    <div class="mini-stat">
+                        <div class="mini-stat-icon">🔥</div>
+                        <div class="mini-stat-content">
+                            <span class="mini-stat-number" id="current-streak">0</span>
+                            <span class="mini-stat-label">Day Streak</span>
+                        </div>
+                    </div>
+                    <div class="mini-stat">
+                        <div class="mini-stat-icon">🏅</div>
+                        <div class="mini-stat-content">
+                            <span class="mini-stat-number" id="badges-earned">0</span>
+                            <span class="mini-stat-label">Badges</span>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="progress-bar">
-                <div class="progress-fill" id="overall-progress" style="width: 0%;"></div>
+            
+            <div class="skill-bars">
+                <div class="skill-item">
+                    <div class="skill-header">
+                        <span class="skill-name">🏗️ HTML</span>
+                        <span class="skill-percentage" id="html-percent">0%</span>
+                    </div>
+                    <div class="skill-bar">
+                        <div class="skill-fill" id="html-fill"></div>
+                    </div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-header">
+                        <span class="skill-name">🎨 CSS</span>
+                        <span class="skill-percentage" id="css-percent">0%</span>
+                    </div>
+                    <div class="skill-bar">
+                        <div class="skill-fill" id="css-fill"></div>
+                    </div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-header">
+                        <span class="skill-name">⚡ JavaScript</span>
+                        <span class="skill-percentage" id="js-percent">0%</span>
+                    </div>
+                    <div class="skill-bar">
+                        <div class="skill-fill" id="js-fill"></div>
+                    </div>
+                </div>
             </div>
-            <p style="text-align: center; margin-top: 15px; opacity: 0.8;">Complete challenges to increase your progress!</p>
         </section>
 
         <!-- Achievements -->
         <section class="section">
             <h2 class="section-title">🏅 Recent Achievements</h2>
-            <div class="achievements-grid">
-                <div class="achievement">
-                    <span class="achievement-icon">🎯</span>
-                    <div class="achievement-title">First Steps</div>
-                    <div class="achievement-desc">Complete your first challenge</div>
+            <div class="achievements-showcase">
+                <div class="achievement-card earned">
+                    <div class="achievement-glow"></div>
+                    <div class="achievement-icon">🎯</div>
+                    <div class="achievement-content">
+                        <h4>First Steps</h4>
+                        <p>Complete your first challenge</p>
+                        <div class="achievement-reward">+50 XP</div>
+                    </div>
+                    <div class="achievement-check">✓</div>
                 </div>
-                <div class="achievement">
-                    <span class="achievement-icon">🔥</span>
-                    <div class="achievement-title">Streak Master</div>
-                    <div class="achievement-desc">Maintain a 7-day streak</div>
+                
+                <div class="achievement-card locked">
+                    <div class="achievement-icon">🔥</div>
+                    <div class="achievement-content">
+                        <h4>Streak Master</h4>
+                        <p>Maintain a 7-day learning streak</p>
+                        <div class="achievement-progress">2/7 days</div>
+                    </div>
+                    <div class="achievement-lock">🔒</div>
                 </div>
-                <div class="achievement">
-                    <span class="achievement-icon">⚡</span>
-                    <div class="achievement-title">Speed Demon</div>
-                    <div class="achievement-desc">Complete challenge in under 5 minutes</div>
+                
+                <div class="achievement-card locked">
+                    <div class="achievement-icon">⚡</div>
+                    <div class="achievement-content">
+                        <h4>Speed Demon</h4>
+                        <p>Complete challenge in under 5 minutes</p>
+                        <div class="achievement-progress">Best: 8m 32s</div>
+                    </div>
+                    <div class="achievement-lock">🔒</div>
                 </div>
-                <div class="achievement">
-                    <span class="achievement-icon">🏆</span>
-                    <div class="achievement-title">Champion</div>
-                    <div class="achievement-desc">Complete all lessons</div>
+                
+                <div class="achievement-card locked">
+                    <div class="achievement-icon">🏆</div>
+                    <div class="achievement-content">
+                        <h4>Champion</h4>
+                        <p>Complete all 9 challenges</p>
+                        <div class="achievement-progress">0/9 completed</div>
+                    </div>
+                    <div class="achievement-lock">🔒</div>
                 </div>
             </div>
         </section>
@@ -1002,6 +1480,7 @@
             constructor() {
                 this.initializeProgress();
                 this.loadProgress();
+                this.animateProgress();
             }
 
             initializeProgress() {
@@ -1030,12 +1509,53 @@
                 document.getElementById('current-streak').textContent = userData.currentStreak;
                 document.getElementById('badges-earned').textContent = userData.badgesEarned;
                 
-                // Update progress bar
-                const progressPercentage = Math.min((userData.completedChallenges / 30) * 100, 100);
-                document.getElementById('overall-progress').style.width = progressPercentage + '%';
+                // Update circular progress
+                const overallProgress = Math.min((userData.completedChallenges / 9) * 100, 100);
+                document.getElementById('overall-percentage').textContent = Math.round(overallProgress) + '%';
+                
+                // Update level
+                const level = Math.floor(userData.totalXP / 500) + 1;
+                document.getElementById('current-level').textContent = `Level ${level}`;
+                
+                // Update skill bars
+                this.updateSkillBars(userData.challengesCompleted);
                 
                 // Update streak
                 this.updateStreak();
+            }
+
+            updateSkillBars(completed) {
+                const htmlCount = completed.filter(id => id.includes('html')).length;
+                const cssCount = completed.filter(id => id.includes('css')).length;
+                const jsCount = completed.filter(id => id.includes('js')).length;
+                
+                const htmlPercent = Math.round((htmlCount / 2) * 100);
+                const cssPercent = Math.round((cssCount / 2) * 100);
+                const jsPercent = Math.round((jsCount / 3) * 100);
+                
+                document.getElementById('html-percent').textContent = htmlPercent + '%';
+                document.getElementById('css-percent').textContent = cssPercent + '%';
+                document.getElementById('js-percent').textContent = jsPercent + '%';
+                
+                setTimeout(() => {
+                    document.getElementById('html-fill').style.width = htmlPercent + '%';
+                    document.getElementById('css-fill').style.width = cssPercent + '%';
+                    document.getElementById('js-fill').style.width = jsPercent + '%';
+                }, 500);
+            }
+
+            animateProgress() {
+                setTimeout(() => {
+                    const userData = JSON.parse(localStorage.getItem('codequest_user_data'));
+                    const overallProgress = Math.min((userData.completedChallenges / 9) * 100, 100);
+                    const circumference = 314;
+                    const offset = circumference - (overallProgress / 100) * circumference;
+                    
+                    const circle = document.getElementById('progress-circle');
+                    if (circle) {
+                        circle.style.strokeDashoffset = offset;
+                    }
+                }, 1000);
             }
 
             updateStreak() {
@@ -1077,6 +1597,7 @@
                     
                     localStorage.setItem('codequest_user_data', JSON.stringify(userData));
                     this.loadProgress();
+                    this.animateProgress();
                 }
             }
 
