@@ -4,44 +4,502 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Interactive Tutorials - CodeQuest</title>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="tutorial-styles.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #1e1e1e;
+            color: #d4d4d4;
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .header {
+            background: #2d2d30;
+            padding: 15px 20px;
+            border-bottom: 1px solid #3e3e42;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            color: #007acc;
+            font-size: 1.4rem;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .nav a {
+            color: #cccccc;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+
+        .nav a:hover {
+            background: #007acc;
+            color: white;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 32px 20px;
+        }
+
+        .page-title {
+            font-size: 2.2rem;
+            color: #ffffff;
+            font-weight: 300;
+            margin-bottom: 32px;
+        }
+
+        /* Tutorial Categories */
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .category-card {
+            background: #252526;
+            border: 1px solid #3e3e42;
+            border-radius: 8px;
+            padding: 24px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .category-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #007acc, #00d4ff);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .category-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .category-card:hover {
+            transform: translateY(-4px);
+            border-color: #007acc;
+            box-shadow: 0 12px 40px rgba(0, 122, 204, 0.2);
+        }
+
+        .category-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .category-icon {
+            font-size: 2.5rem;
+        }
+
+        .category-level {
+            background: #007acc;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .category-title {
+            font-size: 1.4rem;
+            color: #ffffff;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .category-description {
+            color: #cccccc;
+            margin-bottom: 16px;
+            line-height: 1.4;
+        }
+
+        .category-topics {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .topic-tag {
+            background: rgba(0, 122, 204, 0.1);
+            color: #007acc;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .category-stats {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 16px;
+            border-top: 1px solid #3e3e42;
+        }
+
+        .stats-left {
+            display: flex;
+            gap: 16px;
+            font-size: 0.85rem;
+            color: #969696;
+        }
+
+        .start-btn {
+            background: #007acc;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .start-btn:hover {
+            background: #005a9e;
+        }
+
+        /* Tutorial Player */
+        .tutorial-player {
+            background: #252526;
+            border: 1px solid #3e3e42;
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 32px;
+            display: none;
+        }
+
+        .tutorial-player.active {
+            display: block;
+        }
+
+        .player-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #3e3e42;
+        }
+
+        .tutorial-info h2 {
+            color: #ffffff;
+            font-size: 1.6rem;
+            margin-bottom: 4px;
+        }
+
+        .tutorial-meta {
+            color: #969696;
+            font-size: 0.9rem;
+        }
+
+        .progress-info {
+            text-align: right;
+        }
+
+        .progress-bar {
+            width: 200px;
+            height: 6px;
+            background: #3e3e42;
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: 4px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #007acc, #00d4ff);
+            border-radius: 3px;
+            transition: width 0.3s ease;
+        }
+
+        .progress-text {
+            color: #007acc;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .tutorial-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+
+        .content-section {
+            background: #1e1e1e;
+            border-radius: 6px;
+            padding: 20px;
+        }
+
+        .section-title {
+            color: #ffffff;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .code-editor {
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            padding: 16px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9rem;
+            color: #e6edf3;
+            resize: vertical;
+            min-height: 200px;
+            width: 100%;
+        }
+
+        .code-preview {
+            border: 1px solid #3e3e42;
+            border-radius: 6px;
+            background: white;
+            min-height: 200px;
+            padding: 16px;
+        }
+
+        .tutorial-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .control-group {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary {
+            background: #007acc;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #005a9e;
+        }
+
+        .btn-secondary {
+            background: #3e3e42;
+            color: #cccccc;
+        }
+
+        .btn-secondary:hover {
+            background: #4e4e52;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .categories-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .tutorial-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .player-header {
+                flex-direction: column;
+                gap: 16px;
+                text-align: center;
+            }
+            
+            .progress-bar {
+                width: 100%;
+            }
+        }
+
+        /* Success Animation */
+        .success-message {
+            background: #4caf50;
+            color: white;
+            padding: 12px 16px;
+            border-radius: 6px;
+            margin-top: 16px;
+            display: none;
+        }
+
+        .success-message.show {
+            display: block;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(-10px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>Interactive Tutorials</h1>
-            <a href="index.html" class="back-btn">← Back to Dashboard</a>
-        </header>
+    <!-- Header -->
+    <header class="header">
+        <a href="index.html" class="logo">CodeQuest</a>
+        <nav class="nav">
+            <a href="index.html">← Back to Dashboard</a>
+        </nav>
+    </header>
 
-        <main>
-            <div class="tutorial-container">
-                <div class="tutorial-sidebar">
-                    <h3>Tutorial Steps</h3>
-                    <div class="steps-list" id="steps-list">
-                        <!-- Steps populated by JS -->
+    <!-- Main Content -->
+    <div class="container">
+        <h1 class="page-title">Interactive Tutorials</h1>
+
+        <!-- Tutorial Categories -->
+        <div class="categories-grid" id="categories-grid">
+            <div class="category-card" data-tutorial="html-basics">
+                <div class="category-header">
+                    <div class="category-icon">🏗️</div>
+                    <div class="category-level">Beginner</div>
+                </div>
+                <h3 class="category-title">HTML Fundamentals</h3>
+                <p class="category-description">Learn the building blocks of web development with hands-on HTML exercises</p>
+                <div class="category-topics">
+                    <span class="topic-tag">Document Structure</span>
+                    <span class="topic-tag">Semantic Elements</span>
+                    <span class="topic-tag">Forms & Tables</span>
+                </div>
+                <div class="category-stats">
+                    <div class="stats-left">
+                        <span>📚 5 lessons</span>
+                        <span>⏱️ 45 min</span>
+                        <span>👥 2.1k learners</span>
+                    </div>
+                    <button class="start-btn" onclick="startTutorial('html-basics')">Start Tutorial</button>
+                </div>
+            </div>
+
+            <div class="category-card" data-tutorial="css-styling">
+                <div class="category-header">
+                    <div class="category-icon">🎨</div>
+                    <div class="category-level">Beginner</div>
+                </div>
+                <h3 class="category-title">CSS Styling</h3>
+                <p class="category-description">Master visual design with CSS properties, layouts, and responsive techniques</p>
+                <div class="category-topics">
+                    <span class="topic-tag">Selectors & Properties</span>
+                    <span class="topic-tag">Flexbox & Grid</span>
+                    <span class="topic-tag">Responsive Design</span>
+                </div>
+                <div class="category-stats">
+                    <div class="stats-left">
+                        <span>📚 6 lessons</span>
+                        <span>⏱️ 60 min</span>
+                        <span>👥 1.8k learners</span>
+                    </div>
+                    <button class="start-btn" onclick="startTutorial('css-styling')">Start Tutorial</button>
+                </div>
+            </div>
+
+            <div class="category-card" data-tutorial="js-fundamentals">
+                <div class="category-header">
+                    <div class="category-icon">⚡</div>
+                    <div class="category-level">Intermediate</div>
+                </div>
+                <h3 class="category-title">JavaScript Essentials</h3>
+                <p class="category-description">Build interactive functionality with modern JavaScript programming concepts</p>
+                <div class="category-topics">
+                    <span class="topic-tag">Variables & Functions</span>
+                    <span class="topic-tag">DOM Manipulation</span>
+                    <span class="topic-tag">Event Handling</span>
+                </div>
+                <div class="category-stats">
+                    <div class="stats-left">
+                        <span>📚 8 lessons</span>
+                        <span>⏱️ 90 min</span>
+                        <span>👥 1.5k learners</span>
+                    </div>
+                    <button class="start-btn" onclick="startTutorial('js-fundamentals')">Start Tutorial</button>
+                </div>
+            </div>
+
+            <div class="category-card" data-tutorial="responsive-design">
+                <div class="category-header">
+                    <div class="category-icon">📱</div>
+                    <div class="category-level">Advanced</div>
+                </div>
+                <h3 class="category-title">Responsive Web Design</h3>
+                <p class="category-description">Create mobile-first websites that work perfectly on all devices and screen sizes</p>
+                <div class="category-topics">
+                    <span class="topic-tag">Media Queries</span>
+                    <span class="topic-tag">Mobile-First</span>
+                    <span class="topic-tag">Performance</span>
+                </div>
+                <div class="category-stats">
+                    <div class="stats-left">
+                        <span>📚 4 lessons</span>
+                        <span>⏱️ 75 min</span>
+                        <span>👥 892 learners</span>
+                    </div>
+                    <button class="start-btn" onclick="startTutorial('responsive-design')">Start Tutorial</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tutorial Player -->
+        <div class="tutorial-player" id="tutorial-player">
+            <div class="player-header">
+                <div class="tutorial-info">
+                    <h2 id="current-tutorial-title">HTML Fundamentals</h2>
+                    <div class="tutorial-meta">Lesson <span id="current-lesson">1</span> of <span id="total-lessons">5</span></div>
+                </div>
+                <div class="progress-info">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="lesson-progress"></div>
+                    </div>
+                    <div class="progress-text" id="progress-percentage">0% Complete</div>
+                </div>
+            </div>
+
+            <div class="tutorial-content">
+                <div class="content-section">
+                    <h3 class="section-title">📝 Instructions</h3>
+                    <div id="lesson-instructions">
+                        <p>Welcome to HTML Fundamentals! In this lesson, you'll learn how to create a basic HTML document structure.</p>
+                        <p>Follow the example on the right and try writing your own HTML code in the editor below.</p>
                     </div>
                 </div>
-
-                <div class="tutorial-content">
-                    <div class="tutorial-header">
-                        <h2 id="tutorial-title">HTML Basics Tutorial</h2>
-                        <div class="tutorial-progress">
-                            <div class="progress-bar">
-                                <div class="progress-fill" id="tutorial-progress"></div>
-                            </div>
-                            <span id="progress-text">Step 1 of 5</span>
-                        </div>
-                    </div>
-
-                    <div class="step-content" id="step-content">
-                        <h3 id="step-title">Step 1: Create HTML Document</h3>
-                        <div id="step-description">
-                            <p>Let's start by creating a basic HTML document structure.</p>
-                        </div>
-                        
-                        <div class="code-example" id="code-example">
-                            <pre><code>&lt;!DOCTYPE html&gt;
+                <div class="content-section">
+                    <h3 class="section-title">💡 Example</h3>
+                    <div id="lesson-example">
+                        <pre><code>&lt;!DOCTYPE html&gt;
 &lt;html lang="en"&gt;
 &lt;head&gt;
     &lt;title&gt;My First Page&lt;/title&gt;
@@ -50,25 +508,161 @@
     &lt;h1&gt;Hello World!&lt;/h1&gt;
 &lt;/body&gt;
 &lt;/html&gt;</code></pre>
-                        </div>
-
-                        <div class="interactive-area">
-                            <h4>Try it yourself:</h4>
-                            <textarea id="user-code" placeholder="Type your code here..."></textarea>
-                            <button id="check-code" class="btn-primary">Check Code</button>
-                            <div id="feedback" class="feedback"></div>
-                        </div>
-                    </div>
-
-                    <div class="tutorial-navigation">
-                        <button id="prev-btn" class="btn-secondary" disabled>Previous</button>
-                        <button id="next-btn" class="btn-primary" disabled>Next</button>
                     </div>
                 </div>
             </div>
-        </main>
+
+            <div class="content-section">
+                <h3 class="section-title">✏️ Try It Yourself</h3>
+                <textarea class="code-editor" id="code-editor" placeholder="Write your HTML code here..."></textarea>
+                <div class="success-message" id="success-message">
+                    ✅ Great job! Your code is correct. Click Next to continue.
+                </div>
+            </div>
+
+            <div class="tutorial-controls">
+                <div class="control-group">
+                    <button class="btn btn-secondary" id="prev-btn" onclick="previousLesson()" disabled>← Previous</button>
+                    <button class="btn btn-secondary" onclick="closeTutorial()">Close Tutorial</button>
+                </div>
+                <div class="control-group">
+                    <button class="btn btn-primary" onclick="checkCode()">Check Code</button>
+                    <button class="btn btn-primary" id="next-btn" onclick="nextLesson()" disabled>Next →</button>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <script src="tutorial-system.js"></script>
+    <script>
+        let currentTutorial = null;
+        let currentLesson = 0;
+        let totalLessons = 0;
+
+        const tutorials = {
+            'html-basics': {
+                title: 'HTML Fundamentals',
+                lessons: [
+                    {
+                        title: 'Basic HTML Structure',
+                        instructions: 'Create a basic HTML document with DOCTYPE, html, head, and body elements.',
+                        example: '<!DOCTYPE html>\n<html lang="en">\n<head>\n    <title>My Page</title>\n</head>\n<body>\n    <h1>Hello World!</h1>\n</body>\n</html>',
+                        solution: '<!DOCTYPE html>'
+                    },
+                    {
+                        title: 'HTML Headings',
+                        instructions: 'Learn to use heading elements from h1 to h6 for content hierarchy.',
+                        example: '<h1>Main Title</h1>\n<h2>Subtitle</h2>\n<h3>Section Title</h3>',
+                        solution: '<h1>'
+                    },
+                    {
+                        title: 'Paragraphs and Text',
+                        instructions: 'Use paragraph elements and text formatting tags.',
+                        example: '<p>This is a paragraph.</p>\n<p>This is <strong>bold</strong> and <em>italic</em> text.</p>',
+                        solution: '<p>'
+                    }
+                ]
+            },
+            'css-styling': {
+                title: 'CSS Styling',
+                lessons: [
+                    {
+                        title: 'CSS Selectors',
+                        instructions: 'Learn how to select HTML elements using CSS selectors.',
+                        example: 'h1 {\n    color: blue;\n    font-size: 24px;\n}',
+                        solution: 'color:'
+                    }
+                ]
+            }
+        };
+
+        function startTutorial(tutorialId) {
+            currentTutorial = tutorialId;
+            currentLesson = 0;
+            
+            const tutorial = tutorials[tutorialId];
+            if (!tutorial) return;
+            
+            totalLessons = tutorial.lessons.length;
+            
+            document.getElementById('categories-grid').style.display = 'none';
+            document.getElementById('tutorial-player').classList.add('active');
+            
+            loadLesson();
+        }
+
+        function loadLesson() {
+            const tutorial = tutorials[currentTutorial];
+            const lesson = tutorial.lessons[currentLesson];
+            
+            document.getElementById('current-tutorial-title').textContent = tutorial.title;
+            document.getElementById('current-lesson').textContent = currentLesson + 1;
+            document.getElementById('total-lessons').textContent = totalLessons;
+            document.getElementById('lesson-instructions').innerHTML = `<p>${lesson.instructions}</p>`;
+            document.getElementById('lesson-example').innerHTML = `<pre><code>${lesson.example}</code></pre>`;
+            
+            // Update progress
+            const progress = ((currentLesson + 1) / totalLessons) * 100;
+            document.getElementById('lesson-progress').style.width = progress + '%';
+            document.getElementById('progress-percentage').textContent = Math.round(progress) + '% Complete';
+            
+            // Update navigation buttons
+            document.getElementById('prev-btn').disabled = currentLesson === 0;
+            document.getElementById('next-btn').disabled = true;
+            
+            // Clear editor and success message
+            document.getElementById('code-editor').value = '';
+            document.getElementById('success-message').classList.remove('show');
+        }
+
+        function checkCode() {
+            const code = document.getElementById('code-editor').value.toLowerCase();
+            const tutorial = tutorials[currentTutorial];
+            const lesson = tutorial.lessons[currentLesson];
+            
+            if (code.includes(lesson.solution.toLowerCase())) {
+                document.getElementById('success-message').classList.add('show');
+                document.getElementById('next-btn').disabled = false;
+                
+                // Update user progress
+                const userData = JSON.parse(localStorage.getItem('codequest_user_data')) || {
+                    completedChallenges: 0, totalXP: 0, currentStreak: 0, badgesEarned: 0,
+                    challengesCompleted: []
+                };
+                
+                const lessonId = `${currentTutorial}-lesson-${currentLesson}`;
+                if (!userData.challengesCompleted.includes(lessonId)) {
+                    userData.challengesCompleted.push(lessonId);
+                    userData.completedChallenges += 1;
+                    userData.totalXP += 25;
+                    localStorage.setItem('codequest_user_data', JSON.stringify(userData));
+                }
+            } else {
+                alert('Not quite right. Check the example and try again!');
+            }
+        }
+
+        function nextLesson() {
+            if (currentLesson < totalLessons - 1) {
+                currentLesson++;
+                loadLesson();
+            } else {
+                alert('🎉 Tutorial completed! You earned XP and unlocked achievements.');
+                closeTutorial();
+            }
+        }
+
+        function previousLesson() {
+            if (currentLesson > 0) {
+                currentLesson--;
+                loadLesson();
+            }
+        }
+
+        function closeTutorial() {
+            document.getElementById('categories-grid').style.display = 'grid';
+            document.getElementById('tutorial-player').classList.remove('active');
+            currentTutorial = null;
+        }
+    </script>
 </body>
 </html>
